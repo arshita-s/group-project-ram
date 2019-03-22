@@ -1,0 +1,5 @@
+**Format
+**Obstacle sizex sizey positionx positiony moves velocity instantDeath
+
+
+Obstacle 10 10 0 10 false 0.0 false
