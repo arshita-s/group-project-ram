@@ -10,6 +10,8 @@ public class Obstacle {
 	public Obstacle(int width, int length, boolean move, int x, int y, int vertical, int horizontal, boolean death) {
 		size = new Size(width, length);
 		movement = move;
-		
+		position = new Position(x, y);
+		velocity = new Velocity(horizontal, vertical);
+		instantDeath = death;
 	}
 }
