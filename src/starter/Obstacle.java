@@ -2,12 +2,14 @@ package starter;
 
 public class Obstacle {
 	Size size;
-	boolean moves;
+	boolean movement;
 	Position position;
 	Velocity velocity;
 	boolean instantDeath;
 	
-	public Obstacle() {
+	public Obstacle(int width, int length, boolean move, int x, int y, int vertical, int horizontal, boolean death) {
+		size = new Size(width, length);
+		movement = move;
 		
 	}
 }
