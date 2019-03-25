@@ -11,11 +11,10 @@ import javax.swing.Timer;
 public class ACMgraphics extends GraphicsProgram implements ActionListener, KeyListener {
 	public static final int PROGRAM_HEIGHT = 700;
 	public static final int PROGRAM_WIDTH = 700;
-	//private GCanvas map;
 	private ArrayList<GRect> mapObstacles;
-	Timer tm = new Timer(10, this);
 	private int vX = 0;
 	private int lastPressed = 0;
+	Timer tm = new Timer(10, this);
 	
 	public void init() {
 		setSize(PROGRAM_WIDTH, PROGRAM_HEIGHT);
@@ -56,6 +55,10 @@ public class ACMgraphics extends GraphicsProgram implements ActionListener, KeyL
 	public void setupLevel() {
 		//creating map
 		map = new GCanvas();
+<<<<<<< HEAD
+=======
+		map.setVisible(true);
+>>>>>>> branch 'master' of https://github.com/comp55-spr19/group-project-ram.git
 		map.setLocation(0, 0);
 		
 		//adding obstacles to map
