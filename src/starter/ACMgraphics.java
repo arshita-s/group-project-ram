@@ -23,23 +23,19 @@ public class ACMgraphics extends GraphicsProgram implements ActionListener, KeyL
 		this.addKeyListener(this);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
-		requestFocusInWindow();
 	}
 	public void setupLevel() {
+		
 		//adding obstacles to map
 		mapObstacles = new ArrayList();
 		GRect obstacle;
 		
-		obstacle = createObstacle(new Position(350, 550), new Size(50, 50), new Velocity(0,0));
+		obstacle = createObstacle(new Position(100,400), new Size(50, 50), new Velocity(0,0));
 		mapObstacles.add(obstacle);
 		add(obstacle);
-		obstacle = createObstacle(new Position(300, 600), new Size(50, 50), new Velocity(0,0));
+		obstacle = createObstacle(new Position(100,500), new Size(50, 50), new Velocity(0,0));
 		mapObstacles.add(obstacle);
-		add(obstacle);
-		obstacle = createObstacle(new Position(600, 500), new Size(150, 50), new Velocity(0,0));
-		mapObstacles.add(obstacle);
-		add(obstacle);
-		obstacle = createObstacle(new Position(0, 650), new Size(1000, 50), new Velocity(0,0));
+		obstacle = createObstacle(new Position(0,650), new Size(800, 50), new Velocity(0,0));
 		mapObstacles.add(obstacle);
 		add(obstacle);
 	}
@@ -91,32 +87,26 @@ public class ACMgraphics extends GraphicsProgram implements ActionListener, KeyL
 	public void actionPerformed(ActionEvent e) {
 		moveMapObstacles(vX);
 	}
-	
 	@Override
 	public void keyPressed(KeyEvent e) {
-		System.out.println(e.getKeyCode());
 		if(e.getKeyCode() == KeyEvent.VK_D) {
 			vX = -1;
-			lastPressed = e.getKeyCode();
+			lastPressed = KeyEvent.VK_D;
 		}
-		else if (e.getKeyCode() == KeyEvent.VK_A) {
+		if (e.getKeyCode() == KeyEvent.VK_A) {
 			vX = 1;
-			lastPressed = e.getKeyCode();
+			lastPressed = KeyEvent.VK_A;
 		}
-		else return;
 	}
-	
 	@Override
 	public void keyTyped(KeyEvent e) {
 		
 	}
-	
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == lastPressed) {
 			vX = 0;
-			lastPressed = 0;
+			lastPressed = 99999;
 		}
-		else return;
 	}
 }
