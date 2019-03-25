@@ -11,6 +11,7 @@ public class Map {
 	
 	public Map() {
 		Obstacles = new ArrayList<Obstacle>();
+		this.readFromFile();
 	}
 	
 	public void readFromFile() {

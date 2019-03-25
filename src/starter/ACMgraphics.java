@@ -12,6 +12,7 @@ public class ACMgraphics extends GraphicsProgram implements ActionListener, KeyL
 	public static final int PROGRAM_HEIGHT = 700;
 	public static final int PROGRAM_WIDTH = 700;
 	private ArrayList<GRect> mapObstacles;
+	private Map level;
 	private int vX = 0;
 	private int lastPressed = 0;
 	Timer tm = new Timer(10, this);
@@ -25,18 +26,17 @@ public class ACMgraphics extends GraphicsProgram implements ActionListener, KeyL
 	}
 	public void setupLevel() {
 		
+		level = new Map();
 		//adding obstacles to map
-		mapObstacles = new ArrayList();
+		mapObstacles = new ArrayList<GRect>();
 		GRect obstacle;
 		
-		obstacle = createObstacle(new Position(100,400), new Size(50, 50), new Velocity(0,0));
-		mapObstacles.add(obstacle);
-		add(obstacle);
-		obstacle = createObstacle(new Position(100,500), new Size(50, 50), new Velocity(0,0));
-		mapObstacles.add(obstacle);
-		obstacle = createObstacle(new Position(0,650), new Size(800, 50), new Velocity(0,0));
-		mapObstacles.add(obstacle);
-		add(obstacle);
+		for(Obstacle obst: level.getList())
+		{
+			obstacle = createObstacle(obst);
+			mapObstacles.add(obstacle);
+			add(obstacle);
+		}
 	}
 	public void moveMapObstacles(int hMove) {
 		for(GRect current: mapObstacles) {
@@ -50,6 +50,13 @@ public class ACMgraphics extends GraphicsProgram implements ActionListener, KeyL
 		objRec.setFillColor(Color.BLACK);
 		objRec.setFilled(true);
 		return objRec;
+	}
+	
+	public GRect createObstacle(Obstacle obs) {
+		GRect rec = new GRect(obs.getPosition().getX(), obs.getPosition().getY(), obs.getSize().getWidth(), obs.getSize().getHeight());
+		rec.setFillColor(Color.BLACK);
+		rec.setFilled(true);
+		return rec;
 	}
 /*	
 	public void setupLevel() {
