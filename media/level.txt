@@ -1,5 +1,6 @@
 **Format
-**Obstacle sizex sizey positionx positiony moves velocity instantDeath
+**Obstacle width length moves positionx positiony velocityx velocityy instantDeath
 
 
-Obstacle 10 10 0 10 false 0.0 false
+Obstacle 10 10 false 0 10 0 0 false
+Obstacle 10 20 false 0 20 0 0 false

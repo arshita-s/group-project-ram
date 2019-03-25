@@ -7,7 +7,7 @@ public class Obstacle {
 	Velocity velocity;
 	boolean instantDeath;
 	
-	public Obstacle(int width, int length, boolean move, int x, int y, int vertical, int horizontal, boolean death) {
+	public Obstacle(int width, int length, boolean move, int x, int y, int horizontal, int vertical, boolean death) {
 		size = new Size(width, length);
 		movement = move;
 		position = new Position(x, y);

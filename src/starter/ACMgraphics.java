@@ -8,6 +8,7 @@ public class ACMgraphics extends GraphicsProgram{
 	public static final int PROGRAM_HEIGHT = 700;
 	public static final int PROGRAM_WIDTH = 700;
 	private GCanvas map;
+	private Map level;
 	
 	public void init() {
 		setSize(PROGRAM_WIDTH, PROGRAM_HEIGHT);
@@ -22,7 +23,7 @@ public class ACMgraphics extends GraphicsProgram{
 	}
 	public void setupLevel() {
 		//creating map
-		GCanvas map = new GCanvas();
+		map = new GCanvas();
 		map.setVisible(true);
 		map.setLocation(0, 0);
 		add(map);
