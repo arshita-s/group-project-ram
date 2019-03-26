@@ -8,6 +8,8 @@ public class Map {
 	private static final String FILENAME = "level.txt";
 	
 	private ArrayList<Obstacle> Obstacles;
+	private ArrayList<Enemy> Enemies;
+	private Player mainPlayer;
 	
 	public Map() {
 		Obstacles = new ArrayList<Obstacle>();
