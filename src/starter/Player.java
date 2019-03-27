@@ -1,5 +1,9 @@
 package starter;
 
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
 import acm.graphics.GOval;
 
 public class Player {
@@ -14,7 +18,22 @@ public class Player {
 	
 	public Player() {
 		player = new GOval(2, 2);
+		while(true) {
+			player.move(0, 0);
+		}
 	}
 	
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+			
+		}
+	}
 	
+	public void addForce() {
+		
+	}
+	
+	public void addFriction() {
+		
+	}
 }
