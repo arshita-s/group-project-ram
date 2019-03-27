@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import javax.swing.Timer;
 // Here I will take obstacles and put them on the screen
 public class ACMgraphics extends GraphicsProgram implements ActionListener, KeyListener {
-	public static final int PROGRAM_HEIGHT = 700;
-	public static final int PROGRAM_WIDTH = 700;
+	public static final int PROGRAM_HEIGHT = 800;
+	public static final int PROGRAM_WIDTH = 800;
 	private ArrayList<GRect> mapObstacles;
 	private Map level;
 	private int vX = 0;
