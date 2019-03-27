@@ -69,13 +69,15 @@ public class Player {
 	}
 	
 	public void processGravity() {
-		if(speedY == GROUND || speedY < MAX_JUMP) {
-			speedY += SPEED_DY;
+		if(speedY < MAX_JUMP) {
+			speedY -= SPEED_DY;
 		}
 	}
 	
 	public void processFalling() {
-		
+		while(speedY != GROUND) {
+			speedY += SPEED_DY;
+		}
 	}
 	
 	public void processImage() {
