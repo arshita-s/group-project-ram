@@ -8,15 +8,9 @@ import java.util.ArrayList;
 
 import javax.swing.Timer;
 // Here I will take obstacles and put them on the screen
-<<<<<<< HEAD
-public class ACMgraphics extends GraphicsProgram implements ActionListener, KeyListener {
-	public static final int PROGRAM_HEIGHT = 800;
-	public static final int PROGRAM_WIDTH = 800;
-=======
 public class ACMgraphics extends GraphicsPane implements ActionListener, KeyListener {
 	
 	private MainApplication program;
->>>>>>> branch 'master' of https://github.com/comp55-spr19/group-project-ram.git
 	private ArrayList<GRect> mapObstacles;
 	private Map level;
 	private int vX = 0;
