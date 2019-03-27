@@ -38,10 +38,16 @@ public class Player {
 			current = PlayerMovement.JUMP;
 			addForce();
 		}
+		player.move(speedX, speedY);
 	}
 	
 	public void keyReleased(KeyEvent e) {
-		
+		if(current != PlayerMovement.JUMP) {
+			speedX = 0;
+		}
+		else {
+			speedY = 0;
+		}
 	}
 	
 	public void addForce() {
