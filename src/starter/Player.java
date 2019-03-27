@@ -11,6 +11,7 @@ public class Player {
 	private static final double SPEED_DX = .4;
 	private static final double SPEED_DY = .2;
 	private static final int MAX_GRAVITY = 10;
+	private static final int MAX_JUMP = 5;
 	private static final int GROUND = 650;
 	private int speedX;
 	private int speedY;
@@ -25,22 +26,16 @@ public class Player {
 	}
 	
 	public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-			if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-				current = PlayerMovement.JUMP;
-			}
-			else {
-				current = PlayerMovement.LEFT;
-			}
+		if(e.getKeyCode() == KeyEvent.VK_A) {
+			current = PlayerMovement.LEFT;
 			addForce();
 		}
-		else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-				current = PlayerMovement.JUMP;
-			}
-			else {
-				current = PlayerMovement.RIGHT;
-			}
+		else if(e.getKeyCode() == KeyEvent.VK_D) {
+			current = PlayerMovement.RIGHT;
+			addForce();
+		}
+		else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+			current = PlayerMovement.JUMP;
 			addForce();
 		}
 	}
@@ -52,6 +47,7 @@ public class Player {
 	public void addForce() {
 		if(current == PlayerMovement.JUMP) {
 			processGravity();
+			processFalling();
 		}
 		else {
 			if(speedX < MAX_SPEED) {
@@ -73,9 +69,12 @@ public class Player {
 	}
 	
 	public void processGravity() {
-		if(speedY == GROUND) {
+		if(speedY == GROUND || speedY < MAX_JUMP) {
 			speedY += SPEED_DY;
 		}
+	}
+	
+	public void processFalling() {
 		
 	}
 	
