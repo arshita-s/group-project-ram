@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import javax.swing.Timer;
 // Here I will take obstacles and put them on the screen
 public class ACMgraphics extends GraphicsProgram implements ActionListener, KeyListener {
-	public static final int PROGRAM_HEIGHT = 700;
-	public static final int PROGRAM_WIDTH = 700;
+	public static final int MAX_BLOCK_HEIGHT = 10;
+	public static final int PROGRAM_HEIGHT = 700; 
+	public static final int PROGRAM_WIDTH = 1000;
+	private static final int PIXELS_IN_BLOCK = PROGRAM_HEIGHT/MAX_BLOCK_HEIGHT;
 	private ArrayList<GRect> mapObstacles;
 	private Map level;
 	private int vX = 0;
@@ -43,17 +45,12 @@ public class ACMgraphics extends GraphicsProgram implements ActionListener, KeyL
 			current.move(hMove, 0);
 		}
 	}
-
-	//change parameter to object once Object has been made
-	public GRect createObstacle(Position p, Size s, Velocity v) {
-		GRect objRec = new GRect(p.getX(), p.getY(), s.getWidth(), s.getHeight()); 
-		objRec.setFillColor(Color.BLACK);
-		objRec.setFilled(true);
-		return objRec;
-	}
 	
 	public GRect createObstacle(Obstacle obs) {
-		GRect rec = new GRect(obs.getPosition().getX(), obs.getPosition().getY(), obs.getSize().getWidth(), obs.getSize().getHeight());
+		//getting pixel measurements/coordinates
+		Position p = convertSpaceToXY(obs.getPosition().getX(), obs.getPosition().getY());
+		Position s = convertSpaceToXY(obs.getSize().getWidth(), obs.getSize().getHeight());
+		GRect rec = new GRect(p.getX(), p.getY(), obs.getSize().getWidth() * PIXELS_IN_BLOCK, obs.getSize().getHeight() * PIXELS_IN_BLOCK);
 		rec.setFillColor(Color.BLACK);
 		rec.setFilled(true);
 		return rec;
@@ -91,4 +88,48 @@ public class ACMgraphics extends GraphicsProgram implements ActionListener, KeyL
 			lastPressed = 99999;
 		}
 	}
+	//ConvertPixelToStandardBlockSize
+	public int convertPTSBS(int pixels) {
+		if(pixels%PIXELS_IN_BLOCK != 0) return 0;
+		int blocks = pixels / PIXELS_IN_BLOCK;
+		return blocks;
+	}
+	//ConvertStandardBlockSizeToPixel
+	public int convertSBSTP(int block) {
+		int pixels = block * PIXELS_IN_BLOCK;
+		return pixels;
+	}
+	private Position convertXYToSpace(int x, int y) {
+		int row = (int) (y / PIXELS_IN_BLOCK);  
+		int col = (int) (x / PIXELS_IN_BLOCK);
+		if (row >=  PIXELS_IN_BLOCK) row = PIXELS_IN_BLOCK - 1;
+		if (col >= PIXELS_IN_BLOCK) col = PIXELS_IN_BLOCK - 1;
+		return new Position(row, col);
+	}
+	private Position convertSpaceToXY(int x, int y) {
+		return new Position(x *  PIXELS_IN_BLOCK - PIXELS_IN_BLOCK, y * PIXELS_IN_BLOCK - PIXELS_IN_BLOCK);
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
