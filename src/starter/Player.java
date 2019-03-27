@@ -11,6 +11,7 @@ public class Player {
 	private static final double SPEED_DX = .4;
 	private static final double SPEED_DY = .2;
 	private static final int MAX_GRAVITY = 10;
+	private static final int GROUND = 650;
 	private int speedX;
 	private int speedY;
 	private GOval player;
@@ -25,15 +26,60 @@ public class Player {
 	
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-			
+			if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+				current = PlayerMovement.JUMP;
+			}
+			else {
+				current = PlayerMovement.LEFT;
+			}
+			addForce();
+		}
+		else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+				current = PlayerMovement.JUMP;
+			}
+			else {
+				current = PlayerMovement.RIGHT;
+			}
+			addForce();
 		}
 	}
 	
-	public void addForce() {
+	public void keyReleased(KeyEvent e) {
 		
 	}
 	
+	public void addForce() {
+		if(current == PlayerMovement.JUMP) {
+			processGravity();
+		}
+		else {
+			if(speedX < MAX_SPEED) {
+				speedX += SPEED_DX;
+			}
+			else if(speedX > MAX_SPEED) {
+				speedX = MAX_SPEED;
+			}
+		}
+	}
+	
 	public void addFriction() {
+		if(speedX > 0) {
+			speedX -= SPEED_DX;
+		}
+		else if(speedX < 0) {
+			speedX = 0;
+		}
+	}
+	
+	public void processGravity() {
+		if(speedY == GROUND) {
+			speedY += SPEED_DY;
+		}
+		
+	}
+	
+	public void processImage() {
 		
 	}
 }
