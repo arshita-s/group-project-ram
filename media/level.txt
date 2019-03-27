@@ -8,6 +8,6 @@ Obstacle 50 50 false 350 500 0 0 false
 Obstacle 50 50 false 415 500 0 0 false
 Obstacle 50 50 false 480 500 0 0 false
 Obstacle 3000 50 false 800 650 0 0 false
-Obstacle 3000 50 false 850 600 0 0 false
+Obstacle 3000 50 false 900 600 0 0 false
 Obstacle 3000 50 false 0 750 0 0 false
 Obstacle 3000 100 false 700 700 0 0 false
