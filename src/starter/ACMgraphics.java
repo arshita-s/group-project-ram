@@ -12,6 +12,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	
 	private MainApplication program;
 	private ArrayList<GRect> mapObstacles;
+	private GOval player;
 	private Map level;
 	private int vX = 0;
 	private int lastPressed = 0;
@@ -48,6 +49,8 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			mapObstacles.add(obstacle);
 			program.add(obstacle);
 		}
+		player = new GOval(level.getPlayer().getPosition().getX(), level.getPlayer().getPosition().getY(), 50, 50);
+		program.add(player);
 	}
 	public void moveMapObstacles(int hMove) {
 		for(GRect current: mapObstacles) {

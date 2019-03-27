@@ -1,7 +1,8 @@
 **Format
 **Obstacle width length moves positionx positiony velocityx velocityy instantDeath
+**Player positionx positiony
 
-
+Player 20 700
 Obstacle 50 50 false 100 500 0 0 false
 Obstacle 50 50 false 165 500 0 0 false
 Obstacle 50 50 false 350 500 0 0 false

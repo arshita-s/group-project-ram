@@ -38,6 +38,12 @@ public class Map {
 					Obstacle temp = new Obstacle(width, length, moves, x, y, velocityx, velocityy, instantDeath);
 					Obstacles.add(temp);
 				}
+				
+				if(str.equals("Player")) {
+					int x = read.nextInt();
+					int y = read.nextInt();
+					mainPlayer = new Player(x, y);
+				}
 			}
 			read.close();
 		} catch (Exception e) {
@@ -49,4 +55,7 @@ public class Map {
 		return Obstacles;
 	}
 	
+	public Player getPlayer() {
+		return mainPlayer;
+	}
 }

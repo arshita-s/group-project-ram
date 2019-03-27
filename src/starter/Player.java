@@ -1,6 +1,7 @@
 package starter;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
@@ -15,14 +16,11 @@ public class Player {
 	private static final int GROUND = 650;
 	private int speedX;
 	private int speedY;
-	private GOval player;
+	private Position position;
 	private PlayerMovement current;
 	
-	public Player() {
-		player = new GOval(2, 2);
-		while(true) {
-			player.move(0, 0);
-		}
+	public Player(int x, int y) {
+		position = new Position(x, y);
 	}
 	
 	public void keyPressed(KeyEvent e) {
@@ -82,5 +80,9 @@ public class Player {
 	
 	public void processImage() {
 		
+	}
+
+	public Position getPosition() {
+		return position;
 	}
 }
