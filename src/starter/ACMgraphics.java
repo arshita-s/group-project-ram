@@ -58,34 +58,6 @@ public class ACMgraphics extends GraphicsProgram implements ActionListener, KeyL
 		rec.setFilled(true);
 		return rec;
 	}
-/*	
-	public void setupLevel() {
-		//creating map
-		map = new GCanvas();
-<<<<<<< HEAD
-=======
-		map.setVisible(true);
->>>>>>> branch 'master' of https://github.com/comp55-spr19/group-project-ram.git
-		map.setLocation(0, 0);
-		
-		//adding obstacles to map
-		GRect obstacle;
-		
-		obstacle = createObstacle(new Position(80,50), new Size(50, 15), new Velocity(0,0));
-		map.add(obstacle);
-		obstacle = createObstacle(new Position(0,0), new Size(50, 15), new Velocity(0,0));
-		map.add(obstacle);
-		
-		//revalidating map
-		add(map);
-		map.revalidate();
-		
-		System.out.println("Map coordinate: x" + map.getX() + " y" + map.getY());
-	}
-		/* ERROR:
-		 * for some reason "map"'s position for the x coordinate is not 0. why?
-		 */ 
-	
 	
 	public void run() {
 		setupLevel();
