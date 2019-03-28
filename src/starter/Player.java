@@ -7,7 +7,7 @@ import java.awt.event.KeyListener;
 import acm.graphics.GOval;
 
 public class Player implements KeyListener {
-	private static final int MAX_SPEED = 5;
+	private static final int MAX_SPEED = 3;
 	private static final double SPEED_DX = .4;
 	private static final double SPEED_DY = .2;
 	private static final int MAX_GRAVITY = 10;
@@ -36,7 +36,7 @@ public class Player implements KeyListener {
 			current = PlayerMovement.RIGHT;
 			addForce();
 		}
-		else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+		else if(e.getKeyCode() == KeyEvent.VK_W) {
 			current = PlayerMovement.JUMP;
 			addForce();
 		}
@@ -63,27 +63,32 @@ public class Player implements KeyListener {
 		if(current == PlayerMovement.JUMP) {
 			processGravity();
 			processFalling();
-			System.out.println("jumping");
 		}
 		else {
 			if(speedX < MAX_SPEED) {
-				speedX += SPEED_DX;
-				System.out.println("left or right");
+				if(current == PlayerMovement.RIGHT) {
+					speedX += SPEED_DX;
+				}
+				else if(current == PlayerMovement.LEFT) {
+					speedX -= SPEED_DX;
+				}
 			}
 			else if(speedX > MAX_SPEED) {
 				speedX = MAX_SPEED;
-				System.out.println("stopping");
 			}
 		}
 	}
 	
 	public void addFriction() {
-		if(speedX > 0) {
-			speedX -= SPEED_DX;
+		if(current == PlayerMovement.RIGHT) {
+			if(speedX > 0) {
+				speedX -= (SPEED_DX);
+			}
+			else if(speedX < 0) {
+				speedX = 0;
+			}
 		}
-		else if(speedX < 0) {
-			speedX = 0;
-		}
+		
 	}
 	
 	public void processGravity() {
