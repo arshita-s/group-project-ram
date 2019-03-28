@@ -1,7 +1,5 @@
 package starter;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
@@ -16,32 +14,19 @@ public class Player {
 	private static final int GROUND = 650;
 	private int speedX;
 	private int speedY;
-	private Position position;
+	private Position startPosition;
+	private GOval player;
 	private PlayerMovement current;
 	
 	public Player(int x, int y) {
-		position = new Position(x, y);
+		startPosition = new Position(x, y);
+		player = new GOval(startPosition.getX(), startPosition.getY(), 50, 50);
 	}
 	
-	public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_A) {
-			current = PlayerMovement.LEFT;
-			addForce();
-		}
-		else if(e.getKeyCode() == KeyEvent.VK_D) {
-			current = PlayerMovement.RIGHT;
-			addForce();
-		}
-		else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-			current = PlayerMovement.JUMP;
-			addForce();
-		}
+	public GOval getGOval() {
+		return player;
 	}
-	
-	public void keyReleased(KeyEvent e) {
-		
-	}
-	
+
 	public void addForce() {
 		if(current == PlayerMovement.JUMP) {
 			processGravity();
@@ -83,6 +68,15 @@ public class Player {
 	}
 
 	public Position getPosition() {
-		return position;
+		return startPosition;
 	}
+	
+	public void setCurrent(PlayerMovement current) {
+		this.current = current;
+	}
+	
+	public void move(int x, int y) {
+		player.move(x, y);
+	}
+	
 }

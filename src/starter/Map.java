@@ -13,6 +13,7 @@ public class Map {
 	
 	public Map() {
 		Obstacles = new ArrayList<Obstacle>();
+		Enemies = new ArrayList<Enemy>();
 		this.readFromFile();
 	}
 	
@@ -44,6 +45,11 @@ public class Map {
 					int y = read.nextInt();
 					mainPlayer = new Player(x, y);
 				}
+				
+				if(str.contentEquals("Enemy")) {
+					Enemy temp = new Enemy();
+					Enemies.add(temp);
+				}
 			}
 			read.close();
 		} catch (Exception e) {
@@ -58,4 +64,6 @@ public class Map {
 	public Player getPlayer() {
 		return mainPlayer;
 	}
+	
+	
 }

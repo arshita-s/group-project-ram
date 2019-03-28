@@ -1,18 +1,22 @@
 package starter;
-import acm.graphics.*;
-import acm.program.*;
-import acm.util.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.Timer;
+
+import acm.graphics.GOval;
+import acm.graphics.GRect;
 // Here I will take obstacles and put them on the screen
 public class ACMgraphics extends GraphicsPane implements ActionListener, KeyListener {
 	
 	private MainApplication program;
 	private ArrayList<GRect> mapObstacles;
-	private GOval player;
+	private Player player;
 	private Map level;
 	private int vX = 0;
 	private int lastPressed = 0;
@@ -49,9 +53,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			mapObstacles.add(obstacle);
 			program.add(obstacle);
 		}
-		player = new GOval(level.getPlayer().getPosition().getX(), level.getPlayer().getPosition().getY(), 50, 50);
-		program.add(player);
+		player = level.getPlayer();
+		program.add(player.getGOval());
 	}
+	
 	public void moveMapObstacles(int hMove) {
 		for(GRect current: mapObstacles) {
 			current.move(hMove, 0);
@@ -104,28 +109,55 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	public void run(MainApplication program) {
 		setupLevel(program);
 		tm.start();
+		while(!playerAtEnd()) {
+			//TODO all the player processing stuff like
+			// the constant moving at 0
+			player.move(0, 0);
+			
+		}
 	}
 	
+
+	private boolean playerAtEnd() {
+		//TODO check to see if player has finished the level.
+		return true;
+	}
+
 	public void actionPerformed(ActionEvent e) {
+		//TODO Also check to see if its the start/end of the map or not.
+		if(player.getGOval().getX() < 150 ) {
+			vX = 1;
+		} else if(player.getGOval().getX() > 650) {
+			vX = -1;
+		} else {
+			vX = 0;
+		}
 		moveMapObstacles(vX);
 	}
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_D) {
-			vX = -1;
+			player.setCurrent(PlayerMovement.RIGHT);
+			player.addForce();
+			//vX = -1;
 			lastPressed = KeyEvent.VK_D;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_A) {
-			vX = 1;
+		} else if (e.getKeyCode() == KeyEvent.VK_A) {
+			player.setCurrent(PlayerMovement.LEFT);
+			player.addForce();
+			//vX = 1;
 			lastPressed = KeyEvent.VK_A;
+		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			player.setCurrent(PlayerMovement.JUMP);
+			player.addForce();
+			lastPressed = KeyEvent.VK_SPACE;
 		}
 	}
-	
+
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == lastPressed) {
-			vX = 0;
+			//vX = 0;
 			lastPressed = 99999;
 		}
 	}
