@@ -52,9 +52,6 @@ public class Player implements KeyListener {
 		if(current != PlayerMovement.JUMP) {
 			addFriction();
 		}
-		else {
-			processFalling();
-		}
 		player.move(speedX, speedY);
 	}
 	
