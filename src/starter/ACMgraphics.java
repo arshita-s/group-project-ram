@@ -127,7 +127,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		//TODO Also check to see if its the start/end of the map or not.
 		if(player.getGOval().getX() < 150 ) {
 			vX = 1;
 		} else if(player.getGOval().getX() > 650) {
@@ -136,9 +135,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			vX = 0;
 		}
 		moveMapObstacles(vX);
+		player.move();
 	}
 	
-	/*@Override
+	@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_D) {
 			player.setCurrent(PlayerMovement.RIGHT);
@@ -148,16 +148,17 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		} else if (e.getKeyCode() == KeyEvent.VK_A) {
 			player.setCurrent(PlayerMovement.LEFT);
 			player.addForce();
-			//vX = 1;
+			//vX = 1; 
 			lastPressed = KeyEvent.VK_A;
 		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			player.setCurrent(PlayerMovement.JUMPSTANDING);
+			player.setCurrent(PlayerMovement.JUMP);
 			player.addForce();
 			lastPressed = KeyEvent.VK_SPACE;
 		}
+		player.move();
 	}
 
-	@Override
+	/*@Override
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == lastPressed) {
 			//vX = 0;

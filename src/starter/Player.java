@@ -17,7 +17,7 @@ public class Player implements KeyListener {
 	private int speedY;
 	private Position startPosition;
 	private GOval player;
-	private PlayerMovement current;
+	private PlayerMovement current = PlayerMovement.STANDING;
 	
 	public Player(int x, int y) {
 		startPosition = new Position(x, y);
@@ -108,4 +108,7 @@ public class Player implements KeyListener {
 		this.current = current;
 	}
 	
+	public void move() {
+		player.move(speedX, speedY);
+	}
 }
