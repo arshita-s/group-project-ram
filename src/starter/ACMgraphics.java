@@ -12,7 +12,6 @@ import javax.swing.Timer;
 import acm.graphics.GOval;
 import acm.graphics.GRect;
 // Here I will take obstacles and put them on the screen
-
 public class ACMgraphics extends GraphicsPane implements ActionListener, KeyListener {
 	
 	private MainApplication program;
@@ -63,12 +62,17 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			current.move(hMove, 0);
 		}
 	}
+
+	//change parameter to object once Object has been made
+	public GRect createObstacle(Position p, Size s, Velocity v) {
+		GRect objRec = new GRect(p.getX(), p.getY(), s.getWidth(), s.getHeight()); 
+		objRec.setFillColor(Color.BLACK);
+		objRec.setFilled(true);
+		return objRec;
+	}
 	
 	public GRect createObstacle(Obstacle obs) {
-		//getting pixel measurements/coordinates
-		Position p = convertSpaceToXY(obs.getPosition().getX(), obs.getPosition().getY());
-		Position s = convertSpaceToXY(obs.getSize().getWidth(), obs.getSize().getHeight());
-		GRect rec = new GRect(p.getX(), p.getY(), obs.getSize().getWidth() * PIXELS_IN_BLOCK, obs.getSize().getHeight() * PIXELS_IN_BLOCK);
+		GRect rec = new GRect(obs.getPosition().getX(), obs.getPosition().getY(), obs.getSize().getWidth(), obs.getSize().getHeight());
 		rec.setFillColor(Color.BLACK);
 		rec.setFilled(true);
 		return rec;
@@ -133,27 +137,5 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			player.addFriction();
 		}
 	}
+	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
