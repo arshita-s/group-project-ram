@@ -50,11 +50,12 @@ public class Player implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if(current != PlayerMovement.JUMP) {
-			speedX = 0;
+			addFriction();
 		}
 		else {
-			speedY = 0;
+			processGravity();
 		}
+		player.move(speedX, speedY);
 	}
 	
 	public void addForce() {
@@ -108,10 +109,6 @@ public class Player implements KeyListener {
 	
 	public void setCurrent(PlayerMovement current) {
 		this.current = current;
-	}
-	
-	public void move() {
-		player.move(speedX, speedY);
 	}
 	
 }
