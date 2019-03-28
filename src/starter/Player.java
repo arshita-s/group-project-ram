@@ -53,7 +53,7 @@ public class Player implements KeyListener {
 			addFriction();
 		}
 		else {
-			processGravity();
+			processFalling();
 		}
 		player.move(speedX, speedY);
 	}
