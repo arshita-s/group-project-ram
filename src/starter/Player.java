@@ -96,11 +96,6 @@ public class Player implements KeyListener {
 	public void processImage() {
 		
 	}
-	
-	//This is temporary/ for testing's sake
-	public GOval getPlayerObj() {
-		return player;
-	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
