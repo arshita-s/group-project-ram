@@ -109,10 +109,13 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	public void run(MainApplication program) {
 		setupLevel(program);
 		tm.start();
+	}
+	
+	public void next() {
 		while(!playerAtEnd()) {
 			//TODO all the player processing stuff like
 			// the constant moving at 0
-			player.move(0, 0);
+			//player.move();
 			
 		}
 	}
@@ -120,7 +123,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	private boolean playerAtEnd() {
 		//TODO check to see if player has finished the level.
-		return true;
+		return false;
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -148,7 +151,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			//vX = 1;
 			lastPressed = KeyEvent.VK_A;
 		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			player.setCurrent(PlayerMovement.JUMP);
+			player.setCurrent(PlayerMovement.JUMPSTANDING);
 			player.addForce();
 			lastPressed = KeyEvent.VK_SPACE;
 		}

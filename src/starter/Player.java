@@ -21,6 +21,8 @@ public class Player {
 	public Player(int x, int y) {
 		startPosition = new Position(x, y);
 		player = new GOval(startPosition.getX(), startPosition.getY(), 50, 50);
+		speedX = 0;
+		speedY = 0;
 	}
 	
 	public GOval getGOval() {
@@ -28,16 +30,16 @@ public class Player {
 	}
 
 	public void addForce() {
-		if(current == PlayerMovement.JUMP) {
+		if(current == PlayerMovement.JUMPSTANDING) {
 			processGravity();
 			processFalling();
 		}
 		else {
-			if(speedX < MAX_SPEED) {
+			if(current == PlayerMovement.RIGHT) {
 				speedX += SPEED_DX;
 			}
-			else if(speedX > MAX_SPEED) {
-				speedX = MAX_SPEED;
+			else if(current == PlayerMovement.LEFT) {
+				speedX -= SPEED_DX;
 			}
 		}
 	}
@@ -75,8 +77,8 @@ public class Player {
 		this.current = current;
 	}
 	
-	public void move(int x, int y) {
-		player.move(x, y);
+	public void move() {
+		player.move(speedX, speedY);
 	}
 	
 }
