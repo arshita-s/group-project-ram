@@ -1,12 +1,11 @@
 package starter;
 
-import java.awt.Color;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import acm.graphics.GOval;
 
-public class Player {
+public class Player implements KeyListener {
 	private static final int MAX_SPEED = 5;
 	private static final double SPEED_DX = .4;
 	private static final double SPEED_DY = .2;
@@ -19,12 +18,10 @@ public class Player {
 	private PlayerMovement current;
 	
 	public Player() {
-		player = new GOval(2, 2);
-		while(true) {
-			player.move(0, 0);
-		}
+		player = new GOval(50, 625, 50, 50);
 	}
 	
+	@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_A) {
 			current = PlayerMovement.LEFT;
@@ -41,6 +38,7 @@ public class Player {
 		player.move(speedX, speedY);
 	}
 	
+	@Override
 	public void keyReleased(KeyEvent e) {
 		if(current != PlayerMovement.JUMP) {
 			speedX = 0;
@@ -87,6 +85,16 @@ public class Player {
 	}
 	
 	public void processImage() {
+		
+	}
+	
+	//This is temporary/ for testing's sake
+	public GOval getPlayerObj() {
+		return player;
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
 		
 	}
 }
