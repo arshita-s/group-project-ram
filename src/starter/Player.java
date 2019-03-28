@@ -63,11 +63,11 @@ public class Player implements KeyListener {
 			processFalling();
 		}
 		else {
-			if(current == PlayerMovement.RIGHT) {
+			if(speedX < MAX_SPEED) {
 				speedX += SPEED_DX;
 			}
-			else if(current == PlayerMovement.LEFT) {
-				speedX -= SPEED_DX;
+			else if(speedX > MAX_SPEED) {
+				speedX = MAX_SPEED;
 			}
 		}
 	}
