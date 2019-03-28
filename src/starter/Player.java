@@ -7,7 +7,7 @@ import java.awt.event.KeyListener;
 import acm.graphics.GOval;
 
 public class Player implements KeyListener {
-	private static final int MAX_SPEED = 3;
+	private static final double MAX_SPEED = 2;
 	private static final double SPEED_DX = .4;
 	private static final double SPEED_DY = .2;
 	private static final int MAX_GRAVITY = 10;
@@ -50,7 +50,7 @@ public class Player implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if(current != PlayerMovement.JUMP) {
-			addFriction();
+				addFriction();
 		}
 		player.move(speedX, speedY);
 	}
@@ -81,10 +81,18 @@ public class Player implements KeyListener {
 	
 	public void addFriction() {
 		if(current == PlayerMovement.RIGHT) {
-			if(speedX > 0) {
+			while(speedX > 0) {
 				speedX -= (SPEED_DX);
 			}
-			else if(speedX < 0) {
+			if(speedX < 0) {
+				speedX = 0;
+			}
+		}
+		if(current == PlayerMovement.LEFT) {
+			while(speedX < 0) {
+				speedX += (SPEED_DX);
+			}
+			if(speedX > 0) {
 				speedX = 0;
 			}
 		}
