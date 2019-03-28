@@ -95,7 +95,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		//TODO Also check to see if its the start/end of the map or not.
 		if(player.getGOval().getX() < 150 ) {
 			vX = 1;
 		} else if(player.getGOval().getX() > 650) {
@@ -104,9 +103,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			vX = 0;
 		}
 		moveMapObstacles(vX);
+		player.move();
 	}
 	
-	/*@Override
+	@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_D) {
 			player.setCurrent(PlayerMovement.RIGHT);
@@ -116,13 +116,14 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		} else if (e.getKeyCode() == KeyEvent.VK_A) {
 			player.setCurrent(PlayerMovement.LEFT);
 			player.addForce();
-			//vX = 1;
+			//vX = 1; 
 			lastPressed = KeyEvent.VK_A;
 		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			player.setCurrent(PlayerMovement.JUMPSTANDING);
+			player.setCurrent(PlayerMovement.JUMP);
 			player.addForce();
 			lastPressed = KeyEvent.VK_SPACE;
 		}
+		player.move();
 	}
 
 	@Override
@@ -131,32 +132,11 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			//vX = 0;
 			lastPressed = 99999;
 		}
+		if(player.getCurrent() != PlayerMovement.JUMP) {
+			player.addFriction();
+		}
+		player.move();
 	}
-<<<<<<< HEAD
-	//ConvertPixelToStandardBlockSize
-	public int convertPTSBS(int pixels) {
-		if(pixels%PIXELS_IN_BLOCK != 0) return 0;
-		int blocks = pixels / PIXELS_IN_BLOCK;
-		return blocks;
-	}
-	//ConvertStandardBlockSizeToPixel
-	public int convertSBSTP(int block) {
-		int pixels = block * PIXELS_IN_BLOCK;
-		return pixels;
-	}
-	private Position convertXYToSpace(int x, int y) {
-		int row = (int) (y / PIXELS_IN_BLOCK);  
-		int col = (int) (x / PIXELS_IN_BLOCK);
-		if (row >=  PIXELS_IN_BLOCK) row = PIXELS_IN_BLOCK - 1;
-		if (col >= PIXELS_IN_BLOCK) col = PIXELS_IN_BLOCK - 1;
-		return new Position(row, col);
-	}
-	private Position convertSpaceToXY(int x, int y) {
-		return new Position(x *  PIXELS_IN_BLOCK - PIXELS_IN_BLOCK, y * PIXELS_IN_BLOCK - PIXELS_IN_BLOCK);
-	}
-=======
-	*/
->>>>>>> branch 'master' of https://github.com/comp55-spr19/group-project-ram.git
 }
 
 
