@@ -158,12 +158,16 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		player.move();
 	}
 
-	/*@Override
+	@Override
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == lastPressed) {
 			//vX = 0;
 			lastPressed = 99999;
 		}
+		if(player.getCurrent() != PlayerMovement.JUMP) {
+			player.addFriction();
+		}
+		player.move();
 	}
-	*/
+	
 }

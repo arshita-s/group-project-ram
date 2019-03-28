@@ -13,8 +13,8 @@ public class Player implements KeyListener {
 	private static final int MAX_GRAVITY = 10;
 	private static final int MAX_JUMP = 5;
 	private static final int GROUND = 650;
-	private int speedX;
-	private int speedY;
+	private double speedX;
+	private double speedY;
 	private Position startPosition;
 	private GOval player;
 	private PlayerMovement current = PlayerMovement.STANDING;
@@ -55,17 +55,24 @@ public class Player implements KeyListener {
 		player.move(speedX, speedY);
 	}
 	
+	public PlayerMovement getCurrent() {
+		return current;
+	}
+	
 	public void addForce() {
 		if(current == PlayerMovement.JUMP) {
 			processGravity();
 			processFalling();
+			System.out.println("jumping");
 		}
 		else {
 			if(speedX < MAX_SPEED) {
 				speedX += SPEED_DX;
+				System.out.println("left or right");
 			}
 			else if(speedX > MAX_SPEED) {
 				speedX = MAX_SPEED;
+				System.out.println("stopping");
 			}
 		}
 	}
