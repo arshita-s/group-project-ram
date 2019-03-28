@@ -8,9 +8,12 @@ public class Map {
 	private static final String FILENAME = "level.txt";
 	
 	private ArrayList<Obstacle> Obstacles;
+	private ArrayList<Enemy> Enemies;
+	private Player mainPlayer;
 	
 	public Map() {
 		Obstacles = new ArrayList<Obstacle>();
+		Enemies = new ArrayList<Enemy>();
 		this.readFromFile();
 	}
 	
@@ -36,6 +39,17 @@ public class Map {
 					Obstacle temp = new Obstacle(width, length, moves, x, y, velocityx, velocityy, instantDeath);
 					Obstacles.add(temp);
 				}
+				
+				if(str.equals("Player")) {
+					int x = read.nextInt();
+					int y = read.nextInt();
+					mainPlayer = new Player(x, y);
+				}
+				
+				if(str.contentEquals("Enemy")) {
+					Enemy temp = new Enemy();
+					Enemies.add(temp);
+				}
 			}
 			read.close();
 		} catch (Exception e) {
@@ -46,5 +60,10 @@ public class Map {
 	public ArrayList<Obstacle> getList() {
 		return Obstacles;
 	}
+	
+	public Player getPlayer() {
+		return mainPlayer;
+	}
+	
 	
 }

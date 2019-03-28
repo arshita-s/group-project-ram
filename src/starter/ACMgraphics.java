@@ -1,45 +1,63 @@
 package starter;
-import acm.graphics.*;
-import acm.program.*;
-import acm.util.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.Timer;
+
+import acm.graphics.GOval;
+import acm.graphics.GRect;
 // Here I will take obstacles and put them on the screen
-public class ACMgraphics extends GraphicsProgram implements ActionListener, KeyListener {
-	public static final int MAX_BLOCK_HEIGHT = 10;
-	public static final int PROGRAM_HEIGHT = 700; 
-	public static final int PROGRAM_WIDTH = 1000;
-	private static final int PIXELS_IN_BLOCK = PROGRAM_HEIGHT/MAX_BLOCK_HEIGHT;
+
+public class ACMgraphics extends GraphicsPane implements ActionListener, KeyListener {
+	
+	private MainApplication program;
 	private ArrayList<GRect> mapObstacles;
+	private Player player;
 	private Map level;
 	private int vX = 0;
 	private int lastPressed = 0;
 	Timer tm = new Timer(10, this);
 	
-	public void init() {
-		setSize(PROGRAM_WIDTH, PROGRAM_HEIGHT);
-		requestFocus();
-		this.addKeyListener(this);
-		setFocusable(true);
-		setFocusTraversalKeysEnabled(false);
-	}
-	public void setupLevel() {
-		
+	public ACMgraphics(MainApplication app) {
+		super();
+		this.program = app;
 		level = new Map();
-		//adding obstacles to map
 		mapObstacles = new ArrayList<GRect>();
-		GRect obstacle;
+	}
+	
+	@Override
+	public void showContents() {
+		run(program);
+	}
+	
+	@Override
+	public void hideContents() {
 		
+	}
+	
+	@Override
+	public void mousePressed(MouseEvent e) {
+		
+	}
+	
+	public void setupLevel(MainApplication program) {
+		//adding obstacles to map
+		GRect obstacle;
 		for(Obstacle obst: level.getList())
 		{
 			obstacle = createObstacle(obst);
 			mapObstacles.add(obstacle);
-			add(obstacle);
+			program.add(obstacle);
 		}
+		player = level.getPlayer();
+		program.add(player.getGOval());
 	}
+	
 	public void moveMapObstacles(int hMove) {
 		for(GRect current: mapObstacles) {
 			current.move(hMove, 0);
@@ -56,38 +74,65 @@ public class ACMgraphics extends GraphicsProgram implements ActionListener, KeyL
 		return rec;
 	}
 	
-	public void run() {
-		setupLevel();
-		addKeyListener(this);
-		setFocusable(true);
-		setFocusTraversalKeysEnabled(false);
+	public void run(MainApplication program) {
+		setupLevel(program);
 		tm.start();
 	}
+	
+	public void next() {
+		while(!playerAtEnd()) {
+			//TODO all the player processing stuff like
+			// the constant moving at 0
+			//player.move();
+			
+		}
+	}
+	
+
+	private boolean playerAtEnd() {
+		//TODO check to see if player has finished the level.
+		return false;
+	}
+
 	public void actionPerformed(ActionEvent e) {
+		//TODO Also check to see if its the start/end of the map or not.
+		if(player.getGOval().getX() < 150 ) {
+			vX = 1;
+		} else if(player.getGOval().getX() > 650) {
+			vX = -1;
+		} else {
+			vX = 0;
+		}
 		moveMapObstacles(vX);
 	}
-	@Override
+	
+	/*@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_D) {
-			vX = -1;
+			player.setCurrent(PlayerMovement.RIGHT);
+			player.addForce();
+			//vX = -1;
 			lastPressed = KeyEvent.VK_D;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_A) {
-			vX = 1;
+		} else if (e.getKeyCode() == KeyEvent.VK_A) {
+			player.setCurrent(PlayerMovement.LEFT);
+			player.addForce();
+			//vX = 1;
 			lastPressed = KeyEvent.VK_A;
+		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			player.setCurrent(PlayerMovement.JUMPSTANDING);
+			player.addForce();
+			lastPressed = KeyEvent.VK_SPACE;
 		}
 	}
-	@Override
-	public void keyTyped(KeyEvent e) {
-		
-	}
+
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == lastPressed) {
-			vX = 0;
+			//vX = 0;
 			lastPressed = 99999;
 		}
 	}
+<<<<<<< HEAD
 	//ConvertPixelToStandardBlockSize
 	public int convertPTSBS(int pixels) {
 		if(pixels%PIXELS_IN_BLOCK != 0) return 0;
@@ -109,6 +154,9 @@ public class ACMgraphics extends GraphicsProgram implements ActionListener, KeyL
 	private Position convertSpaceToXY(int x, int y) {
 		return new Position(x *  PIXELS_IN_BLOCK - PIXELS_IN_BLOCK, y * PIXELS_IN_BLOCK - PIXELS_IN_BLOCK);
 	}
+=======
+	*/
+>>>>>>> branch 'master' of https://github.com/comp55-spr19/group-project-ram.git
 }
 
 
