@@ -1,5 +1,6 @@
 package starter;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -14,13 +15,17 @@ public class Player implements KeyListener {
 	private static final int GROUND = 650;
 	private int speedX;
 	private int speedY;
+	private Position startPosition;
 	private GOval player;
 	private PlayerMovement current;
 	
-	public Player() {
-		player = new GOval(50, 625, 50, 50);
+	public Player(int x, int y) {
+		startPosition = new Position(x, y);
+		player = new GOval(startPosition.getX(), startPosition.getY(), 50, 50);
+		speedX = 0;
+		speedY = 0;
 	}
-	
+
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_A) {
@@ -36,6 +41,10 @@ public class Player implements KeyListener {
 			addForce();
 		}
 		player.move(speedX, speedY);
+	}
+
+	public GOval getGOval() {
+		return player;
 	}
 	
 	@Override
@@ -54,11 +63,11 @@ public class Player implements KeyListener {
 			processFalling();
 		}
 		else {
-			if(speedX < MAX_SPEED) {
+			if(current == PlayerMovement.RIGHT) {
 				speedX += SPEED_DX;
 			}
-			else if(speedX > MAX_SPEED) {
-				speedX = MAX_SPEED;
+			else if(current == PlayerMovement.LEFT) {
+				speedX -= SPEED_DX;
 			}
 		}
 	}
@@ -97,4 +106,17 @@ public class Player implements KeyListener {
 	public void keyTyped(KeyEvent e) {
 		
 	}
+
+	public Position getPosition() {
+		return startPosition;
+	}
+	
+	public void setCurrent(PlayerMovement current) {
+		this.current = current;
+	}
+	
+	public void move() {
+		player.move(speedX, speedY);
+	}
+	
 }

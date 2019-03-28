@@ -1,5 +1,5 @@
 package starter;
 
 public enum PlayerMovement {
-	LEFT,RIGHT,JUMP;
+	LEFT,RIGHT,STANDING,JUMP;
 }

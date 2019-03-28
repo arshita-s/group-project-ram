@@ -1,18 +1,19 @@
 **Format
 **Obstacle width length moves positionx positiony velocityx velocityy instantDeath
+**Player positionx positiony
 
-
-Obstacle 50 50 false 100 500 0 0 false
-Obstacle 50 50 false 165 500 0 0 false
-Obstacle 50 50 false 350 500 0 0 false
-Obstacle 50 50 false 415 500 0 0 false
-Obstacle 50 50 false 480 500 0 0 false
-Obstacle 3000 50 false 800 650 0 0 false
-Obstacle 3000 50 false 900 600 0 0 false
+Player 170 700
+Obstacle 50 50 false 300 500 0 0 false
+Obstacle 50 50 false 365 500 0 0 false
+Obstacle 50 50 false 550 500 0 0 false
+Obstacle 50 50 false 615 500 0 0 false
+Obstacle 50 50 false 680 500 0 0 false
+Obstacle 3000 50 false 1000 650 0 0 false
+Obstacle 3000 50 false 1100 600 0 0 false
 Obstacle 3000 50 false 0 750 0 0 false
-Obstacle 3000 100 false 700 700 0 0 false
-Obstacle 50 50 false 1000 350 0 0 false
-Obstacle 50 50 false 1065 350 0 0 false
-Obstacle 50 50 false 1130 350 0 0 false
+Obstacle 3000 100 false 900 700 0 0 false
+Obstacle 50 50 false 1200 350 0 0 false
+Obstacle 50 50 false 1265 350 0 0 false
 Obstacle 50 50 false 1330 350 0 0 false
-Obstacle 50 50 false 1395 350 0 0 false
+Obstacle 50 50 false 1530 350 0 0 false
+Obstacle 50 50 false 1595 350 0 0 false
