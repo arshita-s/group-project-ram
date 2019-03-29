@@ -136,6 +136,12 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		if(player.getCurrent() != PlayerMovement.JUMP) {
 			player.addFriction();
 		}
+		else if(player.getCurrent() == PlayerMovement.JUMP){
+			System.out.println(player.getSpeedY());
+			while(player.getSpeedY() < 0) {
+				player.processFalling();
+			}
+		}
 	}
 	
 }

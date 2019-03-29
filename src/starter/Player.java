@@ -11,7 +11,7 @@ public class Player implements KeyListener {
 	private static final double SPEED_DX = .4;
 	private static final double SPEED_DY = .2;
 	private static final int MAX_GRAVITY = 10;
-	private static final int MAX_JUMP = 5;
+	private static final int MAX_JUMP = 50;
 	private static final int GROUND = 650;
 	private double speedX;
 	private double speedY;
@@ -50,9 +50,13 @@ public class Player implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if(current != PlayerMovement.JUMP) {
-				addFriction();
+			addFriction();
 		}
-		player.move(speedX, speedY);
+		else if(current == PlayerMovement.JUMP){
+			while(speedX > 0) {
+				processFalling();
+			}
+		}
 	}
 	
 	public PlayerMovement getCurrent() {
@@ -62,7 +66,6 @@ public class Player implements KeyListener {
 	public void addForce() {
 		if(current == PlayerMovement.JUMP) {
 			processGravity();
-			processFalling();
 		}
 		else {
 			if(speedX < MAX_SPEED) {
@@ -77,6 +80,10 @@ public class Player implements KeyListener {
 				speedX = MAX_SPEED;
 			}
 		}
+	}
+	
+	public double getSpeedY() {
+		return speedY;
 	}
 	
 	public void addFriction() {
@@ -96,19 +103,23 @@ public class Player implements KeyListener {
 				speedX = 0;
 			}
 		}
-		
+		player.move(speedX, speedY);
 	}
 	
 	public void processGravity() {
 		if(speedY < MAX_JUMP) {
 			speedY -= SPEED_DY;
 		}
+		else if(speedY > MAX_JUMP) {
+			speedY = MAX_JUMP;
+		}
 	}
 	
 	public void processFalling() {
-		while(speedY != GROUND) {
+		if(player.getY() < GROUND ) {
 			speedY += SPEED_DY;
 		}
+		player.move(speedX, speedY);
 	}
 	
 	public void processImage() {
