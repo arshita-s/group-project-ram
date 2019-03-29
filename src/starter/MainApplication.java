@@ -31,6 +31,10 @@ public class MainApplication extends GraphicsApplication {
 	public void switchToHelp() {
 		switchToScreen(help);
 	}
+	
+	public void switchHelpInGame() {
+		switchTo(help);
+	}
 
 	/*
 	private void playRandomSound() {

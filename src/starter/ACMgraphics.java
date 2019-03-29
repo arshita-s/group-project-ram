@@ -110,6 +110,8 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		} else if (e.getKeyCode() == KeyEvent.VK_W) {
 			player.setCurrentJump(PlayerJump.JUMP);
 			player.addForce();
+		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			//program.switchHelpInGame();
 		}
 	}
 
