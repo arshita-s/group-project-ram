@@ -11,9 +11,10 @@ public class Player implements KeyListener {
 	private static final double SPEED_DX = .4;
 	private static final double SPEED_DY = .2;
 	private static final int MAX_GRAVITY = 10;
-	private static final int MAX_JUMP = 50;
+	private static final double MAX_JUMP = -2;
 	private static final int GROUND = 650;
 	private double speedX;
+	private boolean jumpStatus;
 	private double speedY;
 	private Position startPosition;
 	private GOval player;
@@ -53,7 +54,7 @@ public class Player implements KeyListener {
 			addFriction();
 		}
 		else if(current == PlayerMovement.JUMP){
-			while(speedX > 0) {
+			while(speedY > 0) {
 				processFalling();
 			}
 		}
@@ -65,7 +66,10 @@ public class Player implements KeyListener {
 	
 	public void addForce() {
 		if(current == PlayerMovement.JUMP) {
-			processGravity();
+			if(speedY > MAX_JUMP) {
+				jumpStatus = true;
+				processGravity();
+			}	
 		}
 		else {
 			if(speedX < MAX_SPEED) {
@@ -103,23 +107,37 @@ public class Player implements KeyListener {
 				speedX = 0;
 			}
 		}
+		if(current == PlayerMovement.JUMP) {
+			if(!jumpStatus) {
+				processFalling();
+				player.setLocation(player.getX(), startPosition.getY());
+			}
+		}
 		player.move(speedX, speedY);
 	}
 	
 	public void processGravity() {
-		if(speedY < MAX_JUMP) {
+		while(jumpStatus) {
 			speedY -= SPEED_DY;
-		}
-		else if(speedY > MAX_JUMP) {
-			speedY = MAX_JUMP;
+			if(speedY < MAX_JUMP) {
+				speedY = MAX_JUMP;
+				jumpStatus = false;
+			}
+			System.out.println("While launching: " + speedY);
+			player.move(speedX, speedY);
 		}
 	}
 	
 	public void processFalling() {
-		if(player.getY() < GROUND ) {
-			speedY += SPEED_DY;
+		speedY = -speedY;
+		while(!jumpStatus && speedY > 0) {
+			speedY -= SPEED_DY;
+			if(speedY <= 0) {
+				speedY = 0;
+			}
+			System.out.println("While falling: after addition" + speedY);
+			player.setLocation(player.getX(), speedY);
 		}
-		player.move(speedX, speedY);
 	}
 	
 	public void processImage() {

@@ -123,6 +123,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		} else if (e.getKeyCode() == KeyEvent.VK_W) {
 			player.setCurrent(PlayerMovement.JUMP);
 			player.addForce();
+			player.addFriction();
 			lastPressed = KeyEvent.VK_W;
 		}
 		player.move();
@@ -130,18 +131,11 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if(e.getKeyCode() == lastPressed) {
+		/*if(e.getKeyCode() == lastPressed) {
 			lastPressed = 99999;
 		}
-		if(player.getCurrent() != PlayerMovement.JUMP) {
-			player.addFriction();
-		}
-		else if(player.getCurrent() == PlayerMovement.JUMP){
-			System.out.println(player.getSpeedY());
-			while(player.getSpeedY() < 0) {
-				player.processFalling();
-			}
-		}
+		*/
+		player.addFriction();
 	}
 	
 }
