@@ -1,13 +1,9 @@
 package starter;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 import acm.graphics.GOval;
 
-public class Player implements KeyListener {
-	private static final double MAX_SPEED = 2;
+public class Player {
+	private static final double MAX_SPEED = 4;
 	private static final double SPEED_DX = .4;
 	private static final double SPEED_DY = .2;
 	private static final int MAX_GRAVITY = 10;
@@ -26,37 +22,8 @@ public class Player implements KeyListener {
 		speedY = 0;
 	}
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_A) {
-			current = PlayerMovement.LEFT;
-			addForce();
-		}
-		else if(e.getKeyCode() == KeyEvent.VK_D) {
-			current = PlayerMovement.RIGHT;
-			addForce();
-		}
-		else if(e.getKeyCode() == KeyEvent.VK_W) {
-			current = PlayerMovement.JUMP;
-			addForce();
-		}
-		player.move(speedX, speedY);
-	}
-
 	public GOval getGOval() {
 		return player;
-	}
-	
-	@Override
-	public void keyReleased(KeyEvent e) {
-		if(current != PlayerMovement.JUMP) {
-			addFriction();
-		}
-		else if(current == PlayerMovement.JUMP){
-			while(speedX > 0) {
-				processFalling();
-			}
-		}
 	}
 	
 	public PlayerMovement getCurrent() {
@@ -66,19 +33,10 @@ public class Player implements KeyListener {
 	public void addForce() {
 		if(current == PlayerMovement.JUMP) {
 			processGravity();
-		}
-		else {
-			if(speedX < MAX_SPEED) {
-				if(current == PlayerMovement.RIGHT) {
-					speedX += SPEED_DX;
-				}
-				else if(current == PlayerMovement.LEFT) {
-					speedX -= SPEED_DX;
-				}
-			}
-			else if(speedX > MAX_SPEED) {
-				speedX = MAX_SPEED;
-			}
+		} else 	if(current == PlayerMovement.RIGHT && speedX < MAX_SPEED) {
+				speedX = Math.min(speedX + SPEED_DX, MAX_SPEED);
+		} else if(current == PlayerMovement.LEFT && -MAX_SPEED < speedX) {
+				speedX = Math.max(speedX - SPEED_DX, -MAX_SPEED);
 		}
 	}
 	
@@ -86,7 +44,17 @@ public class Player implements KeyListener {
 		return speedY;
 	}
 	
+	public double getSpeedX() {
+		return speedX;
+	}
+	
 	public void addFriction() {
+		if(current == PlayerMovement.STANDING && speedX < 0) {
+			speedX = Math.min(0, speedX + SPEED_DX / 2);
+		} else if(current == PlayerMovement.STANDING && 0 < speedX) {
+			speedX = Math.max(0, speedX - SPEED_DX / 2);
+		}
+			/*
 		if(current == PlayerMovement.RIGHT) {
 			while(speedX > 0) {
 				speedX -= (SPEED_DX);
@@ -94,8 +62,7 @@ public class Player implements KeyListener {
 			if(speedX < 0) {
 				speedX = 0;
 			}
-		}
-		if(current == PlayerMovement.LEFT) {
+		} else if(current == PlayerMovement.LEFT) {
 			while(speedX < 0) {
 				speedX += (SPEED_DX);
 			}
@@ -103,7 +70,8 @@ public class Player implements KeyListener {
 				speedX = 0;
 			}
 		}
-		player.move(speedX, speedY);
+			 */
+		//player.move(speedX, speedY);
 	}
 	
 	public void processGravity() {
@@ -123,11 +91,6 @@ public class Player implements KeyListener {
 	}
 	
 	public void processImage() {
-		
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
 		
 	}
 

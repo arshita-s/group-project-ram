@@ -18,7 +18,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private ArrayList<GRect> mapObstacles;
 	private Player player;
 	private Map level;
-	private int vX = 0;
+	private double vX = 0;
 	private int lastPressed = 0;
 	Timer tm = new Timer(10, this);
 	
@@ -57,7 +57,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		program.add(player.getGOval());
 	}
 	
-	public void moveMapObstacles(int hMove) {
+	public void moveMapObstacles(double hMove) {
 		for(GRect current: mapObstacles) {
 			current.move(hMove, 0);
 		}
@@ -82,32 +82,18 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		setupLevel(program);
 		tm.start();
 	}
-	
-	public void next() {
-		while(!playerAtEnd()) {
-			//TODO all the player processing stuff like
-			// the constant moving at 0
-			//player.move();
-			
-		}
-	}
-	
-
-	private boolean playerAtEnd() {
-		//TODO check to see if player has finished the level.
-		return false;
-	}
 
 	public void actionPerformed(ActionEvent e) {
 		if(player.getGOval().getX() < 150 ) {
-			vX = 1;
+			vX = 4;
 		} else if(player.getGOval().getX() > 650) {
-			vX = -1;
+			vX = -4;
 		} else {
 			vX = 0;
 		}
 		moveMapObstacles(vX);
 		player.move();
+		player.addFriction();
 	}
 	
 	@Override
@@ -132,16 +118,13 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == lastPressed) {
 			lastPressed = 99999;
-		}
-		if(player.getCurrent() != PlayerMovement.JUMP) {
-			player.addFriction();
-		}
-		else if(player.getCurrent() == PlayerMovement.JUMP){
+		} else if(player.getCurrent() == PlayerMovement.JUMP){
 			System.out.println(player.getSpeedY());
 			while(player.getSpeedY() < 0) {
 				player.processFalling();
 			}
 		}
+		player.setCurrent(PlayerMovement.STANDING);
 	}
 	
 }
