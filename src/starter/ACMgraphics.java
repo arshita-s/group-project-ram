@@ -73,13 +73,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 	}
 
-	//change parameter to object once Object has been made
-	public GRect createObstacle(Position p, Size s, Velocity v) {
-		GRect objRec = new GRect(p.getX(), p.getY(), s.getWidth(), s.getHeight()); 
-		objRec.setFillColor(Color.BLACK);
-		objRec.setFilled(true);
-		return objRec;
-	}
 	public GOval createEnemy(Enemy e) {
 		GOval objOva = new GOval(e.getCurrentPosition().getX(), e.getCurrentPosition().getY(), e.getSize().getWidth(), e.getSize().getHeight()); 
 		objOva.setFillColor(Color.RED);
