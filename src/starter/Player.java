@@ -1,4 +1,4 @@
-package starter;
+ package starter;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -7,6 +7,11 @@ import java.awt.event.KeyListener;
 import acm.graphics.GOval;
 
 public class Player implements KeyListener {
+	/* 
+	 * For what is below, I suggest not having them "final"
+	 * because of how we will be changing them depending 
+	 * the power-up used.
+	*/
 	private static final double MAX_SPEED = 2;
 	private static final double SPEED_DX = .4;
 	private static final double SPEED_DY = .2;
