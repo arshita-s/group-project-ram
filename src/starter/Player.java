@@ -1,8 +1,10 @@
- package starter;
+package starter;
+
+import java.awt.Color;
 
 import acm.graphics.GOval;
 
-public class Player{
+public class Player {
 	/* 
 	 * For what is below, I suggest not having them "final"
 	 * because of how we will be changing them depending 
@@ -13,108 +15,78 @@ public class Player{
 	private static double SPEED_DY = .2;
 	private static int MAX_GRAVITY = 10;
 	private static double MAX_JUMP = 2;
-	private static int GROUND = 650;
+	private static int GROUND = 750;
+	private static final int PLAYER_SIZE_Y = 50;
 	private double speedX;
 	private double speedY;
 	private Position startPosition;
 	private GOval player;
-	private PlayerMovement current = PlayerMovement.STANDING;
+	private PlayerMovement currentMove;
+	private PlayerJump currentJump;
+
 	
 	/*
 	 * Constructor
 	 */
 	public Player(int x, int y) {
 		startPosition = new Position(x, y);
-		player = new GOval(startPosition.getX(), startPosition.getY(), 50, 50);
+		player = new GOval(startPosition.getX(), startPosition.getY(), 50, PLAYER_SIZE_Y);
 		speedX = 0;
 		speedY = 0;
+		currentMove = PlayerMovement.STANDING;
+		currentJump = PlayerJump.STAND;
 	}
 
-	/*
-	 * Physics below
-	 */
+
 	public void addForce() {
-		if(current == PlayerMovement.JUMP) {
-			if(speedY > MAX_JUMP) {
-				processGravity();
-			}	
-		}
-		else {
-			if(speedX < MAX_SPEED) {
-				if(current == PlayerMovement.RIGHT) {
-					speedX += SPEED_DX;
-				}
-				else if(current == PlayerMovement.LEFT) {
-					speedX -= SPEED_DX;
-				}
-			}
-			else if(speedX > MAX_SPEED) {
-				speedX = MAX_SPEED;
-			}
+		if (currentJump == PlayerJump.JUMP) {
+			speedY = Math.max(speedY - SPEED_DY, -MAX_GRAVITY);
+		} else if (currentMove == PlayerMovement.RIGHT && speedX < MAX_SPEED) {
+			speedX = Math.min(speedX + SPEED_DX, MAX_SPEED);
+		} else if (currentMove == PlayerMovement.LEFT && -MAX_SPEED < speedX) {
+			speedX = Math.max(speedX - SPEED_DX, -MAX_SPEED);
 		}
 	}
-	
-	public void addFriction() {
-		if(current == PlayerMovement.RIGHT) {
-			while(speedX > 0) {
-				speedX -= (SPEED_DX);
-			}
-			if(speedX < 0) {
-				speedX = 0;
-			}
-		}
-		if(current == PlayerMovement.LEFT) {
-			while(speedX < 0) {
-				speedX += (SPEED_DX);
-			}
-			if(speedX > 0) {
-				speedX = 0;
-			}
-		}
-		if(current == PlayerMovement.JUMP) {
-			if(current != PlayerMovement.JUMP) {
-				processFalling();
-				player.setLocation(player.getX(), startPosition.getY());
-			}
-		}
-		player.move(speedX, speedY);
-	}
-	
-	public void processGravity() {
-		while(current == PlayerMovement.JUMP) {
-			speedY -= SPEED_DY;
-			if(speedY < MAX_JUMP) {
-				speedY = MAX_JUMP;
-				current = PlayerMovement.STANDING;
-			}
-			System.out.println("While launching: " + speedY);
-			player.move(speedX, speedY);
-		}
-	}
-	
-	public void processFalling() {
-		speedY = -speedY;
-		while(current != PlayerMovement.STANDING && speedY > 0) {
-			speedY -= SPEED_DY;
-			if(speedY <= 0) {
-				speedY = 0;
-			}
-			System.out.println("While falling: after addition" + speedY);
-			player.setLocation(player.getX(), speedY);
-		}
-	}
-	
-	public void processImage() {
 		
+	public void addFriction() {
+		if (currentMove == PlayerMovement.STANDING && speedX < 0) {
+			speedX = Math.min(0, speedX + SPEED_DX / 2);
+		} else if (currentMove == PlayerMovement.STANDING && 0 < speedX) {
+			speedX = Math.max(0, speedX - SPEED_DX / 2);
+		}
 	}
 
+	public void processGravity() {
+		if (currentJump == PlayerJump.STAND || speedY < -MAX_GRAVITY) {
+			if (player.getY() + player.getHeight() <= GROUND - 1) {
+				speedY = Math.min(speedY + SPEED_DY / 3, MAX_GRAVITY);
+			} else {
+				speedY = 0;
+				player.setLocation(player.getX(), GROUND - player.getHeight());
+			}
+		}
+		/*
+		 * if(speedY < MAX_GRAVITY) { speedY -= SPEED_DY; } else if(speedY >
+		 * MAX_GRAVITY) { speedY = MAX_GRAVITY; }
+		 */
+	}
+
+	public void processFalling() {
+		if (player.getY() < GROUND) {
+			speedY += SPEED_DY;
+		}
+	}
+
+	public void processImage() {
+
+	}
 	
 	/*
 	 * Setters and Getters below.
 	 */
 
 	public PlayerMovement getCurrent() {
-		return current;
+		return currentMove;
 	}
 	
 	public GOval getGOval() {
@@ -124,11 +96,15 @@ public class Player{
 	public Position getPosition() {
 		return startPosition;
 	}
-	
-	public void setCurrent(PlayerMovement current) {
-		this.current = current;
+
+	public void setCurrentMove(PlayerMovement current) {
+		this.currentMove = current;
 	}
-	
+
+	public void setCurrentJump(PlayerJump current) {
+		this.currentJump = current;
+	}
+
 	public void move() {
 		player.move(speedX, speedY);
 	}

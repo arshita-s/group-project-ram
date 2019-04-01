@@ -1,4 +1,5 @@
 package starter;
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,18 +12,18 @@ import javax.swing.Timer;
 
 import acm.graphics.GOval;
 import acm.graphics.GRect;
+
 // Here I will take obstacles and put them on the screen
 public class ACMgraphics extends GraphicsPane implements ActionListener, KeyListener {
-	
+
 	private MainApplication program;
 	private ArrayList<GRect> mapObstacles;
 	private ArrayList<GOval> mapEnemies;
 	private Player player;
 	private Map level;
-	private int vX = 0;
-	private int lastPressed = 0;
+	private double vX = 0;
 	Timer tm = new Timer(10, this);
-	
+
 	public ACMgraphics(MainApplication app) {
 		super();
 		this.program = app;
@@ -30,46 +31,49 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		mapObstacles = new ArrayList<GRect>();
 		mapEnemies = new ArrayList<GOval>();
 	}
-	
+
 	public void run(MainApplication program) {
 		setupLevel(program);
 		tm.start();
 	}
-	
+
 	public void actionPerformed(ActionEvent e) {
-		if(player.getGOval().getX() < 150 ) {
-			vX = 1;
-		} else if(player.getGOval().getX() > 650) {
-			vX = -1;
+		if (player.getGOval().getX() < 150) {
+			vX = 3;
+		} else if (player.getGOval().getX() > 650) {
+			vX = -3;
 		} else {
 			vX = 0;
 		}
 		moveMapObstacles(vX);
 		moveMapEnemies(vX);
 		player.move();
+		player.addFriction();
+		player.processGravity();
+		//System.out.println(player.getSpeedX());
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_D) {
-			player.setCurrent(PlayerMovement.RIGHT);
+		if (e.getKeyCode() == KeyEvent.VK_D) {
+			player.setCurrentMove(PlayerMovement.RIGHT);
 			player.addForce();
-			lastPressed = KeyEvent.VK_D;
 		} else if (e.getKeyCode() == KeyEvent.VK_A) {
-			player.setCurrent(PlayerMovement.LEFT);
+			player.setCurrentMove(PlayerMovement.LEFT);
 			player.addForce();
-			lastPressed = KeyEvent.VK_A;
 		} else if (e.getKeyCode() == KeyEvent.VK_W) {
-			player.setCurrent(PlayerMovement.JUMP);
+			player.setCurrentJump(PlayerJump.JUMP);
 			player.addForce();
 			player.addFriction();
-			lastPressed = KeyEvent.VK_W;
+		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			//program.switchHelpInGame();
 		}
-		player.move();
 	}
 	
 	@Override
 	public void keyReleased(KeyEvent e) {
+		player.setCurrentMove(PlayerMovement.STANDING);
+		player.setCurrentJump(PlayerJump.STAND);
 		player.addFriction();
 	}
 	
@@ -107,21 +111,21 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		rec.setFilled(true);
 		return rec;
 	}
-	public void moveMapObstacles(int hMove) {
+	public void moveMapObstacles(double vX2) {
 		for(GRect current: mapObstacles) {
-			current.move(hMove, 0);
+			current.move(vX2, 0);
 		}
 	}
-	private void moveMapEnemies(int hMove) {
+	private void moveMapEnemies(double vX2) {
 		int i = 0;
 		for(GOval current: mapEnemies) {
 			level.getEnemyList().get(i).move();
 			int enemyDirection = level.getEnemyList().get(i).getdX();
-			current.move(hMove + enemyDirection , 0);
+			current.move(vX2 + enemyDirection , 0);
 			i++;
 		}
 	}
-	
+
 	public void next() {
 		while(!playerAtEnd()) {
 			//TODO all the player processing stuff like

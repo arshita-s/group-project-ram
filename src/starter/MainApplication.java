@@ -8,6 +8,7 @@ public class MainApplication extends GraphicsApplication {
 	private ACMgraphics game;
 	private MainMenuPane mainMenu;
 	private HelpPane help;
+	private ScorePane score;
 
 	public void init() {
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -30,6 +31,14 @@ public class MainApplication extends GraphicsApplication {
 	
 	public void switchToHelp() {
 		switchToScreen(help);
+	}
+	
+	public void switchToScore() {
+		switchToScreen(score);
+	}
+	
+	public void switchHelpInGame() {
+		switchTo(help);
 	}
 
 	/*
