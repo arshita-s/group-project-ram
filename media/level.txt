@@ -1,13 +1,3 @@
-**Format
-<<<<<<< HEAD
-**Obstacle width height moves positionx positiony velocityx velocityy instantDeath
-=======
-**Obstacle width length moves positionx positiony velocityx velocityy instantDeath
-**Player positionx positiony
->>>>>>> branch 'master' of https://github.com/comp55-spr19/group-project-ram.git
-
-<<<<<<< HEAD
-
 Obstacle 100 1 false 0 10 0 0 false //floor
 Obstacle 3 1 false 6 6 0 0 false
 Obstacle 3 1 false 3 8 0 0 false
@@ -27,4 +17,3 @@ Obstacle 50 50 false 1265 350 0 0 false
 Obstacle 50 50 false 1330 350 0 0 false
 Obstacle 50 50 false 1530 350 0 0 false
 Obstacle 50 50 false 1595 350 0 0 false
->>>>>>> branch 'master' of https://github.com/comp55-spr19/group-project-ram.git
