@@ -18,10 +18,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	private MainApplication program;
 	private ArrayList<GRect> mapObstacles;
+	private ArrayList<GOval> mapEnemies;
 	private Player player;
 	private Map level;
 	private double vX = 0;
-	private PlayerMovement lastPressed;
 	Timer tm = new Timer(10, this);
 
 	public ACMgraphics(MainApplication app) {
@@ -29,55 +29,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		this.program = app;
 		level = new Map();
 		mapObstacles = new ArrayList<GRect>();
-	}
-
-	@Override
-	public void showContents() {
-		run(program);
-	}
-
-	@Override
-	public void hideContents() {
-
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-
-	}
-
-	public void setupLevel(MainApplication program) {
-		// adding obstacles to map
-		GRect obstacle;
-		for (Obstacle obst : level.getList()) {
-			obstacle = createObstacle(obst);
-			mapObstacles.add(obstacle);
-			program.add(obstacle);
-		}
-		player = level.getPlayer();
-		program.add(player.getGOval());
-	}
-
-	public void moveMapObstacles(double hMove) {
-		for (GRect current : mapObstacles) {
-			current.move(hMove, 0);
-		}
-	}
-
-	// change parameter to object once Object has been made
-	public GRect createObstacle(Position p, Size s, Velocity v) {
-		GRect objRec = new GRect(p.getX(), p.getY(), s.getWidth(), s.getHeight());
-		objRec.setFillColor(Color.BLACK);
-		objRec.setFilled(true);
-		return objRec;
-	}
-
-	public GRect createObstacle(Obstacle obs) {
-		GRect rec = new GRect(obs.getPosition().getX(), obs.getPosition().getY(), obs.getSize().getWidth(),
-				obs.getSize().getHeight());
-		rec.setFillColor(Color.BLACK);
-		rec.setFilled(true);
-		return rec;
+		mapEnemies = new ArrayList<GOval>();
 	}
 
 	public void run(MainApplication program) {
@@ -94,6 +46,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			vX = 0;
 		}
 		moveMapObstacles(vX);
+		moveMapEnemies(vX);
 		player.move();
 		player.addFriction();
 		player.processGravity();
@@ -111,15 +64,94 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		} else if (e.getKeyCode() == KeyEvent.VK_W) {
 			player.setCurrentJump(PlayerJump.JUMP);
 			player.addForce();
+			player.addFriction();
 		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			//program.switchHelpInGame();
 		}
 	}
-
+	
 	@Override
 	public void keyReleased(KeyEvent e) {
 		player.setCurrentMove(PlayerMovement.STANDING);
 		player.setCurrentJump(PlayerJump.STAND);
+		player.addFriction();
+	}
+	
+	public void setupLevel(MainApplication program) {
+		//adding obstacles to map
+		GRect obstacle;
+		for(Obstacle obst: level.getObstacleList())
+		{
+			obstacle = createObstacle(obst);
+			mapObstacles.add(obstacle);
+			program.add(obstacle);
+		}
+		GOval enemy;
+		for(Enemy enem: level.getEnemyList())
+		{
+			enemy = createEnemy(enem);
+			mapEnemies.add(enemy);
+			program.add(enemy);
+		}
+		player = level.getPlayer();
+		program.add(player.getGOval());
+		
 	}
 
+	public GOval createEnemy(Enemy e) {
+		GOval objOva = new GOval(e.getCurrentPosition().getX(), e.getCurrentPosition().getY(), e.getSize().getWidth(), e.getSize().getHeight()); 
+		objOva.setFillColor(Color.RED);
+		objOva.setFilled(true);
+		return objOva;
+	}
+	
+	public GRect createObstacle(Obstacle obs) {
+		GRect rec = new GRect(obs.getPosition().getX(), obs.getPosition().getY(), obs.getSize().getWidth(), obs.getSize().getHeight());
+		rec.setFillColor(Color.BLACK);
+		rec.setFilled(true);
+		return rec;
+	}
+	public void moveMapObstacles(double vX2) {
+		for(GRect current: mapObstacles) {
+			current.move(vX2, 0);
+		}
+	}
+	private void moveMapEnemies(double vX2) {
+		int i = 0;
+		for(GOval current: mapEnemies) {
+			level.getEnemyList().get(i).move();
+			int enemyDirection = level.getEnemyList().get(i).getdX();
+			current.move(vX2 + enemyDirection , 0);
+			i++;
+		}
+	}
+
+	public void next() {
+		while(!playerAtEnd()) {
+			//TODO all the player processing stuff like
+			// the constant moving at 0
+			//player.move();
+			
+		}
+	}
+
+	private boolean playerAtEnd() {
+		//TODO check to see if player has finished the level.
+		return false;
+	}
+
+	@Override
+	public void showContents() {
+		run(program);
+	}
+	
+	@Override
+	public void hideContents() {
+		
+	}
+	
+	@Override
+	public void mousePressed(MouseEvent e) {
+		
+	}	
 }

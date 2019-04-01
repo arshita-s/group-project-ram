@@ -45,9 +45,16 @@ public class Map {
 					int y = read.nextInt();
 					mainPlayer = new Player(x, y);
 				}
-				
-				if(str.contentEquals("Enemy")) {
-					Enemy temp = new Enemy();
+				//(int health, int damage, Size size, Position position, movesWithin)
+				if(str.equals("Enemy")) {
+					int health = read.nextInt();
+					int damage = read.nextInt();
+					int width = read.nextInt();
+					int height = read.nextInt();
+					int xPos = read.nextInt();
+					int yPos = read.nextInt();
+					int movesWithin = read.nextInt();
+					Enemy temp = new Enemy(health, damage, new Size(width, height), new Position(xPos, yPos), movesWithin);
 					Enemies.add(temp);
 				}
 			}
@@ -57,13 +64,13 @@ public class Map {
 		}
 	}
 	
-	public ArrayList<Obstacle> getList() {
+	public ArrayList<Obstacle> getObstacleList() {
 		return Obstacles;
 	}
-	
+	public ArrayList<Enemy> getEnemyList() {
+		return Enemies;
+	}
 	public Player getPlayer() {
 		return mainPlayer;
 	}
-	
-	
 }

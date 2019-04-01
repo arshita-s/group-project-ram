@@ -5,12 +5,18 @@ import java.awt.Color;
 import acm.graphics.GOval;
 
 public class Player {
-	private static final double MAX_SPEED = 4;
+	/* 
+	 * For what is below, I suggest not having them "final"
+	 * because of how we will be changing them depending 
+	 * the power-up used.
+	*/
+	private static final double MAX_SPEED = 2;
 	private static final double SPEED_DX = .4;
-	private static final double SPEED_DY = 1;
-	private static final int MAX_GRAVITY = 3;
-	private static final int GROUND = 750;
 	private static final int PLAYER_SIZE_Y = 50;
+	private static final double SPEED_DY = .2;
+	private static final int MAX_GRAVITY = 10;
+	private static final double MAX_JUMP = 2;
+	private static final int GROUND = 650;
 	private double speedX;
 	private double speedY;
 	private Position startPosition;
@@ -18,6 +24,10 @@ public class Player {
 	private PlayerMovement currentMove;
 	private PlayerJump currentJump;
 
+	
+	/*
+	 * Constructor
+	 */
 	public Player(int x, int y) {
 		startPosition = new Position(x, y);
 		player = new GOval(startPosition.getX(), startPosition.getY(), 50, PLAYER_SIZE_Y);
@@ -27,13 +37,6 @@ public class Player {
 		currentJump = PlayerJump.STAND;
 	}
 
-	public GOval getGOval() {
-		return player;
-	}
-
-	public PlayerMovement getCurrentMove() {
-		return currentMove;
-	}
 
 	public void addForce() {
 		if (currentJump == PlayerJump.JUMP) {
@@ -44,15 +47,7 @@ public class Player {
 			speedX = Math.max(speedX - SPEED_DX, -MAX_SPEED);
 		}
 	}
-
-	public double getSpeedY() {
-		return speedY;
-	}
-
-	public double getSpeedX() {
-		return speedX;
-	}
-
+		
 	public void addFriction() {
 		if (currentMove == PlayerMovement.STANDING && speedX < 0) {
 			speedX = Math.min(0, speedX + SPEED_DX / 2);
@@ -85,6 +80,18 @@ public class Player {
 	public void processImage() {
 
 	}
+	
+	/*
+	 * Setters and Getters below.
+	 */
+
+	public PlayerMovement getCurrent() {
+		return currentMove;
+	}
+	
+	public GOval getGOval() {
+		return player;
+	}
 
 	public Position getPosition() {
 		return startPosition;
@@ -100,5 +107,21 @@ public class Player {
 
 	public void move() {
 		player.move(speedX, speedY);
+	}
+
+	public void setSpeedX(int sX) {
+		speedX = sX;
+	}
+	
+	public double getSpeedX() {
+		return speedX;
+	}
+
+	public void setSpeedY(int sY) {
+		speedY = sY;
+	}
+	
+	public double getSpeedY() {
+		return speedY;
 	}
 }
