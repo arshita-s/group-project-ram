@@ -16,15 +16,17 @@ public class Player implements KeyListener {
 	private static final double SPEED_DX = .4;
 	private static final double SPEED_DY = .2;
 	private static final int MAX_GRAVITY = 10;
-	private static final double MAX_JUMP = -2;
+	private static final double MAX_JUMP = 2;
 	private static final int GROUND = 650;
 	private double speedX;
-	private boolean jumpStatus;
 	private double speedY;
 	private Position startPosition;
 	private GOval player;
 	private PlayerMovement current = PlayerMovement.STANDING;
 	
+	/*
+	 * Constructor
+	 */
 	public Player(int x, int y) {
 		startPosition = new Position(x, y);
 		player = new GOval(startPosition.getX(), startPosition.getY(), 50, 50);
@@ -32,6 +34,9 @@ public class Player implements KeyListener {
 		speedY = 0;
 	}
 
+	/*
+	 * Handling keyboard input
+	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_A) {
@@ -45,13 +50,11 @@ public class Player implements KeyListener {
 		else if(e.getKeyCode() == KeyEvent.VK_W) {
 			current = PlayerMovement.JUMP;
 			addForce();
+			addFriction();
 		}
 		player.move(speedX, speedY);
 	}
 
-	public GOval getGOval() {
-		return player;
-	}
 	
 	@Override
 	public void keyReleased(KeyEvent e) {
@@ -64,15 +67,18 @@ public class Player implements KeyListener {
 			}
 		}
 	}
-	
-	public PlayerMovement getCurrent() {
-		return current;
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		
 	}
 	
+	/*
+	 * Physics below
+	 */
 	public void addForce() {
 		if(current == PlayerMovement.JUMP) {
 			if(speedY > MAX_JUMP) {
-				jumpStatus = true;
 				processGravity();
 			}	
 		}
@@ -89,10 +95,6 @@ public class Player implements KeyListener {
 				speedX = MAX_SPEED;
 			}
 		}
-	}
-	
-	public double getSpeedY() {
-		return speedY;
 	}
 	
 	public void addFriction() {
@@ -113,7 +115,7 @@ public class Player implements KeyListener {
 			}
 		}
 		if(current == PlayerMovement.JUMP) {
-			if(!jumpStatus) {
+			if(current != PlayerMovement.JUMP) {
 				processFalling();
 				player.setLocation(player.getX(), startPosition.getY());
 			}
@@ -122,11 +124,11 @@ public class Player implements KeyListener {
 	}
 	
 	public void processGravity() {
-		while(jumpStatus) {
+		while(current == PlayerMovement.JUMP) {
 			speedY -= SPEED_DY;
 			if(speedY < MAX_JUMP) {
 				speedY = MAX_JUMP;
-				jumpStatus = false;
+				current = PlayerMovement.STANDING;
 			}
 			System.out.println("While launching: " + speedY);
 			player.move(speedX, speedY);
@@ -135,7 +137,7 @@ public class Player implements KeyListener {
 	
 	public void processFalling() {
 		speedY = -speedY;
-		while(!jumpStatus && speedY > 0) {
+		while(current != PlayerMovement.STANDING && speedY > 0) {
 			speedY -= SPEED_DY;
 			if(speedY <= 0) {
 				speedY = 0;
@@ -149,9 +151,17 @@ public class Player implements KeyListener {
 		
 	}
 
-	@Override
-	public void keyTyped(KeyEvent e) {
-		
+	
+	/*
+	 * Setters and Getters below.
+	 */
+
+	public PlayerMovement getCurrent() {
+		return current;
+	}
+	
+	public GOval getGOval() {
+		return player;
 	}
 
 	public Position getPosition() {
@@ -164,5 +174,21 @@ public class Player implements KeyListener {
 	
 	public void move() {
 		player.move(speedX, speedY);
+	}
+
+	public void setSpeedX(int sX) {
+		speedX = sX;
+	}
+	
+	public double getSpeedX() {
+		return speedX;
+	}
+
+	public void setSpeedY(int sY) {
+		speedY = sY;
+	}
+	
+	public double getSpeedY() {
+		return speedY;
 	}
 }
