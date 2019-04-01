@@ -1,5 +1,7 @@
 package starter;
 
+import java.awt.Color;
+
 import acm.graphics.GOval;
 
 public class Player {
@@ -60,9 +62,9 @@ public class Player {
 	}
 
 	public void processGravity() {
-		if (currentJump == PlayerJump.STAND || speedY == -MAX_GRAVITY) {
-			if (player.getY() + player.getHeight() <= GROUND) {
-				speedY += SPEED_DY;
+		if (currentJump == PlayerJump.STAND || speedY < -MAX_GRAVITY) {
+			if (player.getY() + player.getHeight() <= GROUND - 1) {
+				speedY = Math.min(speedY + SPEED_DY / 3, MAX_GRAVITY);
 			} else {
 				speedY = 0;
 				player.setLocation(player.getX(), GROUND - player.getHeight());
