@@ -53,7 +53,8 @@ public class Map {
 					int height = read.nextInt();
 					int xPos = read.nextInt();
 					int yPos = read.nextInt();
-					Enemy temp = new Enemy(health, damage, new Size(width, height), new Position(xPos, yPos), 50);
+					int movesWithin = read.nextInt();
+					Enemy temp = new Enemy(health, damage, new Size(width, height), new Position(xPos, yPos), movesWithin);
 					Enemies.add(temp);
 				}
 			}

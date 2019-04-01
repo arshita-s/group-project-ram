@@ -15,7 +15,7 @@ public class Enemy {
 	private boolean canJump;
 	
 	private GOval enemy;
-	private int dX = 1;
+	private int dX;
 	
 	
 	/*
@@ -27,20 +27,22 @@ public class Enemy {
 		this.setSize(s);
 		this.movesWithin = movesW;
 		this.setSpawnPoint(p);
-		this.setCurrentPosition(p);
+		this.setCurrentPosition(new Position(p.getX(), p.getY()));
 		this.setJumping(false);
 		this.setCanJump(false);
+		this.setdX(1);
 		enemy = new GOval(p.getX(), p.getY(), s.getWidth(), s.getHeight());
 	}
 	/*
 	 * Enemy's movements
 	 */
 	public void move() {
-		if (currentPosition.getX() + dX > (spawnPoint.getX() + movesWithin) || currentPosition.getX() + dX < (spawnPoint.getX() + movesWithin)) {
-			dX = dX * -1;
+		if (currentPosition.getX() + dX > (spawnPoint.getX() + movesWithin) || currentPosition.getX() + dX < (spawnPoint.getX() - movesWithin)) {
+			setdX(getdX() * -1);
 		}
-		enemy.move(currentPosition.getX() + dX, currentPosition.getY());
-	}
+		currentPosition.setX(currentPosition.getX() + getdX());
+		
+	} 
 	
 	/*
 	 * Setters and Getters below

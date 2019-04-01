@@ -93,6 +93,17 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		rec.setFilled(true);
 		return rec;
 	}
+	private void moveMapEnemies(int hMove) {
+		int i = 0;
+		for(GOval current: mapEnemies) {
+			level.getEnemyList().get(i).move();
+			int enemyDirection = level.getEnemyList().get(i).getdX();
+			current.move(hMove + enemyDirection , 0);
+			
+			i++;
+		}
+		
+	}
 	
 	public void run(MainApplication program) {
 		setupLevel(program);
@@ -125,13 +136,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		moveMapObstacles(vX);
 		moveMapEnemies(vX);
 		player.move();
-	}
-	
-	private void moveMapEnemies(int hMove) {
-		for(GOval current: mapEnemies) {
-			current.move(hMove , 0);
-		}
-		
 	}
 
 	@Override
