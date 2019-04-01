@@ -50,7 +50,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		player.move();
 		player.addFriction();
 		player.processGravity();
-		//System.out.println(player.getSpeedX());
+		System.out.println(player.getSpeedY());
 	}
 
 	@Override
