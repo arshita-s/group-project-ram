@@ -16,6 +16,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	
 	private MainApplication program;
 	private ArrayList<GRect> mapObstacles;
+	private ArrayList<GOval> mapEnemies;
 	private Player player;
 	private Map level;
 	private int vX = 0;
@@ -27,6 +28,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		this.program = app;
 		level = new Map();
 		mapObstacles = new ArrayList<GRect>();
+		mapEnemies = new ArrayList<GOval>();
 	}
 	
 	@Override
@@ -47,14 +49,22 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	public void setupLevel(MainApplication program) {
 		//adding obstacles to map
 		GRect obstacle;
-		for(Obstacle obst: level.getList())
+		for(Obstacle obst: level.getObstacleList())
 		{
 			obstacle = createObstacle(obst);
 			mapObstacles.add(obstacle);
 			program.add(obstacle);
 		}
+		GOval enemy;
+		for(Enemy enem: level.getEnemyList())
+		{
+			enemy = createEnemy(enem);
+			mapEnemies.add(enemy);
+			program.add(enemy);
+		}
 		player = level.getPlayer();
 		program.add(player.getGOval());
+		
 	}
 	
 	public void moveMapObstacles(int hMove) {
@@ -69,6 +79,12 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		objRec.setFillColor(Color.BLACK);
 		objRec.setFilled(true);
 		return objRec;
+	}
+	public GOval createEnemy(Enemy e) {
+		GOval objOva = new GOval(e.getCurrentPosition().getX(), e.getCurrentPosition().getY(), e.getSize().getWidth(), e.getSize().getHeight()); 
+		objOva.setFillColor(Color.RED);
+		objOva.setFilled(true);
+		return objOva;
 	}
 	
 	public GRect createObstacle(Obstacle obs) {
@@ -107,9 +123,17 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			vX = 0;
 		}
 		moveMapObstacles(vX);
+		moveMapEnemies(vX);
 		player.move();
 	}
 	
+	private void moveMapEnemies(int hMove) {
+		for(GOval current: mapEnemies) {
+			current.move(hMove , 0);
+		}
+		
+	}
+
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_D) {

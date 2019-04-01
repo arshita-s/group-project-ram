@@ -1,15 +1,20 @@
 package starter;
 
+import java.awt.Color;
+
+import acm.graphics.GOval;
+
 public class Enemy {
 	private int health; // Health that enemy starts with
 	private Size size; // Enemies size
-	private Position position; //Where enemy spawns
+	private Position spawnPoint; //Where enemy spawns
 	private Position currentPosition; //Where enemy currently is
 	private int damage; // Damage that enemy gives to player
 	private int movesWithin;
 	private boolean isJumping; 
 	private boolean canJump;
 	
+	private GOval enemy;
 	private int dX = 1;
 	
 	
@@ -21,11 +26,21 @@ public class Enemy {
 		this.setDamage(d);
 		this.setSize(s);
 		this.movesWithin = movesW;
-		this.setPosition(p);
+		this.setSpawnPoint(p);
+		this.setCurrentPosition(p);
 		this.setJumping(false);
 		this.setCanJump(false);
+		enemy = new GOval(p.getX(), p.getY(), s.getWidth(), s.getHeight());
 	}
-
+	/*
+	 * Enemy's movements
+	 */
+	public void move() {
+		if (currentPosition.getX() + dX > (spawnPoint.getX() + movesWithin) || currentPosition.getX() + dX < (spawnPoint.getX() + movesWithin)) {
+			dX = dX * -1;
+		}
+		enemy.move(currentPosition.getX() + dX, currentPosition.getY());
+	}
 	
 	/*
 	 * Setters and Getters below
@@ -46,12 +61,12 @@ public class Enemy {
 		this.size = size;
 	}
 
-	public Position getPosition() {
-		return position;
+	public Position getSpawnPoint() {
+		return spawnPoint;
 	}
 
-	public void setPosition(Position position) {
-		this.position = position;
+	public void setSpawnPoint(Position sP) {
+		this.spawnPoint = sP;
 	}
 
 	public boolean isCanJump() {
@@ -92,6 +107,12 @@ public class Enemy {
 
 	public void setCurrentPosition(Position currentPosition) {
 		this.currentPosition = currentPosition;
+	}
+	public int getdX() {
+		return dX;
+	}
+	public void setdX(int dX) {
+		this.dX = dX;
 	}
 
 }

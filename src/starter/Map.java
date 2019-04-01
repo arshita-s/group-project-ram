@@ -63,13 +63,13 @@ public class Map {
 		}
 	}
 	
-	public ArrayList<Obstacle> getList() {
+	public ArrayList<Obstacle> getObstacleList() {
 		return Obstacles;
 	}
-	
+	public ArrayList<Enemy> getEnemyList() {
+		return Enemies;
+	}
 	public Player getPlayer() {
 		return mainPlayer;
 	}
-	
-	
 }
