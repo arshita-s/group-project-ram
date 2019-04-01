@@ -1,12 +1,8 @@
  package starter;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 import acm.graphics.GOval;
 
-public class Player implements KeyListener {
+public class Player{
 	/* 
 	 * For what is below, I suggest not having them "final"
 	 * because of how we will be changing them depending 
@@ -34,45 +30,6 @@ public class Player implements KeyListener {
 		speedY = 0;
 	}
 
-	/*
-	 * Handling keyboard input
-	 */
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_A) {
-			current = PlayerMovement.LEFT;
-			addForce();
-		}
-		else if(e.getKeyCode() == KeyEvent.VK_D) {
-			current = PlayerMovement.RIGHT;
-			addForce();
-		}
-		else if(e.getKeyCode() == KeyEvent.VK_W) {
-			current = PlayerMovement.JUMP;
-			addForce();
-			addFriction();
-		}
-		player.move(speedX, speedY);
-	}
-
-	
-	@Override
-	public void keyReleased(KeyEvent e) {
-		if(current != PlayerMovement.JUMP) {
-			addFriction();
-		}
-		else if(current == PlayerMovement.JUMP){
-			while(speedY > 0) {
-				processFalling();
-			}
-		}
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		
-	}
-	
 	/*
 	 * Physics below
 	 */
