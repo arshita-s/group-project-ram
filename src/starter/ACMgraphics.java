@@ -50,23 +50,26 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		player.move();
 		player.addFriction();
 		player.processGravity();
+
 		System.out.println(player.getSpeedY());
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_D) {
-			player.setCurrentMove(PlayerMovement.RIGHT);
-			player.addForce();
-		} else if (e.getKeyCode() == KeyEvent.VK_A) {
-			player.setCurrentMove(PlayerMovement.LEFT);
-			player.addForce();
-		} else if (e.getKeyCode() == KeyEvent.VK_W) {
-			player.setCurrentJump(PlayerJump.JUMP);
-			player.addForce();
-			player.addFriction();
-		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			//program.switchHelpInGame();
+		if(!detectCollisionObstacle()) {	
+			if (e.getKeyCode() == KeyEvent.VK_D) {
+				player.setCurrentMove(PlayerMovement.RIGHT);
+				player.addForce();
+			} else if (e.getKeyCode() == KeyEvent.VK_A) {
+				player.setCurrentMove(PlayerMovement.LEFT);
+				player.addForce();
+			} else if (e.getKeyCode() == KeyEvent.VK_W) {
+				player.setCurrentJump(PlayerJump.JUMP);
+				player.addForce();
+				player.addFriction();
+			} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+				//program.switchHelpInGame();
+			}
 		}
 	}
 	
@@ -158,9 +161,23 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		return false;
 	}
 	
+	private boolean detectCollisionObstacle() {
+		for(Obstacle o: level.getObstacleList()) {
+			for(int i = o.getCurrentPosition().getX()+1; i < (o.getCurrentPosition().getX() + o.getSize().getWidth())-1; i++) {
+				for(int j = o.getCurrentPosition().getY()+1; j < o.getCurrentPosition().getY() + o.getSize().getHeight()-1; j++) {
+					if(player.getGOval().contains(i, j)) {
+						System.out.println("OBSTACLE!");
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
 	// returns true if between two numbers
 	private boolean isBetween(int numA, int numToCompare, int numB) {
-		return ((numA < numToCompare && numToCompare < numB) || (numB < numToCompare && numToCompare < numA));
+		return ((numA <= numToCompare && numToCompare <= numB) || (numB <= numToCompare && numToCompare <= numA));
 	}
 
 	public void next() {

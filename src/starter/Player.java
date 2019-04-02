@@ -106,7 +106,10 @@ public class Player {
 	/*
 	 * Setters and Getters below.
 	 */
-
+	public PlayerJump getJump() {
+		return currentJump;
+	}
+	
 	public PlayerMovement getCurrent() {
 		return currentMove;
 	}
