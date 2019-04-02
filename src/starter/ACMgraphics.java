@@ -97,7 +97,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		program.add(player.getGOval());
 		
 	}
-
+	
 	public GOval createEnemy(Enemy e) {
 		GOval objOva = new GOval(e.getCurrentPosition().getX(), e.getCurrentPosition().getY(), e.getSize().getWidth(), e.getSize().getHeight()); 
 		objOva.setFillColor(Color.RED);
@@ -106,24 +106,61 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 	
 	public GRect createObstacle(Obstacle obs) {
-		GRect rec = new GRect(obs.getPosition().getX(), obs.getPosition().getY(), obs.getSize().getWidth(), obs.getSize().getHeight());
+		GRect rec = new GRect(obs.getSpawnPosition().getX(), obs.getSpawnPosition().getY(), obs.getSize().getWidth(), obs.getSize().getHeight());
 		rec.setFillColor(Color.BLACK);
 		rec.setFilled(true);
 		return rec;
 	}
+	
 	public void moveMapObstacles(double vX2) {
+		int i = 0;
 		for(GRect current: mapObstacles) {
 			current.move(vX2, 0);
+			level.getObstacleList().get(i).setCurrentPosition(new Position((int) current.getX(), (int) current.getY()));
+			i++;
 		}
 	}
+	
 	private void moveMapEnemies(double vX2) {
 		int i = 0;
 		for(GOval current: mapEnemies) {
 			level.getEnemyList().get(i).move();
 			int enemyDirection = level.getEnemyList().get(i).getdX();
 			current.move(vX2 + enemyDirection , 0);
+			level.getEnemyList().get(i).setCurrentPosition(new Position((int) current.getX(), (int) current.getY()));
 			i++;
 		}
+	}
+	
+	private boolean obstacleAt(Position p) {
+		int x = p.getX();
+		int y = p.getY();
+		for(Obstacle o: level.getObstacleList()) {
+			Position oP = o.getCurrentPosition();
+			if (isBetween(oP.getX(), x, oP.getX() + o.getSize().getWidth()) &&
+					isBetween(oP.getY(), y, oP.getY() + o.getSize().getHeight())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean enemyAt(Position p) {
+		int x = p.getX();
+		int y = p.getY();
+		for(Enemy e: level.getEnemyList()) {
+			Position eP = e.getCurrentPosition();
+			if (isBetween(eP.getX(), x , eP.getX() + e.getSize().getWidth()) && 
+					isBetween(eP.getY(), y , eP.getY() + e.getSize().getHeight())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	// returns true if between two numbers
+	private boolean isBetween(int numA, int numToCompare, int numB) {
+		return ((numA < numToCompare && numToCompare < numB) || (numB < numToCompare && numToCompare < numA));
 	}
 
 	public void next() {

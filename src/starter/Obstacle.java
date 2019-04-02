@@ -3,14 +3,16 @@ package starter;
 public class Obstacle {
 	private Size size;
 	private boolean movement;
-	private Position position;
+	private Position spawnPosition;
+	private Position currentPosition;
 	private Velocity velocity;
 	private boolean instantDeath;
 	
 	public Obstacle(int width, int length, boolean move, int x, int y, int horizontal, int vertical, boolean death) {
 		setSize(new Size(width, length));
 		setMovement(move);
-		setPosition(new Position(x, y));
+		setSpawnPosition(new Position(x, y));
+		setCurrentPosition(new Position(x, y));
 		setVelocity(new Velocity(horizontal, vertical));
 		setInstantDeath(death);
 	}
@@ -31,14 +33,6 @@ public class Obstacle {
 		this.velocity = velocity;
 	}
 
-	public Position getPosition() {
-		return position;
-	}
-
-	public void setPosition(Position position) {
-		this.position = position;
-	}
-
 	public boolean isMovement() {
 		return movement;
 	}
@@ -53,5 +47,21 @@ public class Obstacle {
 
 	public void setSize(Size size) {
 		this.size = size;
+	}
+
+	public Position getCurrentPosition() {
+		return currentPosition;
+	}
+
+	public void setCurrentPosition(Position currentPosition) {
+		this.currentPosition = currentPosition;
+	}
+
+	public Position getSpawnPosition() {
+		return spawnPosition;
+	}
+
+	public void setSpawnPosition(Position spawnPosition) {
+		this.spawnPosition = spawnPosition;
 	}
 }
