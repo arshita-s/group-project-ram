@@ -42,21 +42,23 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			vX = 3;
 		} else if (player.getGOval().getX() > 650) {
 			vX = -3;
-		} else {
+		}
+		else {
 			vX = 0;
 		}
+		
 		moveMapObstacles(vX);
 		moveMapEnemies(vX);
 		player.move();
 		player.addFriction();
 		player.processGravity();
-
+		
 		System.out.println(player.getSpeedY());
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(!detectCollisionObstacle()) {	
+		
 			if (e.getKeyCode() == KeyEvent.VK_D) {
 				player.setCurrentMove(PlayerMovement.RIGHT);
 				player.addForce();
@@ -70,7 +72,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				//program.switchHelpInGame();
 			}
-		}
+		
 	}
 	
 	@Override
@@ -163,8 +165,8 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	
 	private boolean detectCollisionObstacle() {
 		for(Obstacle o: level.getObstacleList()) {
-			for(int i = o.getCurrentPosition().getX()+1; i < (o.getCurrentPosition().getX() + o.getSize().getWidth())-1; i++) {
-				for(int j = o.getCurrentPosition().getY()+1; j < o.getCurrentPosition().getY() + o.getSize().getHeight()-1; j++) {
+			for(int i = o.getCurrentPosition().getX(); i < (o.getCurrentPosition().getX() + o.getSize().getWidth()); i++) {
+				for(int j = o.getCurrentPosition().getY(); j < o.getCurrentPosition().getY() + o.getSize().getHeight(); j++) {
 					if(player.getGOval().contains(i, j)) {
 						System.out.println("OBSTACLE!");
 						return true;
