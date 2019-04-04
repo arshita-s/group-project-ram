@@ -1,8 +1,8 @@
 package starter;
 
 public class Position {
-	private int x;
-	private int y;
+	private double x;
+	private double y;
 	
 	public static void main(String[] args) {
 		
@@ -16,7 +16,7 @@ public class Position {
 		
 	}
 	
-	public Position(int x, int y) {
+	public Position(double x, double y) {
 		if(x < 0) x *= -1;
 		if(x == 0) x = 1;
 		if(y < 0) y *= -1;
@@ -24,18 +24,18 @@ public class Position {
 		this.x = x;
 		this.y = y;
 	}
-	public int getX() {
+	public double getX() {
 		return x;
 	}
-	public void setX(int x) {
+	public void setX(double x) {
 		if(x < 0) x *= -1;
 		if(x == 0) x = 1;
 		this.x = x;
 	}
-	public int getY() {
+	public double getY() {
 		return y;
 	}
-	public void setY(int y) {
+	public void setY(double y) {
 		if(y < 0) y *= -1;
 		if(y == 0) y = 1;
 		this.y = y;

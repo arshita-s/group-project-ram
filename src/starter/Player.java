@@ -29,7 +29,7 @@ public class Player {
 	/*
 	 * Constructor
 	 */
-	public Player(int x, int y) {
+	public Player(double x, double y) {
 		startPosition = new Position(x, y);
 		player = new GOval(startPosition.getX(), startPosition.getY(), 50, PLAYER_SIZE_Y);
 		speedX = 0;
@@ -39,7 +39,10 @@ public class Player {
 		currentJump = PlayerJump.STAND;
 	}
 
-
+	public void setPosition(Position p) {
+		startPosition = p;
+	}
+	
 	public void addForce() {
 		if(jumped) {
 			currentJump = PlayerJump.STAND;

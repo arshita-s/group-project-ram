@@ -9,7 +9,9 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.Timer;
-
+import acm.graphics.GCanvas;
+import acm.graphics.GImage;
+import acm.graphics.GObject;
 import acm.graphics.GOval;
 import acm.graphics.GRect;
 
@@ -38,10 +40,11 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (player.getGOval().getX() < 150) {
-			vX = 3;
-		} else if (player.getGOval().getX() > 650) {
-			vX = -3;
+		double x = player.getGOval().getX();
+		if (x < 400 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.LEFT) {
+			vX = 4;
+		} else if (x > 400 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.RIGHT) {
+			vX = -4;
 		}
 		else {
 			vX = 0;
@@ -53,25 +56,30 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		player.addFriction();
 		player.processGravity();
 		
-		System.out.println(player.getSpeedY());
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		
-			if (e.getKeyCode() == KeyEvent.VK_D) {
-				player.setCurrentMove(PlayerMovement.RIGHT);
+		if (e.getKeyCode() == KeyEvent.VK_D) {
+			player.setCurrentMove(PlayerMovement.RIGHT);
+			if(!detectCollisionObstacle()) {
 				player.addForce();
-			} else if (e.getKeyCode() == KeyEvent.VK_A) {
-				player.setCurrentMove(PlayerMovement.LEFT);
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_A) {
+			player.setCurrentMove(PlayerMovement.LEFT);
+			if(!detectCollisionObstacle()) {
 				player.addForce();
-			} else if (e.getKeyCode() == KeyEvent.VK_W) {
-				player.setCurrentJump(PlayerJump.JUMP);
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_W) {
+			player.setCurrentJump(PlayerJump.JUMP);
+			if(!detectCollisionObstacle()) {
 				player.addForce();
 				player.addFriction();
-			} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-				//program.switchHelpInGame();
 			}
+		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			program.switchHelpInGame();
+		}
 		
 	}
 	
@@ -119,7 +127,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	
 	public void moveMapObstacles(double vX2) {
 		int i = 0;
-		for(GRect current: mapObstacles) {
+		for(GObject current: mapObstacles) {
 			current.move(vX2, 0);
 			level.getObstacleList().get(i).setCurrentPosition(new Position((int) current.getX(), (int) current.getY()));
 			i++;
@@ -128,7 +136,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	
 	private void moveMapEnemies(double vX2) {
 		int i = 0;
-		for(GOval current: mapEnemies) {
+		for(GObject current: mapEnemies) {
 			level.getEnemyList().get(i).move();
 			int enemyDirection = level.getEnemyList().get(i).getdX();
 			current.move(vX2 + enemyDirection , 0);
@@ -137,49 +145,62 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 	}
 	
-	private boolean obstacleAt(Position p) {
-		int x = p.getX();
-		int y = p.getY();
-		for(Obstacle o: level.getObstacleList()) {
-			Position oP = o.getCurrentPosition();
-			if (isBetween(oP.getX(), x, oP.getX() + o.getSize().getWidth()) &&
-					isBetween(oP.getY(), y, oP.getY() + o.getSize().getHeight())) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private boolean enemyAt(Position p) {
-		int x = p.getX();
-		int y = p.getY();
-		for(Enemy e: level.getEnemyList()) {
-			Position eP = e.getCurrentPosition();
-			if (isBetween(eP.getX(), x , eP.getX() + e.getSize().getWidth()) && 
-					isBetween(eP.getY(), y , eP.getY() + e.getSize().getHeight())) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private boolean detectCollisionObstacle() {
-		for(Obstacle o: level.getObstacleList()) {
-			for(int i = o.getCurrentPosition().getX(); i < (o.getCurrentPosition().getX() + o.getSize().getWidth()); i++) {
-				for(int j = o.getCurrentPosition().getY(); j < o.getCurrentPosition().getY() + o.getSize().getHeight(); j++) {
-					if(player.getGOval().contains(i, j)) {
-						System.out.println("OBSTACLE!");
-						return true;
+	private boolean obstacleAt(GObject p) {
+		double x = p.getX();
+		double y = p.getY();
+		GObject z = program.getElementAt(x,y);
+		for(GRect o: mapObstacles) {
+			if(z == o) {
+				for(double i = o.getX(); i < o.getWidth()+o.getX(); i++) {
+					for(double j = o.getY(); j < o.getHeight()+o.getY(); j++) {
+						if(p.contains(i, j)) {
+							return true;
+						}
 					}
 				}
+				return false;
 			}
 		}
 		return false;
 	}
 	
-	// returns true if between two numbers
-	private boolean isBetween(int numA, int numToCompare, int numB) {
-		return ((numA <= numToCompare && numToCompare <= numB) || (numB <= numToCompare && numToCompare <= numA));
+	
+	private boolean detectCollisionObstacle() {
+		Player tempP = player;
+		GOval temp = player.getGOval();
+		double x = temp.getX();
+		double y = temp.getY();
+		if(player.getCurrent() == PlayerMovement.RIGHT && player.getJump() == PlayerJump.STAND) {
+			x += 1;
+			tempP = new Player(x,y);
+			temp = tempP.getGOval();
+			System.out.print(obstacleAt(temp));
+			return obstacleAt(temp);
+		}
+		else if(player.getCurrent() == PlayerMovement.LEFT && player.getJump() == PlayerJump.STAND) {
+			x -= 1;
+			tempP = new Player(x,y);
+			temp = tempP.getGOval();
+			System.out.print(obstacleAt(temp));
+			return obstacleAt(temp);
+		}
+		else if(player.getJump() == PlayerJump.JUMP && player.getCurrent() == PlayerMovement.RIGHT) {
+			x += 1;
+			y += 1;
+			tempP = new Player(x,y);
+			temp = tempP.getGOval();
+			System.out.print(obstacleAt(temp));
+			return obstacleAt(temp);
+		}
+		else if(player.getJump() == PlayerJump.JUMP && player.getCurrent() == PlayerMovement.LEFT) {
+			x -= 1;
+			y += 1;
+			tempP = new Player(x,y);
+			temp = tempP.getGOval();
+			System.out.print(obstacleAt(temp));
+			return obstacleAt(temp);
+		}
+		return false;
 	}
 
 	public void next() {
