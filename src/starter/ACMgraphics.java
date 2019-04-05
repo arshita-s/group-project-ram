@@ -13,7 +13,9 @@ import acm.graphics.GCanvas;
 import acm.graphics.GImage;
 import acm.graphics.GObject;
 import acm.graphics.GOval;
+import acm.graphics.GPoint;
 import acm.graphics.GRect;
+import acm.graphics.GRectangle;
 
 // Here I will take obstacles and put them on the screen
 public class ACMgraphics extends GraphicsPane implements ActionListener, KeyListener {
@@ -24,7 +26,12 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private Player player;
 	private Map level;
 	private double vX = 0;
+	private GPoint checkR;
+	private GPoint checkL;
+	private GPoint checkU;
+	private GPoint checkD;
 	Timer tm = new Timer(10, this);
+	GObject collidingO;
 
 	public ACMgraphics(MainApplication app) {
 		super();
@@ -54,28 +61,31 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		moveMapEnemies(vX);
 		player.move();
 		player.addFriction();
-		player.processGravity();
-		
+		player.processGravity();		
+		System.out.print(detectCollisionObstacle());
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
+
 		if (e.getKeyCode() == KeyEvent.VK_D) {
 			player.setCurrentMove(PlayerMovement.RIGHT);
-			if(!detectCollisionObstacle()) {
-				player.addForce();
+			player.addForce();
+			if(detectCollisionObstacle()) {
+				player.getGOval().setLocation(player.getLastPos().getX(), player.getLastPos().getY());
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_A) {
 			player.setCurrentMove(PlayerMovement.LEFT);
-			if(!detectCollisionObstacle()) {
-				player.addForce();
+			player.addForce();
+			if(detectCollisionObstacle()) {
+				player.getGOval().setLocation(player.getLastPos().getX(), player.getLastPos().getY());
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_W) {
 			player.setCurrentJump(PlayerJump.JUMP);
-			if(!detectCollisionObstacle()) {
-				player.addForce();
-				player.addFriction();
+			player.addForce();
+			player.addFriction();
+			if(detectCollisionObstacle()) {
+				player.getGOval().setLocation(player.getLastPos().getX(), player.getLastPos().getY());
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			program.switchHelpInGame();
@@ -108,7 +118,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 		player = level.getPlayer();
 		program.add(player.getGOval());
-		
+		player.setLastPos(player.getPosition());
 	}
 	
 	public GOval createEnemy(Enemy e) {
@@ -145,60 +155,30 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 	}
 	
-	private boolean obstacleAt(GObject p) {
-		double x = p.getX();
-		double y = p.getY();
-		GObject z = program.getElementAt(x,y);
-		for(GRect o: mapObstacles) {
-			if(z == o) {
-				for(double i = o.getX(); i < o.getWidth()+o.getX(); i++) {
-					for(double j = o.getY(); j < o.getHeight()+o.getY(); j++) {
-						if(p.contains(i, j)) {
-							return true;
-						}
-					}
-				}
-				return false;
-			}
-		}
-		return false;
+	private void checkBounds(GObject p) {
+		GRectangle b = p.getBounds();
+		checkR = new GPoint(p.getX()+p.getWidth(), p.getY()-(p.getHeight()/2));
+		checkL = new GPoint(p.getX(), p.getY()-(p.getHeight()/2));
+		checkU = new GPoint(p.getX()+(p.getWidth()/2), p.getY()-(p.getHeight()/2));
+		//checkD = new GPoint(p.getX()+(p.getWidth()/2), p.getY()+p.getHeight());
+		System.out.println(checkR + " " + checkL + " " + checkU + " ;");
 	}
 	
-	
 	private boolean detectCollisionObstacle() {
-		Player tempP = player;
-		GOval temp = player.getGOval();
-		double x = temp.getX();
-		double y = temp.getY();
-		if(player.getCurrent() == PlayerMovement.RIGHT && player.getJump() == PlayerJump.STAND) {
-			x += 1;
-			tempP = new Player(x,y);
-			temp = tempP.getGOval();
-			System.out.print(obstacleAt(temp));
-			return obstacleAt(temp);
-		}
-		else if(player.getCurrent() == PlayerMovement.LEFT && player.getJump() == PlayerJump.STAND) {
-			x -= 1;
-			tempP = new Player(x,y);
-			temp = tempP.getGOval();
-			System.out.print(obstacleAt(temp));
-			return obstacleAt(temp);
-		}
-		else if(player.getJump() == PlayerJump.JUMP && player.getCurrent() == PlayerMovement.RIGHT) {
-			x += 1;
-			y += 1;
-			tempP = new Player(x,y);
-			temp = tempP.getGOval();
-			System.out.print(obstacleAt(temp));
-			return obstacleAt(temp);
-		}
-		else if(player.getJump() == PlayerJump.JUMP && player.getCurrent() == PlayerMovement.LEFT) {
-			x -= 1;
-			y += 1;
-			tempP = new Player(x,y);
-			temp = tempP.getGOval();
-			System.out.print(obstacleAt(temp));
-			return obstacleAt(temp);
+		checkBounds(player.getGOval());
+		for(GRect o: mapObstacles) {
+			if(o == program.getElementAt(checkR)) {
+				collidingO = program.getElementAt(checkR);
+				return true;
+			}
+			else if(o == program.getElementAt(checkL)) {
+				collidingO = program.getElementAt(checkL);
+				return true;
+			}
+			else if(o == program.getElementAt(checkU)) {
+				collidingO = program.getElementAt(checkU);
+				return true;
+			}
 		}
 		return false;
 	}

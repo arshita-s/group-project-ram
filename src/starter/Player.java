@@ -20,18 +20,19 @@ public class Player {
 	private double speedX;
 	private double speedY;
 	private boolean jumped;
-	private Position startPosition;
+	private Position currentPosition;
 	private GOval player;
 	private PlayerMovement currentMove;
 	private PlayerJump currentJump;
+	private Position lastPos;
 
 	
 	/*
 	 * Constructor
 	 */
 	public Player(double x, double y) {
-		startPosition = new Position(x, y);
-		player = new GOval(startPosition.getX(), startPosition.getY(), 50, PLAYER_SIZE_Y);
+		currentPosition = new Position(x, y);
+		player = new GOval(currentPosition.getX(), currentPosition.getY(), 50, PLAYER_SIZE_Y);
 		speedX = 0;
 		speedY = 0;
 		jumped = false;
@@ -39,8 +40,16 @@ public class Player {
 		currentJump = PlayerJump.STAND;
 	}
 
+	public Position getLastPos() {
+		return lastPos;
+	}
+	
+	public void setLastPos(Position p) {
+		lastPos = p;
+	}
+	
 	public void setPosition(Position p) {
-		startPosition = p;
+		currentPosition = p;
 	}
 	
 	public void addForce() {
@@ -52,11 +61,14 @@ public class Player {
 			if(speedY <= -MAX_JUMP) {
 				jumped = true;
 			}
+			lastPos = new Position(player.getX(), player.getY());
 		}
 		if (currentMove == PlayerMovement.RIGHT && speedX < MAX_SPEED) {
 			speedX = Math.min(speedX + SPEED_DX, MAX_SPEED);
+			lastPos = new Position(player.getX(), player.getY());
 		} else if (currentMove == PlayerMovement.LEFT && -MAX_SPEED < speedX) {
 			speedX = Math.max(speedX - SPEED_DX, -MAX_SPEED);
+			lastPos = new Position(player.getX(), player.getY());
 		}
 	}
 		
@@ -122,7 +134,7 @@ public class Player {
 	}
 
 	public Position getPosition() {
-		return startPosition;
+		return currentPosition;
 	}
 
 	public void setCurrentMove(PlayerMovement current) {
