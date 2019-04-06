@@ -25,6 +25,9 @@ public class Player {
 	private PlayerMovement currentMove;
 	private PlayerJump currentJump;
 	private Position lastPos;
+	private int lives;
+	private int health;
+	private int powerUps;
 
 	
 	/*
@@ -38,8 +41,35 @@ public class Player {
 		jumped = false;
 		currentMove = PlayerMovement.STANDING;
 		currentJump = PlayerJump.STAND;
+		lives = 3;
+		health = 30;
+		powerUps = 0;
 	}
 
+	public int getLives() {
+		return lives;
+	}
+	
+	public int getHealth() {
+		return health;
+	}
+	
+	public void setLives(int l) {
+		lives = l;
+	}
+	
+	public void setHealth(int h) {
+		health = h;
+	}
+	
+	public void incremetLives() {
+		lives++;
+	}
+	
+	public void decrementLives() {
+		lives--;
+	}
+	
 	public Position getLastPos() {
 		return lastPos;
 	}
