@@ -55,11 +55,19 @@ public class Player {
 	}
 	
 	public void setLives(int l) {
-		lives = l;
+		lives = 3;
 	}
 	
 	public void setHealth(int h) {
 		health = h;
+	}
+	
+	public int getPowerUps() {
+		return powerUps;
+	}
+	
+	public void setPowerUps(int p) {
+		powerUps = p;
 	}
 	
 	public void incremetLives() {
