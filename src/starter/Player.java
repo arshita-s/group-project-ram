@@ -14,7 +14,7 @@ public class Player {
 	private static double SPEED_DX = .4;
 	private static double SPEED_DY = .4;
 	private static int MAX_GRAVITY = 10;
-	private static double JUMP = 8;
+	private static double JUMP = 9;
 	private static int GROUND = 750;
 	private static final int PLAYER_SIZE_Y = 50;
 	private double speedX;
@@ -111,17 +111,10 @@ public class Player {
 
 	public void addFriction() {
 		speedX *= .9;
-		
-		/*if (currentMove == PlayerMovement.STANDING && speedX < 0) {
-			speedX = Math.min(0, speedX + SPEED_DX / 2);
-		} else if (currentMove == PlayerMovement.STANDING && 0 < speedX) {
-			speedX = Math.max(0, speedX - SPEED_DX / 2);
-		}*/
 	}
 
 	public void processGravity() {
 		onGround = player.getY() + player.getHeight() >= GROUND;
-		//currentJump == PlayerJump.STAND || 
 		if (onGround) {
 			speedY = 0;
 			player.setLocation(player.getX(), GROUND - player.getHeight());
@@ -129,20 +122,10 @@ public class Player {
 			speedY = Math.min(speedY + SPEED_DY / 3, MAX_GRAVITY);
 		}
 	}
-	/*if (currentJump == PlayerJump.STAND || speedY < -MAX_GRAVITY) {
-			if (player.getY() + player.getHeight() <= GROUND - 1) {
-				speedY = Math.min(speedY + SPEED_DY / 3, MAX_GRAVITY);
-			} else {
-				speedY = 0;
-				player.setLocation(player.getX(), GROUND - player.getHeight());
-				jumped = false;
-			}
-		}*/
-
-	/*
-	 * if(speedY < MAX_GRAVITY) { speedY -= SPEED_DY; } else if(speedY >
-	 * MAX_GRAVITY) { speedY = MAX_GRAVITY; }
-	 */
+	
+	public void collided() {
+		
+	}
 
 	/*public void processFalling() {
 		if (player.getY() < GROUND) {

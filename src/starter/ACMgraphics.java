@@ -30,6 +30,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private GPoint checkL;
 	private GPoint checkU;
 	private GPoint checkD;
+	private double left;
+	private double right;
+	private double up;
+	private double down;
 	Timer tm = new Timer(10, this);
 	GObject collidingO;
 
@@ -56,14 +60,14 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		else {
 			vX = 0;
 		}
-		
+
 		moveMapObstacles(vX);
 		moveMapEnemies(vX);
 		player.addForce();
+		processObstacleCollision();
 		player.move();
 		player.addFriction();
 		player.processGravity();		
-		//System.out.print(detectCollisionObstacle());
 	}
 
 	@Override
@@ -71,38 +75,29 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 		if (e.getKeyCode() == KeyEvent.VK_D) {
 			player.setCurrentMove(PlayerMovement.RIGHT);
-			if(detectCollisionObstacle()) {
-				player.getGOval().setLocation(player.getLastPos().getX(), player.getLastPos().getY());
-			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_A) {
 			player.setCurrentMove(PlayerMovement.LEFT);
-			if(detectCollisionObstacle()) {
-				player.getGOval().setLocation(player.getLastPos().getX(), player.getLastPos().getY());
-			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_W && player.getOnGround()) {
 			player.setCurrentJump(PlayerJump.JUMP);
-			if(detectCollisionObstacle()) {
-				player.getGOval().setLocation(player.getLastPos().getX(), player.getLastPos().getY());
-			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			program.switchHelpInGame();
 		}
-		
+
 	}
-	
+
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_W && !player.getOnGround()) {
 			player.setCurrentJump(PlayerJump.STAND);
 		}
-		if(e.getKeyCode() != KeyEvent.VK_W) {
+		if(e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_A) {
 			player.setCurrentMove(PlayerMovement.STANDING);			
 		}
 	}
-	
+
 	public void setupLevel(MainApplication program) {
 		//adding obstacles to map
 		GRect obstacle;
@@ -123,21 +118,21 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		program.add(player.getGOval());
 		player.setLastPos(player.getPosition());
 	}
-	
+
 	public GOval createEnemy(Enemy e) {
 		GOval objOva = new GOval(e.getCurrentPosition().getX(), e.getCurrentPosition().getY(), e.getSize().getWidth(), e.getSize().getHeight()); 
 		objOva.setFillColor(Color.RED);
 		objOva.setFilled(true);
 		return objOva;
 	}
-	
+
 	public GRect createObstacle(Obstacle obs) {
 		GRect rec = new GRect(obs.getSpawnPosition().getX(), obs.getSpawnPosition().getY(), obs.getSize().getWidth(), obs.getSize().getHeight());
 		rec.setFillColor(Color.BLACK);
 		rec.setFilled(true);
 		return rec;
 	}
-	
+
 	public void moveMapObstacles(double vX2) {
 		int i = 0;
 		for(GObject current: mapObstacles) {
@@ -146,7 +141,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			i++;
 		}
 	}
-	
+
 	private void moveMapEnemies(double vX2) {
 		int i = 0;
 		for(GObject current: mapEnemies) {
@@ -157,17 +152,47 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			i++;
 		}
 	}
-	
-	private void checkBounds(GObject p) {
-		GRectangle b = p.getBounds();
-		checkR = new GPoint(p.getX()+p.getWidth(), p.getY()-(p.getHeight()/2));
-		checkL = new GPoint(p.getX(), p.getY()-(p.getHeight()/2));
-		checkU = new GPoint(p.getX()+(p.getWidth()/2), p.getY()-(p.getHeight()/2));
-		//checkD = new GPoint(p.getX()+(p.getWidth()/2), p.getY()+p.getHeight());
-		System.out.println(checkR + " " + checkL + " " + checkU + " ;");
+
+	private void processObstacleCollision() {
+		setBounds();
+		if(checkObstacleCollisionX(player.getSpeedX())) {
+			player.setSpeedX(0);
+		}
+		/*if(obstacleCollisionX()) {
+			player.setSpeedX(0);
+		}
+		if(obstacleCollisionY()) {
+			player.setSpeedY(0);
+			System.out.println("true");
+		}*/
 	}
 	
-	private boolean detectCollisionObstacle() {
+	private void setBounds() {
+		left = player.getGOval().getX();
+		right = player.getGOval().getX() + player.getGOval().getWidth();
+		up = player.getGOval().getY();
+		down = player.getGOval().getY() + player.getGOval().getHeight();
+	}
+	
+	private boolean checkObstacleCollisionX(double speedX) {
+		for(GRect obs: mapObstacles) {
+			if((left - speedX < obs.getX() + obs.getWidth()) || right + speedX > obs.getX()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/*private void checkBounds(GObject p) {
+		GRectangle b = p.getBounds();
+		checkR = new GPoint(p.getX() + p.getWidth() + player.getSpeedX(), p.getY() + player.getGOval().getHeight()/2);
+		checkL = new GPoint(p.getX() - player.getSpeedX(), p.getY() + player.getGOval().getHeight()/2);
+		checkU = new GPoint(p.getX() + player.getGOval().getWidth()/2, p.getY() - player.getSpeedY());
+		checkD = new GPoint(p.getX() + player.getGOval().getWidth()/2, p.getY() + p.getHeight() + player.getSpeedY());
+		//System.out.println(checkR + " " + checkL + " " + checkU + " ;");
+	}
+
+	private boolean obstacleCollisionX() {
 		checkBounds(player.getGOval());
 		for(GRect o: mapObstacles) {
 			if(o == program.getElementAt(checkR)) {
@@ -178,20 +203,30 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 				collidingO = program.getElementAt(checkL);
 				return true;
 			}
-			else if(o == program.getElementAt(checkU)) {
-				collidingO = program.getElementAt(checkU);
-				return true;
-			}
 		}
 		return false;
 	}
+	private boolean obstacleCollisionY() {
+		checkBounds(player.getGOval());
+		for(GRect o: mapObstacles) {
+			if(o == program.getElementAt(checkU)) {
+				collidingO = program.getElementAt(checkU);
+				return true;
+			}
+			else if(o == program.getElementAt(checkD)) {
+				collidingO = program.getElementAt(checkD);
+				//return true;
+			}
+		}
+		return false;
+	}*/
 
 	public void next() {
 		while(!playerAtEnd()) {
 			//TODO all the player processing stuff like
 			// the constant moving at 0
 			//player.move();
-			
+
 		}
 	}
 
@@ -204,14 +239,14 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	public void showContents() {
 		run(program);
 	}
-	
+
 	@Override
 	public void hideContents() {
-		
+
 	}
-	
+
 	@Override
 	public void mousePressed(MouseEvent e) {
-		
+
 	}	
 }
