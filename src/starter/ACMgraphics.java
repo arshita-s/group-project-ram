@@ -72,20 +72,20 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			player.setCurrentMove(PlayerMovement.RIGHT);
 			player.addForce();
 			if(detectCollisionObstacle()) {
-				player.getGOval().setLocation(player.getLastPos().getX(), player.getLastPos().getY());
+				player.getGOval().setLocation(player.getGOval().getX()-1, player.getGOval().getY());
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_A) {
 			player.setCurrentMove(PlayerMovement.LEFT);
 			player.addForce();
 			if(detectCollisionObstacle()) {
-				player.getGOval().setLocation(player.getLastPos().getX(), player.getLastPos().getY());
+				player.getGOval().setLocation(player.getGOval().getX()+1, player.getLastPos().getY());
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_W) {
 			player.setCurrentJump(PlayerJump.JUMP);
 			player.addForce();
 			player.addFriction();
 			if(detectCollisionObstacle()) {
-				player.getGOval().setLocation(player.getLastPos().getX(), player.getLastPos().getY());
+				player.getGOval().setLocation(player.getGOval().getX(), player.getGOval().getY()-1);
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			program.switchHelpInGame();

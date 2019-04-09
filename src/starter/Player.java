@@ -99,14 +99,11 @@ public class Player {
 			if(speedY <= -MAX_JUMP) {
 				jumped = true;
 			}
-			lastPos = new Position(player.getX(), player.getY());
 		}
 		if (currentMove == PlayerMovement.RIGHT && speedX < MAX_SPEED) {
 			speedX = Math.min(speedX + SPEED_DX, MAX_SPEED);
-			lastPos = new Position(player.getX(), player.getY());
 		} else if (currentMove == PlayerMovement.LEFT && -MAX_SPEED < speedX) {
 			speedX = Math.max(speedX - SPEED_DX, -MAX_SPEED);
-			lastPos = new Position(player.getX(), player.getY());
 		}
 	}
 		
