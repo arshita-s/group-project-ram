@@ -59,10 +59,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		
 		moveMapObstacles(vX);
 		moveMapEnemies(vX);
+		player.addForce();
 		player.move();
 		player.addFriction();
 		player.processGravity();		
-		System.out.println(player.getOnGround());
 		//System.out.print(detectCollisionObstacle());
 	}
 
@@ -71,24 +71,23 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 		if (e.getKeyCode() == KeyEvent.VK_D) {
 			player.setCurrentMove(PlayerMovement.RIGHT);
-			player.addForce();
 			if(detectCollisionObstacle()) {
 				player.getGOval().setLocation(player.getLastPos().getX(), player.getLastPos().getY());
 			}
-		} else if (e.getKeyCode() == KeyEvent.VK_A) {
+		}
+		if (e.getKeyCode() == KeyEvent.VK_A) {
 			player.setCurrentMove(PlayerMovement.LEFT);
-			player.addForce();
 			if(detectCollisionObstacle()) {
 				player.getGOval().setLocation(player.getLastPos().getX(), player.getLastPos().getY());
 			}
-		} else if (e.getKeyCode() == KeyEvent.VK_W) {
+		}
+		if (e.getKeyCode() == KeyEvent.VK_W && player.getOnGround()) {
 			player.setCurrentJump(PlayerJump.JUMP);
-			player.addForce();
-			player.addFriction();
 			if(detectCollisionObstacle()) {
 				player.getGOval().setLocation(player.getLastPos().getX(), player.getLastPos().getY());
 			}
-		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+		}
+		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			program.switchHelpInGame();
 		}
 		
@@ -96,9 +95,12 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	
 	@Override
 	public void keyReleased(KeyEvent e) {
-		player.setCurrentMove(PlayerMovement.STANDING);
-		player.setCurrentJump(PlayerJump.STAND);
-		player.addFriction();
+		if(e.getKeyCode() == KeyEvent.VK_W && !player.getOnGround()) {
+			player.setCurrentJump(PlayerJump.STAND);
+		}
+		if(e.getKeyCode() != KeyEvent.VK_W) {
+			player.setCurrentMove(PlayerMovement.STANDING);			
+		}
 	}
 	
 	public void setupLevel(MainApplication program) {
