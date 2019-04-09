@@ -9,17 +9,17 @@ public class Player {
 	 * For what is below, I suggest not having them "final"
 	 * because of how we will be changing them depending 
 	 * the power-up used.
-	*/
+	 */
 	private static double MAX_SPEED = 2;
 	private static double SPEED_DX = .4;
 	private static double SPEED_DY = .4;
 	private static int MAX_GRAVITY = 10;
-	private static double MAX_JUMP = 5;
+	private static double JUMP = 8;
 	private static int GROUND = 750;
 	private static final int PLAYER_SIZE_Y = 50;
 	private double speedX;
 	private double speedY;
-	private boolean jumped;
+	private boolean onGround;
 	private Position currentPosition;
 	private GOval player;
 	private PlayerMovement currentMove;
@@ -29,7 +29,7 @@ public class Player {
 	private int health;
 	private int powerUps;
 
-	
+
 	/*
 	 * Constructor
 	 */
@@ -38,7 +38,7 @@ public class Player {
 		player = new GOval(currentPosition.getX(), currentPosition.getY(), 50, PLAYER_SIZE_Y);
 		speedX = 0;
 		speedY = 0;
-		jumped = false;
+		onGround = true;
 		currentMove = PlayerMovement.STANDING;
 		currentJump = PlayerJump.STAND;
 		lives = 3;
@@ -49,89 +49,87 @@ public class Player {
 	public int getLives() {
 		return lives;
 	}
-	
+
 	public int getHealth() {
 		return health;
 	}
-	
+
 	public void setLives(int l) {
 		lives = 3;
 	}
-	
+
 	public void setHealth(int h) {
 		health = h;
 	}
-	
+
 	public int getPowerUps() {
 		return powerUps;
 	}
-	
+
 	public void setPowerUps(int p) {
 		powerUps = p;
 	}
-	
+
 	public void incrementLives() {
 		lives++;
 	}
-	
+
 	public void decrementLives() {
 		lives--;
 	}
-	
+
 	public Position getLastPos() {
 		return lastPos;
 	}
-	
+
 	public void setLastPos(Position p) {
 		lastPos = p;
 	}
-	
+
 	public void setPosition(Position p) {
 		currentPosition = p;
 	}
-	
+
 	public void addForce() {
-		if(jumped) {
-			currentJump = PlayerJump.STAND;
-		}
-		if (currentJump == PlayerJump.JUMP && !jumped) {
-			speedY = speedY - SPEED_DY;
-			if(speedY <= -MAX_JUMP) {
-				jumped = true;
-			}
+		if (currentJump == PlayerJump.JUMP && onGround) {
+			speedY -= JUMP;
+			onGround = false;
 			lastPos = new Position(player.getX(), player.getY());
 		}
-		if (currentMove == PlayerMovement.RIGHT && speedX < MAX_SPEED) {
+		if(Math.abs(speedX) < SPEED_DX / 2) {
+			speedX = 0;
+		}
+		if (currentMove == PlayerMovement.RIGHT) {
 			speedX = Math.min(speedX + SPEED_DX, MAX_SPEED);
 			lastPos = new Position(player.getX(), player.getY());
-		} else if (currentMove == PlayerMovement.LEFT && -MAX_SPEED < speedX) {
+		}
+		if (currentMove == PlayerMovement.LEFT) {
 			speedX = Math.max(speedX - SPEED_DX, -MAX_SPEED);
 			lastPos = new Position(player.getX(), player.getY());
 		}
 	}
-		
+
 	public void addFriction() {
-		if (currentMove == PlayerMovement.STANDING && speedX < 0) {
+		speedX *= .9;
+		
+		/*if (currentMove == PlayerMovement.STANDING && speedX < 0) {
 			speedX = Math.min(0, speedX + SPEED_DX / 2);
 		} else if (currentMove == PlayerMovement.STANDING && 0 < speedX) {
 			speedX = Math.max(0, speedX - SPEED_DX / 2);
-		}
+		}*/
 	}
 
 	public void processGravity() {
-		
-		if (currentJump == PlayerJump.STAND || speedY < -MAX_JUMP) {
-			if (player.getY() + player.getHeight() <= GROUND - 1) {
-				speedY = Math.min(speedY + SPEED_DY / 3, MAX_GRAVITY);
-			} else {
-				speedY = 0;
-				player.setLocation(player.getX(), GROUND - player.getHeight());
-				jumped = false;
-			}
-		
+		onGround = player.getY() + player.getHeight() >= GROUND;
+		//currentJump == PlayerJump.STAND || 
+		if (onGround) {
+			speedY = 0;
+			player.setLocation(player.getX(), GROUND - player.getHeight());
+		} else {
+			speedY = Math.min(speedY + SPEED_DY / 3, MAX_GRAVITY);
 		}
-		
-		/*if (currentJump == PlayerJump.STAND || speedY < -MAX_GRAVITY) {
+	}
+	/*if (currentJump == PlayerJump.STAND || speedY < -MAX_GRAVITY) {
 			if (player.getY() + player.getHeight() <= GROUND - 1) {
 				speedY = Math.min(speedY + SPEED_DY / 3, MAX_GRAVITY);
 			} else {
@@ -140,33 +138,33 @@ public class Player {
 				jumped = false;
 			}
 		}*/
-		/*
-		 * if(speedY < MAX_GRAVITY) { speedY -= SPEED_DY; } else if(speedY >
-		 * MAX_GRAVITY) { speedY = MAX_GRAVITY; }
-		 */
-	}
 
-	public void processFalling() {
+	/*
+	 * if(speedY < MAX_GRAVITY) { speedY -= SPEED_DY; } else if(speedY >
+	 * MAX_GRAVITY) { speedY = MAX_GRAVITY; }
+	 */
+
+	/*public void processFalling() {
 		if (player.getY() < GROUND) {
 			speedY += SPEED_DY;
 		}
-	}
+	}*/
 
 	public void processImage() {
 
 	}
-	
+
 	/*
 	 * Setters and Getters below.
 	 */
 	public PlayerJump getJump() {
 		return currentJump;
 	}
-	
+
 	public PlayerMovement getCurrent() {
 		return currentMove;
 	}
-	
+
 	public GOval getGOval() {
 		return player;
 	}
@@ -190,7 +188,7 @@ public class Player {
 	public void setSpeedX(int sX) {
 		speedX = sX;
 	}
-	
+
 	public double getSpeedX() {
 		return speedX;
 	}
@@ -198,8 +196,12 @@ public class Player {
 	public void setSpeedY(int sY) {
 		speedY = sY;
 	}
-	
+
 	public double getSpeedY() {
 		return speedY;
+	}
+	
+	public boolean getOnGround() {
+		return onGround;
 	}
 }

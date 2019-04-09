@@ -62,7 +62,8 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		player.move();
 		player.addFriction();
 		player.processGravity();		
-		System.out.print(detectCollisionObstacle());
+		System.out.println(player.getOnGround());
+		//System.out.print(detectCollisionObstacle());
 	}
 
 	@Override
