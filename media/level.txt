@@ -6,9 +6,9 @@
 Player 10 530
 Obstacle 30 30 false 112 425 0 0 false
 Obstacle 30 30 false 152 425 0 0 false
-Obstacle 30 30 false 725 350 0 0 false
-Obstacle 30 30 false 765 350 0 0 false
-Obstacle 30 30 false 805 350 0 0 false
+Obstacle 30 30 false 825 350 0 0 false
+Obstacle 30 30 false 865 350 0 0 false
+Obstacle 30 30 false 905 350 0 0 false
 Obstacle 1000 30 false 500 540 0 0 false
 Obstacle 900 30 false 600 510 0 0 false
 Obstacle 1500 30 false 0 570 0 0 false
