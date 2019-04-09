@@ -3,20 +3,20 @@
 **Obstacle width length moves positionx positiony velocityx velocityy instantDeath
 **Player positionx positiony
 
-Player 170 650
-Obstacle 50 50 false 300 600 0 0 false
-Obstacle 50 50 false 365 600 0 0 false
-Obstacle 50 50 false 600 500 0 0 false
-Obstacle 50 50 false 665 500 0 0 false
-Obstacle 50 50 false 730 500 0 0 false
-Obstacle 3000 50 false 1000 650 0 0 false
-Obstacle 3000 50 false 1100 600 0 0 false
-Obstacle 3000 50 false 0 750 0 0 false
-Obstacle 3000 100 false 900 700 0 0 false
-Obstacle 50 50 false 1200 350 0 0 false
-Obstacle 50 50 false 1265 350 0 0 false
-Obstacle 50 50 false 1330 350 0 0 false
-Obstacle 50 50 false 1530 350 0 0 false
+Player 10 530
+Obstacle 30 30 false 112 425 0 0 false
+Obstacle 30 30 false 152 425 0 0 false
+Obstacle 30 30 false 725 350 0 0 false
+Obstacle 30 30 false 765 350 0 0 false
+Obstacle 30 30 false 805 350 0 0 false
+Obstacle 1000 30 false 500 540 0 0 false
+Obstacle 900 30 false 600 510 0 0 false
+Obstacle 1500 30 false 0 570 0 0 false
+Obstacle 800 60 false 700 480 0 0 false
+Obstacle 30 30 false 1200 350 0 0 false
+Obstacle 30 30 false 1240 350 0 0 false
+Obstacle 30 30 false 1280 350 0 0 false
+
 
 // health, damage, width, length, xPosition, yPosition, movesWithin
-Enemy 1 1 50 50 700 700 50
+Enemy 1 1 30 30 170 540 50
