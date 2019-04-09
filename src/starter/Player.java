@@ -114,10 +114,10 @@ public class Player {
 	}
 
 	public void processGravity() {
-		onGround = player.getY() + player.getHeight() >= GROUND;
+		//onGround = player.getY() + player.getHeight() >= GROUND;
 		if (onGround) {
 			speedY = 0;
-			player.setLocation(player.getX(), GROUND - player.getHeight());
+			//player.setLocation(player.getX(), GROUND - player.getHeight());
 		} else {
 			speedY = Math.min(speedY + SPEED_DY / 3, MAX_GRAVITY);
 		}
@@ -186,5 +186,9 @@ public class Player {
 	
 	public boolean getOnGround() {
 		return onGround;
+	}
+	
+	public void setOnGround(boolean og) {
+		onGround = og;
 	}
 }
