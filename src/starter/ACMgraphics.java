@@ -62,25 +62,23 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	
 	public void actionPerformed(ActionEvent e) {
 		double x = player.getGOval().getX();
-		if (x < 300 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.LEFT) {
+		if (x < 200 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.LEFT) {
 			vX = 4;
-		} else if (x > 300 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.RIGHT) {
+		} else if (x > 400 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.RIGHT) {
 			vX = -4;
 		}
 		else {
 			vX = 0;
 		}
-		updateLives();
+		player.setLastPos(new Position(player.getGOval().getX(), player.getGOval().getY()));
+
 		program.add(lives);
-		updatePowerUps();
 		program.add(powerups);
 		moveMapObstacles(vX);
 		moveMapEnemies(vX);
 		player.move();
 		player.addFriction();
-		player.processGravity();		
-		System.out.print(detectCollisionObstacle());
-	}
+		player.processGravity();			}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -89,23 +87,23 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			player.setCurrentMove(PlayerMovement.RIGHT);
 			player.addForce();
 			if(detectCollisionObstacle()) {
-				player.getGOval().setLocation(player.getGOval().getX()-1, player.getGOval().getY());
+				player.getGOval().setLocation(player.getLastPos().getX(), player.getLastPos().getY());
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_A) {
 			player.setCurrentMove(PlayerMovement.LEFT);
 			player.addForce();
 			if(detectCollisionObstacle()) {
-				player.getGOval().setLocation(player.getGOval().getX()+1, player.getLastPos().getY());
+				player.getGOval().setLocation(player.getLastPos().getX(), player.getLastPos().getY());
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_W) {
 			player.setCurrentJump(PlayerJump.JUMP);
 			player.addForce();
 			player.addFriction();
 			if(detectCollisionObstacle()) {
-				player.getGOval().setLocation(player.getGOval().getX(), player.getGOval().getY()-1);
+				player.getGOval().setLocation(player.getLastPos().getX(), player.getLastPos().getY());
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			program.switchHelpInGame();
+			//program.switchHelpInGame();
 		}
 		
 	}
@@ -136,6 +134,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		player = level.getPlayer();
 		program.add(player.getGOval());
 		player.setLastPos(player.getPosition());
+		lives = new GLabel("Lives: " + player.getLives(), 10, 50);
+		lives.setFont("Arial-18");
+		powerups = new GLabel("Power-Ups: " + player.getPowerUps(), 475, 50);
+		powerups.setFont("Arial-18");
 	}
 	
 	public GOval createEnemy(Enemy e) {
@@ -177,22 +179,18 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		checkL = new GPoint(p.getX(), p.getY()-(p.getHeight()/2));
 		checkU = new GPoint(p.getX()+(p.getWidth()/2), p.getY()-(p.getHeight()/2));
 		//checkD = new GPoint(p.getX()+(p.getWidth()/2), p.getY()+p.getHeight());
-		System.out.println(checkR + " " + checkL + " " + checkU + " ;");
 	}
 	
 	private boolean detectCollisionObstacle() {
 		checkBounds(player.getGOval());
 		for(GRect o: mapObstacles) {
 			if(o == program.getElementAt(checkR)) {
-				collidingO = program.getElementAt(checkR);
 				return true;
 			}
 			else if(o == program.getElementAt(checkL)) {
-				collidingO = program.getElementAt(checkL);
 				return true;
 			}
 			else if(o == program.getElementAt(checkU)) {
-				collidingO = program.getElementAt(checkU);
 				return true;
 			}
 		}
