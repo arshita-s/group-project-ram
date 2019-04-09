@@ -13,9 +13,9 @@ public class Player {
 	private static double MAX_SPEED = 4;
 	private static double SPEED_DX = .4;
 	private static double SPEED_DY = .605;
-	private static int MAX_GRAVITY = 15;
-	private static double JUMP = 8;
-	private static final int PLAYER_SIZE_Y = 50;
+	private static int MAX_GRAVITY = 10;
+	private static double JUMP = 7;
+	private static final int PLAYER_SIZE_Y = 30;
 	private double speedX;
 	private double speedY;
 	private boolean onGround;

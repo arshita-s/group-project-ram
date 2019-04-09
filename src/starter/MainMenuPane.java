@@ -17,8 +17,8 @@ public class MainMenuPane extends GraphicsPane{
 	public MainMenuPane(MainApplication app) {
 		super();
 		program = app;
-		start = new GButton("Start", 450, 300, 100, 50);
-		help = new GButton("Help", 600, 375, 100, 50);
+		start = new GButton("Start", 353, 312, 100, 50);
+		help = new GButton("Help", 353, 412, 100, 50);
 		titleOne = new GLabel("Kid", 120, 150);
 		titleOne.setFont("Arial-70");
 		titleTwo = new GLabel("Lizard", 200, 220);

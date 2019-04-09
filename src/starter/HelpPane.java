@@ -18,10 +18,10 @@ public class HelpPane extends GraphicsPane{
 	public HelpPane(MainApplication app) {
 		super();
 		program = app;
-		title = new GLabel("HELP", 350, 100);
+		title = new GLabel("HELP", 200, 100);
 		title.setFont("Arial-70");
-		backToMenu = new GButton("Back to Title", 300, 400, 100, 50);
-		backToGame = new GButton("Back to Game", 400, 500, 100, 50);
+		backToMenu = new GButton("Back to Title", 250, 450, 100, 50);
+		backToGame = new GButton("Back to Game", 250, 500, 100, 50);
 		/*
 		int x = 166;
 		int y = 100;
