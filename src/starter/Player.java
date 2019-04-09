@@ -10,11 +10,11 @@ public class Player {
 	 * because of how we will be changing them depending 
 	 * the power-up used.
 	 */
-	private static double MAX_SPEED = 3;
+	private static double MAX_SPEED = 4;
 	private static double SPEED_DX = .4;
-	private static double SPEED_DY = .7;
+	private static double SPEED_DY = .605;
 	private static int MAX_GRAVITY = 15;
-	private static double JUMP = 11;
+	private static double JUMP = 8;
 	private static final int PLAYER_SIZE_Y = 50;
 	private double speedX;
 	private double speedY;

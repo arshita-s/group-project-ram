@@ -165,10 +165,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			player.setSpeedY(0);
 			System.out.println("cant move yyyyyyyy");
 		}
-		/*if(obstacleCollisionXY(player.getSpeedX(), player.getSpeedY())) {
-			//player.setSpeedX(0);
-			//player.setSpeedY(0);
-		}*/
 	}
 	
 	private void checkBounds(GObject p) {
@@ -221,21 +217,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			}
 		}
 		player.setOnGround(false);
-		return false;
-	}
-
-	private boolean obstacleCollisionXY(double speedX, double speedY) {
-		for(GRect obs: mapObstacles) {
-			if(obs == program.getElementAt(pointSE.getX() + speedX, pointSE.getY() + speedY)) {
-				return true;
-			} else if(obs == program.getElementAt(pointSW.getX() + speedX, pointSW.getY() + speedY)) {
-				return true;
-			} else if(obs == program.getElementAt(pointNE.getX() + speedX, pointNE.getY() + speedY)) {
-				return true;
-			} else if(obs == program.getElementAt(pointNW.getX() + speedX, pointNW.getY() + speedY)) {
-				return true;
-			}
-		}
 		return false;
 	}
 	
