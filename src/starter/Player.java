@@ -10,12 +10,11 @@ public class Player {
 	 * because of how we will be changing them depending 
 	 * the power-up used.
 	 */
-	private static double MAX_SPEED = 2;
+	private static double MAX_SPEED = 3;
 	private static double SPEED_DX = .4;
-	private static double SPEED_DY = .4;
-	private static int MAX_GRAVITY = 10;
-	private static double JUMP = 9;
-	private static int GROUND = 750;
+	private static double SPEED_DY = .7;
+	private static int MAX_GRAVITY = 15;
+	private static double JUMP = 11;
 	private static final int PLAYER_SIZE_Y = 50;
 	private double speedX;
 	private double speedY;
@@ -29,7 +28,6 @@ public class Player {
 	private int health;
 	private int powerUps;
 
-
 	/*
 	 * Constructor
 	 */
@@ -38,7 +36,7 @@ public class Player {
 		player = new GOval(currentPosition.getX(), currentPosition.getY(), 50, PLAYER_SIZE_Y);
 		speedX = 0;
 		speedY = 0;
-		onGround = true;
+		//onGround = true;
 		currentMove = PlayerMovement.STANDING;
 		currentJump = PlayerJump.STAND;
 		lives = 3;

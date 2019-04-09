@@ -52,22 +52,24 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	public void actionPerformed(ActionEvent e) {
 		double x = player.getGOval().getX();
-		if (x < 400 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.LEFT) {
+		/*if (x < 400 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.LEFT) {
 			vX = 4;
 		} else if (x > 400 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.RIGHT) {
 			vX = -4;
 		}
 		else {
 			vX = 0;
-		}
+		}*/
 
 		moveMapObstacles(vX);
 		moveMapEnemies(vX);
+		player.addFriction();
 		player.addForce();
+		player.processGravity();
 		processObstacleCollision();
 		player.move();
-		player.addFriction();
-		player.processGravity();		
+		System.out.println(player.getSpeedX());
+		//System.out.println(player.getOnGround());
 	}
 
 	@Override
@@ -90,7 +92,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_W && !player.getOnGround()) {
+		if(e.getKeyCode() == KeyEvent.VK_W) {
 			player.setCurrentJump(PlayerJump.STAND);
 		}
 		if(e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_A) {
@@ -157,11 +159,16 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		checkBounds(player.getGOval());
 		if(obstacleCollisionX(player.getSpeedX())) {
 			player.setSpeedX(0);
+			System.out.println("cant move xxxxxx");
 		}
 		if(obstacleCollisionY(player.getSpeedY())) {
 			player.setSpeedY(0);
-			System.out.println("true");
+			System.out.println("cant move yyyyyyyy");
 		}
+		/*if(obstacleCollisionXY(player.getSpeedX(), player.getSpeedY())) {
+			//player.setSpeedX(0);
+			//player.setSpeedY(0);
+		}*/
 	}
 	
 	private void checkBounds(GObject p) {
@@ -174,38 +181,42 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	private boolean obstacleCollisionX(double speed) {
-		for(GRect o: mapObstacles) {
-			if(o == program.getElementAt(pointNE.getX() + speed, pointNE.getY())) {
-				collidingO = program.getElementAt(pointNE.getX() + speed, pointNE.getY());
+		for(GRect obs: mapObstacles) {
+			if(obs == program.getElementAt(pointNE.getX() + speed, pointNE.getY() +1)) {
+				collidingO = program.getElementAt(pointNE.getX() + speed, pointNE.getY()+1);
 				return true;
-			} else if(o == program.getElementAt(pointNW.getX() + speed, pointNW.getY())) {
-				collidingO = program.getElementAt(pointNW.getX() + speed, pointNW.getY());
+			} else if(obs == program.getElementAt(pointNW.getX() + speed, pointNW.getY()+1)) {
+				collidingO = program.getElementAt(pointNW.getX() + speed, pointNW.getY()+1);
 				return true;
-			} else if(o == program.getElementAt(pointSE.getX() + speed, pointSE.getY())) {
-				collidingO = program.getElementAt(pointSE.getX() + speed, pointSE.getY());
+			} else if(obs == program.getElementAt(pointSE.getX() + speed, pointSE.getY()-1)) {
+				collidingO = program.getElementAt(pointSE.getX() + speed, pointSE.getY()-1);
 				return true;
-			} else if(o == program.getElementAt(pointSW.getX() + speed, pointSW.getY())) {
-				collidingO = program.getElementAt(pointSW.getX() + speed, pointSW.getY());
+			} else if(obs == program.getElementAt(pointSW.getX() + speed, pointSW.getY()-1)) {
+				collidingO = program.getElementAt(pointSW.getX() + speed, pointSW.getY()-1);
 				return true;
 			}
 		}
 		return false;
 	}
 	private boolean obstacleCollisionY(double speed) {
-		for(GRect o: mapObstacles) {
-			if(o == program.getElementAt(pointSE.getX(), pointSE.getY() + speed)) {
+		for(GRect obs: mapObstacles) {
+			if(obs == program.getElementAt(pointSE.getX(), pointSE.getY() + speed)) {
 				collidingO = program.getElementAt(pointSE.getX(), pointSE.getY() + speed);
 				player.setOnGround(true);
+				player.getGOval().setLocation(pointNW.getX(), collidingO.getY() - player.getGOval().getHeight());
 				return true;
-			} else if(o == program.getElementAt(pointSW.getX(), pointSW.getY() + speed)) {
+			} else if(obs == program.getElementAt(pointSW.getX(), pointSW.getY() + speed)) {
 				collidingO = program.getElementAt(pointSW.getX(), pointSW.getY() + speed);
+				player.getGOval().setLocation(pointNW.getX(), collidingO.getY() - player.getGOval().getHeight());
 				player.setOnGround(true);
 				return true;
-			} else if(o == program.getElementAt(pointNE.getX(), pointNE.getY() + speed)) {
+			} else if(obs == program.getElementAt(pointNE.getX(), pointNE.getY() + speed)) {
 				collidingO = program.getElementAt(pointNE.getX(), pointNE.getY() + speed);
+				player.setOnGround(false);
 				return true;
-			} else if(o == program.getElementAt(pointNW.getX(), pointNW.getY() + speed)) {
+			} else if(obs == program.getElementAt(pointNW.getX(), pointNW.getY() + speed)) {
 				collidingO = program.getElementAt(pointNW.getX(), pointNW.getY() + speed);
+				player.setOnGround(false);
 				return true;
 			}
 		}
@@ -213,6 +224,21 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		return false;
 	}
 
+	private boolean obstacleCollisionXY(double speedX, double speedY) {
+		for(GRect obs: mapObstacles) {
+			if(obs == program.getElementAt(pointSE.getX() + speedX, pointSE.getY() + speedY)) {
+				return true;
+			} else if(obs == program.getElementAt(pointSW.getX() + speedX, pointSW.getY() + speedY)) {
+				return true;
+			} else if(obs == program.getElementAt(pointNE.getX() + speedX, pointNE.getY() + speedY)) {
+				return true;
+			} else if(obs == program.getElementAt(pointNW.getX() + speedX, pointNW.getY() + speedY)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	private boolean playerAtEnd() {
 		//TODO check to see if player has finished the level.
 		return false;
