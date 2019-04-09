@@ -70,7 +70,7 @@ public class Player {
 		powerUps = p;
 	}
 	
-	public void incremetLives() {
+	public void incrementLives() {
 		lives++;
 	}
 	
