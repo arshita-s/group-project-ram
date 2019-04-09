@@ -18,6 +18,5 @@ Obstacle 50 50 false 1265 350 0 0 false
 Obstacle 50 50 false 1330 350 0 0 false
 Obstacle 50 50 false 1530 350 0 0 false
 
-Obstacle 50 50 false 1595 350 0 0 false
 // health, damage, width, length, xPosition, yPosition, movesWithin
 Enemy 1 1 50 50 700 700 50

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import javax.swing.Timer;
 import acm.graphics.GCanvas;
 import acm.graphics.GImage;
+import acm.graphics.GLabel;
 import acm.graphics.GObject;
 import acm.graphics.GOval;
 import acm.graphics.GPoint;
@@ -36,6 +37,8 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private double down;
 	Timer tm = new Timer(10, this);
 	GObject collidingO;
+	private GLabel lives;
+	private GLabel powerups;
 
 	public ACMgraphics(MainApplication app) {
 		super();
@@ -50,9 +53,20 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		tm.start();
 	}
 
+	
+	public void updateLives() {
+		lives = new GLabel("Lives: " + player.getLives(), 10, 50);
+		lives.setFont("Arial-18");
+	}
+	
+	public void updatePowerUps() {
+		powerups = new GLabel("Power-Ups: " + player.getPowerUps(), 475, 50);
+		powerups.setFont("Arial-18");
+	}
+	
 	public void actionPerformed(ActionEvent e) {
 		double x = player.getGOval().getX();
-		/*if (x < 400 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.LEFT) {
+		/*if (x < 200 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.LEFT) {
 			vX = 4;
 		} else if (x > 400 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.RIGHT) {
 			vX = -4;
@@ -60,7 +74,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		else {
 			vX = 0;
 		}*/
+		player.setLastPos(new Position(player.getGOval().getX(), player.getGOval().getY()));
 
+		program.add(lives);
+		program.add(powerups);
 		moveMapObstacles(vX);
 		moveMapEnemies(vX);
 		player.addFriction();
@@ -68,8 +85,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		player.processGravity();
 		processObstacleCollision();
 		player.move();
-		System.out.println(player.getSpeedX());
-		//System.out.println(player.getOnGround());
+		//System.out.println(player.speedX());
 	}
 
 	@Override
@@ -119,6 +135,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		player = level.getPlayer();
 		program.add(player.getGOval());
 		player.setLastPos(player.getPosition());
+		lives = new GLabel("Lives: " + player.getLives(), 10, 50);
+		lives.setFont("Arial-18");
+		powerups = new GLabel("Power-Ups: " + player.getPowerUps(), 475, 50);
+		powerups.setFont("Arial-18");
 	}
 
 	public GOval createEnemy(Enemy e) {
@@ -159,11 +179,9 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		checkBounds(player.getGOval());
 		if(obstacleCollisionX(player.getSpeedX())) {
 			player.setSpeedX(0);
-			System.out.println("cant move xxxxxx");
 		}
 		if(obstacleCollisionY(player.getSpeedY())) {
 			player.setSpeedY(0);
-			System.out.println("cant move yyyyyyyy");
 		}
 	}
 	
@@ -173,7 +191,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		pointSW = new GPoint(p.getX(), p.getY() + p.getHeight());
 		pointNW = new GPoint(p.getX(), p.getY());
 		pointSE = new GPoint(p.getX() + p.getWidth(), p.getY() + p.getHeight());
-		//System.out.println(checkR + " " + checkL + " " + checkU + " ;");
 	}
 
 	private boolean obstacleCollisionX(double speed) {

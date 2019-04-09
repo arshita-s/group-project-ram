@@ -20,7 +20,8 @@ public class MainApplication extends GraphicsApplication {
 		help = new HelpPane(this);
 		switchToMainMenu();
 	}
-
+	
+	
 	public void switchToMainMenu() {
 		switchToScreen(mainMenu);
 	}

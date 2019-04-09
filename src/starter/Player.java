@@ -103,7 +103,6 @@ public class Player {
 		}
 		if (currentMove == PlayerMovement.LEFT) {
 			speedX = Math.max(speedX - SPEED_DX, -MAX_SPEED);
-			lastPos = new Position(player.getX(), player.getY());
 		}
 	}
 
