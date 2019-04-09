@@ -31,10 +31,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private GPoint pointSW;
 	private GPoint pointNW;
 	private GPoint pointSE;
-	private double left;
-	private double right;
-	private double up;
-	private double down;
 	Timer tm = new Timer(10, this);
 	GObject collidingO;
 	private GLabel lives;
@@ -53,20 +49,22 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		tm.start();
 	}
 
-	
+
 	public void updateLives() {
 		lives = new GLabel("Lives: " + player.getLives(), 10, 50);
 		lives.setFont("Arial-18");
 	}
-	
+
 	public void updatePowerUps() {
 		powerups = new GLabel("Power-Ups: " + player.getPowerUps(), 475, 50);
 		powerups.setFont("Arial-18");
 	}
-	
+
 	public void actionPerformed(ActionEvent e) {
-		double x = player.getGOval().getX();
-		/*if (x < 200 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.LEFT) {
+		//if(player.getGOval() != null) {
+			//if(!playerAtEnd()) {
+				double x = player.getGOval().getX();
+				/*if (x < 200 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.LEFT) {
 			vX = 4;
 		} else if (x > 400 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.RIGHT) {
 			vX = -4;
@@ -74,18 +72,26 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		else {
 			vX = 0;
 		}*/
-		player.setLastPos(new Position(player.getGOval().getX(), player.getGOval().getY()));
+				player.setLastPos(new Position(player.getGOval().getX(), player.getGOval().getY()));
 
-		program.add(lives);
-		program.add(powerups);
-		moveMapObstacles(vX);
-		moveMapEnemies(vX);
-		player.addFriction();
-		player.addForce();
-		player.processGravity();
-		processObstacleCollision();
-		player.move();
-		//System.out.println(player.speedX());
+				program.add(lives);
+				program.add(powerups);
+				moveMapObstacles(vX);
+				moveMapEnemies(vX);
+				player.addFriction();
+				player.addForce();
+				player.processGravity();
+				processObstacleCollision();
+				processEnemyCollision();
+				player.move();
+				//System.out.println(player.speedX());
+			//} else {
+				if(playerAtEnd()) {
+				//goToScoreScreen();
+				//tm.stop();
+				}
+			//}
+		//}
 	}
 
 	@Override
@@ -134,7 +140,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 		player = level.getPlayer();
 		program.add(player.getGOval());
-		player.setLastPos(player.getPosition());
+		player.setLastPos(player.getOriginalPosition());
 		lives = new GLabel("Lives: " + player.getLives(), 10, 50);
 		lives.setFont("Arial-18");
 		powerups = new GLabel("Power-Ups: " + player.getPowerUps(), 475, 50);
@@ -184,7 +190,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			player.setSpeedY(0);
 		}
 	}
-	
+
 	private void checkBounds(GObject p) {
 		GRectangle b = p.getBounds();
 		pointNE = new GPoint(p.getX() + p.getWidth(), p.getY());
@@ -211,6 +217,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 		return false;
 	}
+
 	private boolean obstacleCollisionY(double speed) {
 		for(GRect obs: mapObstacles) {
 			if(obs == program.getElementAt(pointSE.getX(), pointSE.getY() + speed)) {
@@ -237,9 +244,77 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		return false;
 	}
 	
-	private boolean playerAtEnd() {
-		//TODO check to see if player has finished the level.
+	private void processEnemyCollision() {
+		checkBounds(player.getGOval());
+		if(enemyCollisionDeath(player.getSpeedX(), player.getSpeedY())) {
+			//switchtoscreen
+			clearScreen();
+			tm.stop();
+		}
+		if(enemyBounce(player.getSpeedY())) {
+			player.setSpeedY(-1 * player.getJumpSpeed());
+			program.remove(collidingO);
+		}
+	}
+	
+	private boolean enemyCollisionDeath(double speedX, double speedY) {
+		for(GOval enem: mapEnemies) {
+			if(enem == program.getElementAt(pointNE.getX() + speedX, pointNE.getY() +1)) {
+				collidingO = program.getElementAt(pointNE.getX() + speedX, pointNE.getY()+1);
+				return true;
+			} else if(enem == program.getElementAt(pointNW.getX() + speedX, pointNW.getY()+1)) {
+				collidingO = program.getElementAt(pointNW.getX() + speedX, pointNW.getY()+1);
+				return true;
+			} else if(enem == program.getElementAt(pointSE.getX() + speedX, pointSE.getY()-1)) {
+				collidingO = program.getElementAt(pointSE.getX() + speedX, pointSE.getY()-1);
+				return true;
+			} else if(enem == program.getElementAt(pointSW.getX() + speedX, pointSW.getY()-1)) {
+				collidingO = program.getElementAt(pointSW.getX() + speedX, pointSW.getY()-1);
+				return true;
+			} else if(enem == program.getElementAt(pointNE.getX(), pointNE.getY() + speedY)) {
+				collidingO = program.getElementAt(pointNE.getX(), pointNE.getY() + speedY);
+				return true;
+			} else if(enem == program.getElementAt(pointNW.getX(), pointNW.getY() + speedY)) {
+				collidingO = program.getElementAt(pointNW.getX(), pointNW.getY() + speedY);
+				return true;
+			}
+		}
 		return false;
+	}
+	
+	private boolean enemyBounce(double speedY) {
+		for(GOval enem: mapEnemies) {
+			if(enem == program.getElementAt(pointSE.getX(), pointSE.getY() + speedY)) {
+				collidingO = program.getElementAt(pointSE.getX(), pointSE.getY() + speedY);
+				player.getGOval().setLocation(pointNW.getX(), collidingO.getY() - player.getGOval().getHeight());
+				return true;
+			} else if(enem == program.getElementAt(pointSW.getX(), pointSW.getY() + speedY)) {
+				collidingO = program.getElementAt(pointSW.getX(), pointSW.getY() + speedY);
+				player.getGOval().setLocation(pointNW.getX(), collidingO.getY() - player.getGOval().getHeight());
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean playerAtEnd() {
+		return player.getGOval().getX() >= 500;
+	}
+
+	private void goToScoreScreen() {
+		program.switchToScore();
+	}
+
+	private void clearScreen() {
+		for(GRect obs: mapObstacles) {
+			program.remove(obs);
+		}
+		for(GOval enemy: mapEnemies) {
+			program.remove(enemy);
+		}
+		program.remove(player.getGOval());
+		program.remove(lives);
+		program.remove(powerups);
 	}
 
 	@Override
@@ -249,7 +324,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	@Override
 	public void hideContents() {
-
+		clearScreen();
 	}
 
 	@Override

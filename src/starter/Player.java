@@ -19,6 +19,7 @@ public class Player {
 	private double speedX;
 	private double speedY;
 	private boolean onGround;
+	private Position originalPosition;
 	private Position currentPosition;
 	private GOval player;
 	private PlayerMovement currentMove;
@@ -33,6 +34,7 @@ public class Player {
 	 */
 	public Player(double x, double y) {
 		currentPosition = new Position(x, y);
+		originalPosition = new Position(x, y);
 		player = new GOval(currentPosition.getX(), currentPosition.getY(), 50, PLAYER_SIZE_Y);
 		speedX = 0;
 		speedY = 0;
@@ -152,6 +154,10 @@ public class Player {
 	public Position getPosition() {
 		return currentPosition;
 	}
+	
+	public Position getOriginalPosition() {
+		return originalPosition;
+	}
 
 	public void setCurrentMove(PlayerMovement current) {
 		this.currentMove = current;
@@ -165,7 +171,7 @@ public class Player {
 		player.move(speedX, speedY);
 	}
 
-	public void setSpeedX(int sX) {
+	public void setSpeedX(double sX) {
 		speedX = sX;
 	}
 
@@ -173,8 +179,8 @@ public class Player {
 		return speedX;
 	}
 
-	public void setSpeedY(int sY) {
-		speedY = sY;
+	public void setSpeedY(double d) {
+		speedY = d;
 	}
 
 	public double getSpeedY() {
@@ -187,5 +193,9 @@ public class Player {
 	
 	public void setOnGround(boolean og) {
 		onGround = og;
+	}
+	
+	public double getJumpSpeed() {
+		return JUMP;
 	}
 }

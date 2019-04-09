@@ -18,6 +18,7 @@ public class MainApplication extends GraphicsApplication {
 		game = new ACMgraphics(this);
 		mainMenu = new MainMenuPane(this);
 		help = new HelpPane(this);
+		score = new ScorePane(this);
 		switchToMainMenu();
 	}
 	

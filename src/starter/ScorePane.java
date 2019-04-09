@@ -45,9 +45,9 @@ public class ScorePane extends GraphicsPane{
 	public void mousePressed(MouseEvent e) {
 		GObject obj = program.getElementAt(e.getX(), e.getY());
 		if(obj == backToMenu) {
-			program.switchToMainMenu();
+			//program.switchToMainMenu();
 		} else if(obj == next) {
-			program.switchToGame();
+			//program.switchToGame();
 		}
 	}
 	
