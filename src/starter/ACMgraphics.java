@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import javax.swing.Timer;
 import acm.graphics.GCanvas;
 import acm.graphics.GImage;
+import acm.graphics.GLabel;
 import acm.graphics.GObject;
 import acm.graphics.GOval;
 import acm.graphics.GPoint;
@@ -29,9 +30,11 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private GPoint checkR;
 	private GPoint checkL;
 	private GPoint checkU;
-	private GPoint checkD;
+	//private GPoint checkD;
 	Timer tm = new Timer(10, this);
 	GObject collidingO;
+	private GLabel lives;
+	private GLabel powerups;
 
 	public ACMgraphics(MainApplication app) {
 		super();
@@ -46,17 +49,31 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		tm.start();
 	}
 
+	
+	public void updateLives() {
+		lives = new GLabel("Lives: " + player.getLives(), 10, 50);
+		lives.setFont("Arial-18");
+	}
+	
+	public void updatePowerUps() {
+		powerups = new GLabel("Power-Ups: " + player.getPowerUps(), 475, 50);
+		powerups.setFont("Arial-18");
+	}
+	
 	public void actionPerformed(ActionEvent e) {
 		double x = player.getGOval().getX();
-		if (x < 400 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.LEFT) {
+		if (x < 300 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.LEFT) {
 			vX = 4;
-		} else if (x > 400 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.RIGHT) {
+		} else if (x > 300 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.RIGHT) {
 			vX = -4;
 		}
 		else {
 			vX = 0;
 		}
-		
+		updateLives();
+		program.add(lives);
+		updatePowerUps();
+		program.add(powerups);
 		moveMapObstacles(vX);
 		moveMapEnemies(vX);
 		player.move();
@@ -156,7 +173,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 	
 	private void checkBounds(GObject p) {
-		GRectangle b = p.getBounds();
 		checkR = new GPoint(p.getX()+p.getWidth(), p.getY()-(p.getHeight()/2));
 		checkL = new GPoint(p.getX(), p.getY()-(p.getHeight()/2));
 		checkU = new GPoint(p.getX()+(p.getWidth()/2), p.getY()-(p.getHeight()/2));
