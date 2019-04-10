@@ -40,7 +40,7 @@ public class MainApplication extends GraphicsApplication {
 	}
 	
 	public void switchHelpInGame() {
-		switchTo(help);
+		switchToScreen(help);
 	}
 
 	/*

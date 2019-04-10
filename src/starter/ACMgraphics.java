@@ -61,37 +61,24 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		//if(player.getGOval() != null) {
-			//if(!playerAtEnd()) {
-				double x = player.getGOval().getX();
-				/*if (x < 200 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.LEFT) {
-			vX = 4;
-		} else if (x > 400 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.RIGHT) {
-			vX = -4;
-		}
-		else {
-			vX = 0;
-		}*/
-				player.setLastPos(new Position(player.getGOval().getX(), player.getGOval().getY()));
+	
+		player.setLastPos(new Position(player.getGOval().getX(), player.getGOval().getY()));
 
-				program.add(lives);
-				program.add(powerups);
-				moveMapObstacles(vX);
-				moveMapEnemies(vX);
-				player.addFriction();
-				player.addForce();
-				player.processGravity();
-				processObstacleCollision();
-				processEnemyCollision();
-				player.move();
-				//System.out.println(player.speedX());
-			//} else {
-				if(playerAtEnd()) {
-				//goToScoreScreen();
-				//tm.stop();
-				}
-			//}
-		//}
+		program.add(lives);
+		program.add(powerups);
+		//moveMapObstacles(vX);
+		//moveMapEnemies(vX);
+		player.addFriction();
+		player.addForce();
+		player.processGravity();
+		processObstacleCollision();
+		processEnemyCollision();
+		player.move();
+		if(playerAtEnd()) {
+			//goToScoreScreen();
+			//tm.stop();
+		}
+
 	}
 
 	@Override
@@ -112,6 +99,12 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	}
 
+	@Override
+	public void hideContents() {
+		program.removeAll();
+	}
+	
+	
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_W) {
@@ -162,11 +155,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	public void moveMapObstacles(double vX2) {
-		int i = 0;
-		for(GObject current: mapObstacles) {
-			current.move(vX2, 0);
-			level.getObstacleList().get(i).setCurrentPosition(new Position((int) current.getX(), (int) current.getY()));
-			i++;
+		for(int i = 0; i < mapObstacles.size(); i++) {
+			GRect o = mapObstacles.get(i);
+			o.move(vX2, 0);
+			level.getObstacleList().get(i).setCurrentPosition(new Position((int) o.getX(), (int) o.getY()));
 		}
 	}
 
@@ -320,11 +312,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	@Override
 	public void showContents() {
 		run(program);
-	}
-
-	@Override
-	public void hideContents() {
-		clearScreen();
 	}
 
 	@Override
