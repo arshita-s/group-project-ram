@@ -77,7 +77,7 @@ public class HelpPane extends GraphicsPane{
 		if(obj == backToMenu) {
 			program.switchToMainMenu();
 		} else if(obj == backToGame) {
-			//program.switchToGame();
+			program.switchToGame();
 		}
 	}
 }
