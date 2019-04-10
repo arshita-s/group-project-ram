@@ -15,6 +15,7 @@ public class Player {
 	private static double SPEED_DY = .605;
 	private static int MAX_GRAVITY = 10;
 	private static double JUMP = 7;
+	private static final int PLAYER_SIZE_X = 30;
 	private static final int PLAYER_SIZE_Y = 30;
 	private double speedX;
 	private double speedY;
@@ -35,7 +36,7 @@ public class Player {
 	public Player(double x, double y) {
 		currentPosition = new Position(x, y);
 		originalPosition = new Position(x, y);
-		player = new GOval(currentPosition.getX(), currentPosition.getY(), 50, PLAYER_SIZE_Y);
+		player = new GOval(currentPosition.getX(), currentPosition.getY(), PLAYER_SIZE_X, PLAYER_SIZE_Y);
 		speedX = 0;
 		speedY = 0;
 		//onGround = true;

@@ -31,6 +31,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private GPoint pointSW;
 	private GPoint pointNW;
 	private GPoint pointSE;
+	private GPoint pointN;
+	private GPoint pointS;
+	private GPoint pointE;
+	private GPoint pointW;
 	Timer tm = new Timer(10, this);
 	GObject collidingO;
 	private GLabel lives;
@@ -197,6 +201,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		pointSW = new GPoint(p.getX(), p.getY() + p.getHeight());
 		pointNW = new GPoint(p.getX(), p.getY());
 		pointSE = new GPoint(p.getX() + p.getWidth(), p.getY() + p.getHeight());
+		pointN = new GPoint(p.getX() + p.getWidth()/2, p.getY());
+		pointS = new GPoint(p.getX() + p.getWidth()/2, p.getY() + p.getHeight());
+		pointE = new GPoint(p.getX() + p.getWidth(), p.getY() + p.getHeight()/2);
+		pointW = new GPoint(p.getX(), p.getY() + p.getHeight()/2);
 	}
 
 	private boolean obstacleCollisionX(double speed) {
@@ -212,6 +220,12 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 				return true;
 			} else if(obs == program.getElementAt(pointSW.getX() + speed, pointSW.getY()-1)) {
 				collidingO = program.getElementAt(pointSW.getX() + speed, pointSW.getY()-1);
+				return true;
+			} else if(obs == program.getElementAt(pointE.getX() + speed, pointE.getY()-1)) {
+				collidingO = program.getElementAt(pointE.getX() + speed, pointE.getY()-1);
+				return true;
+			} else if(obs == program.getElementAt(pointW.getX() + speed, pointW.getY()-1)) {
+				collidingO = program.getElementAt(pointW.getX() + speed, pointW.getY()-1);
 				return true;
 			}
 		}
@@ -237,6 +251,12 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			} else if(obs == program.getElementAt(pointNW.getX(), pointNW.getY() + speed)) {
 				collidingO = program.getElementAt(pointNW.getX(), pointNW.getY() + speed);
 				player.setOnGround(false);
+				return true;
+			} else if(obs == program.getElementAt(pointN.getX(), pointN.getY() + speed)) {
+				collidingO = program.getElementAt(pointN.getX(), pointN.getY() + speed);
+				return true;
+			} else if(obs == program.getElementAt(pointS.getX(), pointS.getY() + speed)) {
+				collidingO = program.getElementAt(pointS.getX(), pointS.getY() + speed);
 				return true;
 			}
 		}
@@ -277,6 +297,15 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			} else if(enem == program.getElementAt(pointNW.getX(), pointNW.getY() + speedY)) {
 				collidingO = program.getElementAt(pointNW.getX(), pointNW.getY() + speedY);
 				return true;
+			}  else if(enem == program.getElementAt(pointE.getX() + speedX, pointE.getY()-1)) {
+				collidingO = program.getElementAt(pointE.getX() + speedX, pointE.getY()-1);
+				return true;
+			} else if(enem == program.getElementAt(pointW.getX() + speedX, pointW.getY()-1)) {
+				collidingO = program.getElementAt(pointW.getX() + speedX, pointW.getY()-1);
+				return true;
+			} else if(enem == program.getElementAt(pointN.getX(), pointN.getY() + speedY)) {
+				collidingO = program.getElementAt(pointN.getX(), pointN.getY() + speedY);
+				return true;
 			}
 		}
 		return false;
@@ -291,6 +320,9 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			} else if(enem == program.getElementAt(pointSW.getX(), pointSW.getY() + speedY)) {
 				collidingO = program.getElementAt(pointSW.getX(), pointSW.getY() + speedY);
 				player.getGOval().setLocation(pointNW.getX(), collidingO.getY() - player.getGOval().getHeight());
+				return true;
+			} else if(enem == program.getElementAt(pointS.getX(), pointS.getY() + speedY)) {
+				collidingO = program.getElementAt(pointS.getX(), pointS.getY() + speedY);
 				return true;
 			}
 		}
