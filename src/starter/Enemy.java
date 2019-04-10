@@ -7,7 +7,7 @@ import acm.graphics.GOval;
 public class Enemy {
 	private int health; // Health that enemy starts with
 	private Size size; // Enemies size
-	private Position spawnPoint; //Where enemy spawns
+	private Position spawnPosition; //Where enemy spawns
 	private Position currentPosition; //Where enemy currently is
 	private int damage; // Damage that enemy gives to player
 	private int movesWithin;
@@ -37,7 +37,7 @@ public class Enemy {
 	 * Enemy's movements
 	 */
 	public void move() {
-		if (currentPosition.getX() + dX > (spawnPoint.getX() + movesWithin) || currentPosition.getX() + dX < (spawnPoint.getX() - movesWithin)) {
+		if (currentPosition.getX() + dX > (spawnPosition.getX() + movesWithin) || currentPosition.getX() + dX < (spawnPosition.getX() - movesWithin)) {
 			setdX(getdX() * -1);
 		}
 		currentPosition.setX(currentPosition.getX() + getdX());
@@ -64,11 +64,11 @@ public class Enemy {
 	}
 
 	public Position getSpawnPoint() {
-		return spawnPoint;
+		return spawnPosition;
 	}
 
 	public void setSpawnPoint(Position sP) {
-		this.spawnPoint = sP;
+		this.spawnPosition = sP;
 	}
 
 	public boolean isCanJump() {

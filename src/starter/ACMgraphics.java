@@ -55,47 +55,57 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 
 	public void updateLives() {
+		try {
+			program.remove(lives);
+		} catch(NullPointerException e) {}
 		lives = new GLabel("Lives: " + player.getLives(), 10, 50);
 		lives.setFont("Arial-18");
 	}
 
 	public void updatePowerUps() {
+		try {
+			program.remove(powerups);
+		} catch(NullPointerException e) {}
 		powerups = new GLabel("Power-Ups: " + player.getPowerUps(), 475, 50);
 		powerups.setFont("Arial-18");
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		//if(player.getGOval() != null) {
-			//if(!playerAtEnd()) {
-				double x = player.getGOval().getX();
-				/*if (x < 200 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.LEFT) {
+		//if(!playerAtEnd()) {
+		//setCameraSpeed(player.getGOval().getX(), player.getSpeedX());
+		player.setLastPos(new Position(player.getGOval().getX(), player.getGOval().getY()));
+
+		program.add(lives);
+		program.add(powerups);
+		moveMapObstacles(vX);
+		moveMapEnemies(vX);
+		player.addFriction();
+		player.addForce();
+		player.processGravity();
+		processObstacleCollision();
+		processEnemyCollision();
+		player.move();
+		
+		//System.out.println(player.speedX());
+		//} else {
+		//if(playerAtEnd()) {
+		//	tm.stop();
+		//	program.switchToScore();
+		//}
+		//}
+		//}
+	}
+
+	private void setCameraSpeed(double x, double speedX) {
+		if (x < 200 && speedX != 0 && player.getCurrent() == PlayerMovement.LEFT) {
 			vX = 4;
-		} else if (x > 400 && player.getSpeedX() != 0 && player.getCurrent() == PlayerMovement.RIGHT) {
+		} else if (x > 400 && speedX != 0 && player.getCurrent() == PlayerMovement.RIGHT) {
 			vX = -4;
 		}
 		else {
 			vX = 0;
-		}*/
-				player.setLastPos(new Position(player.getGOval().getX(), player.getGOval().getY()));
-
-				program.add(lives);
-				program.add(powerups);
-				moveMapObstacles(vX);
-				moveMapEnemies(vX);
-				player.addFriction();
-				player.addForce();
-				player.processGravity();
-				processObstacleCollision();
-				processEnemyCollision();
-				player.move();
-				//System.out.println(player.speedX());
-			//} else {
-				if(playerAtEnd()) {
-				//goToScoreScreen();
-				//tm.stop();
-				}
-			//}
-		//}
+		}
 	}
 
 	@Override
@@ -127,7 +137,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	public void setupLevel(MainApplication program) {
-		//adding obstacles to map
 		GRect obstacle;
 		for(Obstacle obst: level.getObstacleList())
 		{
@@ -145,10 +154,8 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		player = level.getPlayer();
 		program.add(player.getGOval());
 		player.setLastPos(player.getOriginalPosition());
-		lives = new GLabel("Lives: " + player.getLives(), 10, 50);
-		lives.setFont("Arial-18");
-		powerups = new GLabel("Power-Ups: " + player.getPowerUps(), 475, 50);
-		powerups.setFont("Arial-18");
+		updateLives();
+		updatePowerUps();
 	}
 
 	public GOval createEnemy(Enemy e) {
@@ -185,6 +192,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 	}
 
+	//Logic for colliding with obstacles
 	private void processObstacleCollision() {
 		checkBounds(player.getGOval());
 		if(obstacleCollisionX(player.getSpeedX())) {
@@ -195,6 +203,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 	}
 
+	//Gets all the points of an object
 	private void checkBounds(GObject p) {
 		GRectangle b = p.getBounds();
 		pointNE = new GPoint(p.getX() + p.getWidth(), p.getY());
@@ -207,6 +216,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		pointW = new GPoint(p.getX(), p.getY() + p.getHeight()/2);
 	}
 
+	//Returns true if player collided with obstacle in x direction
 	private boolean obstacleCollisionX(double speed) {
 		for(GRect obs: mapObstacles) {
 			if(obs == program.getElementAt(pointNE.getX() + speed, pointNE.getY() +1)) {
@@ -232,6 +242,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		return false;
 	}
 
+	//Returns true if player collided with obstacle in y direction
 	private boolean obstacleCollisionY(double speed) {
 		for(GRect obs: mapObstacles) {
 			if(obs == program.getElementAt(pointSE.getX(), pointSE.getY() + speed)) {
@@ -263,20 +274,27 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		player.setOnGround(false);
 		return false;
 	}
-	
+
+	//Logic for colliding with enemies
 	private void processEnemyCollision() {
 		checkBounds(player.getGOval());
 		if(enemyCollisionDeath(player.getSpeedX(), player.getSpeedY())) {
-			//switchtoscreen
-			clearScreen();
-			tm.stop();
+			player.loseHealth(10);
+			if(player.getLives() == 0) {
+				tm.stop();
+				program.switchToMainMenu();
+			} else {
+				reset();
+				tm.start();
+			}
 		}
 		if(enemyBounce(player.getSpeedY())) {
 			player.setSpeedY(-1 * player.getJumpSpeed());
 			program.remove(collidingO);
 		}
 	}
-	
+
+	//Returns true if player collided with enemy from every direction except top
 	private boolean enemyCollisionDeath(double speedX, double speedY) {
 		for(GOval enem: mapEnemies) {
 			if(enem == program.getElementAt(pointNE.getX() + speedX, pointNE.getY() +1)) {
@@ -310,7 +328,8 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 		return false;
 	}
-	
+
+	//Returns true if player collided with enemy from the top
 	private boolean enemyBounce(double speedY) {
 		for(GOval enem: mapEnemies) {
 			if(enem == program.getElementAt(pointSE.getX(), pointSE.getY() + speedY)) {
@@ -329,14 +348,12 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		return false;
 	}
 
+	//Checks if player is at the end
 	private boolean playerAtEnd() {
 		return player.getGOval().getX() >= 500;
 	}
 
-	private void goToScoreScreen() {
-		program.switchToScore();
-	}
-
+	//Removes all drawings and then resets
 	private void clearScreen() {
 		for(GRect obs: mapObstacles) {
 			program.remove(obs);
@@ -347,6 +364,45 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		program.remove(player.getGOval());
 		program.remove(lives);
 		program.remove(powerups);
+		resetArrayLists();
+		resetPositions();
+		player.resetAll();
+	}
+
+	//Removes all objects from all arraylists
+	private void resetArrayLists() {
+		mapObstacles.clear();
+		mapEnemies.clear();
+
+	}
+
+	//Resets positions of all objects in the game
+	private void resetPositions() {
+		for(Obstacle obs: level.getObstacleList()) {
+			obs.setCurrentPosition(obs.getSpawnPosition());
+		}
+		for(Enemy enem: level.getEnemyList()) {
+			enem.setCurrentPosition(enem.getSpawnPoint());
+		}
+
+	}
+	
+	//redraw from level text file with less life
+	private void reset() {
+		for(GRect obs: mapObstacles) {
+			program.remove(obs);
+		}
+		for(GOval enemy: mapEnemies) {
+			program.remove(enemy);
+		}
+		program.remove(player.getGOval());
+		resetArrayLists();
+		resetPositions();
+		player.reset();
+		updateLives();
+		updatePowerUps();
+		
+		setupLevel(program);
 	}
 
 	@Override

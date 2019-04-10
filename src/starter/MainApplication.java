@@ -25,18 +25,22 @@ public class MainApplication extends GraphicsApplication {
 	
 	public void switchToMainMenu() {
 		switchToScreen(mainMenu);
+		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	}
 
 	public void switchToGame() {
 		switchToScreen(game);
+		setSize(WINDOW_WIDTH*2, WINDOW_HEIGHT);
 	}
 	
 	public void switchToHelp() {
 		switchToScreen(help);
+		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	}
 	
 	public void switchToScore() {
 		switchToScreen(score);
+		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	}
 	
 	public void switchHelpInGame() {

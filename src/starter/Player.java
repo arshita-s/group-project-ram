@@ -56,7 +56,7 @@ public class Player {
 	}
 
 	public void setLives(int l) {
-		lives = 3;
+		lives = l;
 	}
 
 	public void setHealth(int h) {
@@ -87,8 +87,35 @@ public class Player {
 		lastPos = p;
 	}
 
-	public void setPosition(Position p) {
+	public void setCurrentPosition(Position p) {
 		currentPosition = p;
+	}
+	
+	public void resetAll() {
+		player = new GOval(originalPosition.getX(), originalPosition.getY(), PLAYER_SIZE_X, PLAYER_SIZE_Y);
+		setCurrentPosition(originalPosition);
+		setSpeedX(0);
+		setSpeedY(0);
+		setCurrentMove(PlayerMovement.STANDING);
+		setCurrentJump(PlayerJump.STAND);
+		setHealth(30);
+		calculateLives();
+		setPowerUps(0);
+	}
+	
+	public void reset() {
+		player = new GOval(originalPosition.getX(), originalPosition.getY(), PLAYER_SIZE_X, PLAYER_SIZE_Y);
+		setCurrentPosition(originalPosition);
+		setSpeedX(0);
+		setSpeedY(0);
+		setCurrentMove(PlayerMovement.STANDING);
+		setCurrentJump(PlayerJump.STAND);
+		calculateLives();
+		setPowerUps(0);
+	}
+
+	private void calculateLives() {
+		setLives((int)Math.ceil(getHealth()/10));
 	}
 
 	public void addForce() {
@@ -107,6 +134,11 @@ public class Player {
 		if (currentMove == PlayerMovement.LEFT) {
 			speedX = Math.max(speedX - SPEED_DX, -MAX_SPEED);
 		}
+	}
+	
+	public void loseHealth(int health) {
+		setHealth(getHealth() - health);
+		calculateLives();
 	}
 
 	public void addFriction() {
