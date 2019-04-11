@@ -91,6 +91,7 @@ public class Player {
 		currentPosition = p;
 	}
 	
+	//Resets all characteristics of player
 	public void resetAll() {
 		player = new GOval(originalPosition.getX(), originalPosition.getY(), PLAYER_SIZE_X, PLAYER_SIZE_Y);
 		setCurrentPosition(originalPosition);
@@ -103,6 +104,8 @@ public class Player {
 		setPowerUps(0);
 	}
 	
+	//Resets all characteristics except health
+	//Used after player loses a life
 	public void reset() {
 		player = new GOval(originalPosition.getX(), originalPosition.getY(), PLAYER_SIZE_X, PLAYER_SIZE_Y);
 		setCurrentPosition(originalPosition);

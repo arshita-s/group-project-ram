@@ -294,7 +294,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 	}
 
-	//Returns true if player collided with enemy from every direction except top
+	//Returns true if player collided with enemy from every direction except top 
 	private boolean enemyCollisionDeath(double speedX, double speedY) {
 		for(GOval enem: mapEnemies) {
 			if(enem == program.getElementAt(pointNE.getX() + speedX, pointNE.getY() +1)) {
