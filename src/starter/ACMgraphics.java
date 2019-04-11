@@ -23,7 +23,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	private MainApplication program;
 	private ArrayList<GRect> mapObstacles;
-	private ArrayList<GOval> mapEnemies;
+	private ArrayList<GImage> mapEnemies;
 	private Player player;
 	private Map level;
 	private double vX = 0;
@@ -46,7 +46,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		this.program = app;
 		level = new Map();
 		mapObstacles = new ArrayList<GRect>();
-		mapEnemies = new ArrayList<GOval>();
+		mapEnemies = new ArrayList<GImage>();
 		player = new Player(0, 0);
 	}
 
@@ -76,7 +76,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		//if(player.getGOval() != null) {
 		//if(!playerAtEnd()) {
 		//setCameraSpeed(player.getGOval().getX(), player.getSpeedX());
-		player.setLastPos(new Position(player.getGOval().getX(), player.getGOval().getY()));
+		player.setLastPos(new Position(player.getGImage().getX(), player.getGImage().getY()));
 
 		moveMapObstacles(vX);
 		moveMapEnemies(vX);
@@ -145,7 +145,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			mapObstacles.add(obstacle);
 			program.add(obstacle);
 		}
-		GOval enemy;
+		GImage enemy;
 		for(Enemy enem: level.getEnemyList())
 		{
 			enemy = createEnemy(enem);
@@ -153,7 +153,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			program.add(enemy);
 		}
 		player = level.getPlayer();
-		program.add(player.getGOval());
+		program.add(player.getGImage());
 		player.setLastPos(player.getOriginalPosition());
 		updateLives();
 		updatePowerUps();
@@ -161,11 +161,8 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		program.add(powerups);
 	}
 
-	public GOval createEnemy(Enemy e) {
-		GOval objOva = new GOval(e.getCurrentPosition().getX(), e.getCurrentPosition().getY(), e.getSize().getWidth(), e.getSize().getHeight()); 
-		objOva.setFillColor(Color.RED);
-		objOva.setFilled(true);
-		return objOva;
+	public GImage createEnemy(Enemy e) {
+		return e.getSkin();
 	}
 
 	public GRect createObstacle(Obstacle obs) {
@@ -196,7 +193,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	//Logic for colliding with obstacles
 	private void processObstacleCollision() {
-		checkBounds(player.getGOval());
+		checkBounds(player.getGImage());
 		if(obstacleCollisionX(player.getSpeedX())) {
 			player.setSpeedX(0);
 		}
@@ -250,11 +247,11 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			if(obs == program.getElementAt(pointSE.getX(), pointSE.getY() + speed)) {
 				collidingO = program.getElementAt(pointSE.getX(), pointSE.getY() + speed);
 				player.setOnGround(true);
-				player.getGOval().setLocation(pointNW.getX(), collidingO.getY() - player.getGOval().getHeight());
+				player.getGImage().setLocation(pointNW.getX(), collidingO.getY() - player.getGImage().getHeight());
 				return true;
 			} else if(obs == program.getElementAt(pointSW.getX(), pointSW.getY() + speed)) {
 				collidingO = program.getElementAt(pointSW.getX(), pointSW.getY() + speed);
-				player.getGOval().setLocation(pointNW.getX(), collidingO.getY() - player.getGOval().getHeight());
+				player.getGImage().setLocation(pointNW.getX(), collidingO.getY() - player.getGImage().getHeight());
 				player.setOnGround(true);
 				return true;
 			} else if(obs == program.getElementAt(pointNE.getX(), pointNE.getY() + speed)) {
@@ -279,7 +276,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	//Logic for colliding with enemies
 	private void processEnemyCollision() {
-		checkBounds(player.getGOval());
+		checkBounds(player.getGImage());
 		if(enemyCollisionDeath(player.getSpeedX(), player.getSpeedY())) {
 			player.loseHealth(10); //TODO Change this line to check for type of enemy and lose health based on that with separate method
 			if(player.getLives() == 0) {
@@ -299,7 +296,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	//Returns true if player collided with enemy from every direction except top 
 	private boolean enemyCollisionDeath(double speedX, double speedY) {
-		for(GOval enem: mapEnemies) {
+		for(GImage enem: mapEnemies) {
 			if(enem == program.getElementAt(pointNE.getX() + speedX, pointNE.getY() +1)) {
 				collidingO = program.getElementAt(pointNE.getX() + speedX, pointNE.getY()+1);
 				return true;
@@ -334,14 +331,14 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	//Returns true if player collided with enemy from the top
 	private boolean enemyBounce(double speedY) {
-		for(GOval enem: mapEnemies) {
+		for(GImage enem: mapEnemies) {
 			if(enem == program.getElementAt(pointSE.getX(), pointSE.getY() + speedY)) {
 				collidingO = program.getElementAt(pointSE.getX(), pointSE.getY() + speedY);
-				player.getGOval().setLocation(pointNW.getX(), collidingO.getY() - player.getGOval().getHeight());
+				player.getGImage().setLocation(pointNW.getX(), collidingO.getY() - player.getGImage().getHeight());
 				return true;
 			} else if(enem == program.getElementAt(pointSW.getX(), pointSW.getY() + speedY)) {
 				collidingO = program.getElementAt(pointSW.getX(), pointSW.getY() + speedY);
-				player.getGOval().setLocation(pointNW.getX(), collidingO.getY() - player.getGOval().getHeight());
+				player.getGImage().setLocation(pointNW.getX(), collidingO.getY() - player.getGImage().getHeight());
 				return true;
 			} else if(enem == program.getElementAt(pointS.getX(), pointS.getY() + speedY)) {
 				collidingO = program.getElementAt(pointS.getX(), pointS.getY() + speedY);
@@ -353,7 +350,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	//Checks if player is at the end
 	private boolean playerAtEnd() {
-		return player.getGOval().getX() >= 500;
+		return player.getGImage().getX() >= 500;
 	}
 
 	//Removes all drawings
@@ -404,10 +401,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		for(GRect obs: mapObstacles) {
 			program.add(obs);
 		}
-		for(GOval enem: mapEnemies) {
+		for(GImage enem: mapEnemies) {
 			program.add(enem);
 		}
-		program.add(player.getGOval());
+		program.add(player.getGImage());
 		program.add(lives);
 		program.add(powerups);
 		tm.start();

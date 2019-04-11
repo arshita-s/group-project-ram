@@ -2,7 +2,7 @@ package starter;
 
 import java.awt.Color;
 
-import acm.graphics.GOval;
+import acm.graphics.GImage;
 
 public class Player {
 	/* 
@@ -17,12 +17,13 @@ public class Player {
 	private static double JUMP = 7;
 	private static final int PLAYER_SIZE_X = 30;
 	private static final int PLAYER_SIZE_Y = 30;
+	private static final String skin = "player.png";
 	private double speedX;
 	private double speedY;
 	private boolean onGround;
 	private Position originalPosition;
 	private Position currentPosition;
-	private GOval player;
+	private GImage player;
 	private PlayerMovement currentMove;
 	private PlayerJump currentJump;
 	private Position lastPos;
@@ -36,7 +37,8 @@ public class Player {
 	public Player(double x, double y) {
 		currentPosition = new Position(x, y);
 		originalPosition = new Position(x, y);
-		player = new GOval(currentPosition.getX(), currentPosition.getY(), PLAYER_SIZE_X, PLAYER_SIZE_Y);
+		player = new GImage(skin, currentPosition.getX(), currentPosition.getY());
+		player.setSize(PLAYER_SIZE_X, PLAYER_SIZE_Y);
 		speedX = 0;
 		speedY = 0;
 		//onGround = true;
@@ -93,7 +95,8 @@ public class Player {
 	
 	//Resets all characteristics of player
 	public void resetAll() {
-		player = new GOval(originalPosition.getX(), originalPosition.getY(), PLAYER_SIZE_X, PLAYER_SIZE_Y);
+		player = new GImage(skin, currentPosition.getX(), currentPosition.getY());
+		player.setSize(PLAYER_SIZE_X, PLAYER_SIZE_Y);
 		setCurrentPosition(originalPosition);
 		setSpeedX(0);
 		setSpeedY(0);
@@ -107,7 +110,8 @@ public class Player {
 	//Resets all characteristics except health
 	//Used after player loses a life
 	public void reset() {
-		player = new GOval(originalPosition.getX(), originalPosition.getY(), PLAYER_SIZE_X, PLAYER_SIZE_Y);
+		player = new GImage(skin, currentPosition.getX(), currentPosition.getY());
+		player.setSize(PLAYER_SIZE_X, PLAYER_SIZE_Y);
 		setCurrentPosition(originalPosition);
 		setSpeedX(0);
 		setSpeedY(0);
@@ -183,7 +187,7 @@ public class Player {
 		return currentMove;
 	}
 
-	public GOval getGOval() {
+	public GImage getGImage() {
 		return player;
 	}
 

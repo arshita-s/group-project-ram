@@ -2,7 +2,7 @@ package starter;
 
 import java.awt.Color;
 
-import acm.graphics.GOval;
+import acm.graphics.GImage;
 
 public class Enemy {
 	private int health; // Health that enemy starts with
@@ -14,7 +14,8 @@ public class Enemy {
 	private boolean isJumping; 
 	private boolean canJump;
 	
-	private GOval enemy;
+	private GImage enemy;
+	private final String skin = "enemy.png";
 	private int dX;
 	
 	
@@ -31,7 +32,8 @@ public class Enemy {
 		this.setJumping(false);
 		this.setCanJump(false);
 		this.setdX(1);
-		enemy = new GOval(p.getX(), p.getY(), s.getWidth(), s.getHeight());
+		enemy = new GImage(skin, p.getX(), p.getY());
+		enemy.setSize(s.getWidth(), s.getHeight());
 	}
 	/*
 	 * Enemy's movements
@@ -116,5 +118,7 @@ public class Enemy {
 	public void setdX(int dX) {
 		this.dX = dX;
 	}
-
+	public GImage getSkin() {
+		return enemy;
+	}
 }
