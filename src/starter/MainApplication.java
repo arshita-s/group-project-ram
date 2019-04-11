@@ -34,17 +34,17 @@ public class MainApplication extends GraphicsApplication {
 	}
 	
 	public void switchToHelp() {
+		GraphicsPane temp = getCurrentScreen();
 		switchToScreen(help);
+		if(temp.equals(mainMenu)) {
+			help.removeGameButton();
+		}
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	}
 	
 	public void switchToScore() {
 		switchToScreen(score);
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	}
-	
-	public void switchHelpInGame() {
-		switchTo(help);
 	}
 
 	/*

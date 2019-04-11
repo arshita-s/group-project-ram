@@ -39,8 +39,8 @@ public abstract class GraphicsApplication extends GraphicsProgram {
 		curScreen = newScreen;
 	}
 	
-	protected void switchTo(GraphicsPane newScreen) {
-		newScreen.showContents();
+	protected GraphicsPane getCurrentScreen() {
+		return curScreen;
 	}
 	
 	/*

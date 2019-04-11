@@ -39,6 +39,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	GObject collidingO;
 	private GLabel lives;
 	private GLabel powerups;
+	private int lastPressed;
 
 	public ACMgraphics(MainApplication app) {
 		super();
@@ -76,8 +77,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		//setCameraSpeed(player.getGOval().getX(), player.getSpeedX());
 		player.setLastPos(new Position(player.getGOval().getX(), player.getGOval().getY()));
 
-		program.add(lives);
-		program.add(powerups);
 		moveMapObstacles(vX);
 		moveMapEnemies(vX);
 		player.addFriction();
@@ -106,22 +105,23 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		else {
 			vX = 0;
 		}
+
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-
-		if (e.getKeyCode() == KeyEvent.VK_D) {
+		lastPressed = e.getKeyCode();
+		if (lastPressed == KeyEvent.VK_D) {
 			player.setCurrentMove(PlayerMovement.RIGHT);
 		}
-		if (e.getKeyCode() == KeyEvent.VK_A) {
+		if (lastPressed == KeyEvent.VK_A) {
 			player.setCurrentMove(PlayerMovement.LEFT);
 		}
-		if (e.getKeyCode() == KeyEvent.VK_W && player.getOnGround()) {
+		if (lastPressed == KeyEvent.VK_W && player.getOnGround()) {
 			player.setCurrentJump(PlayerJump.JUMP);
 		}
-		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			program.switchHelpInGame();
+		if (lastPressed == KeyEvent.VK_ESCAPE) {
+			program.switchToHelp();
 		}
 
 	}
@@ -156,6 +156,8 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		player.setLastPos(player.getOriginalPosition());
 		updateLives();
 		updatePowerUps();
+		program.add(lives);
+		program.add(powerups);
 	}
 
 	public GOval createEnemy(Enemy e) {
@@ -173,11 +175,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	public void moveMapObstacles(double vX2) {
-		int i = 0;
-		for(GObject current: mapObstacles) {
-			current.move(vX2, 0);
-			level.getObstacleList().get(i).setCurrentPosition(new Position((int) current.getX(), (int) current.getY()));
-			i++;
+		for(int i = 0; i < mapObstacles.size(); i++) {
+			GRect o = mapObstacles.get(i);
+			o.move(vX2, 0);
+			level.getObstacleList().get(i).setCurrentPosition(new Position((int) o.getX(), (int) o.getY()));
 		}
 	}
 
@@ -279,7 +280,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private void processEnemyCollision() {
 		checkBounds(player.getGOval());
 		if(enemyCollisionDeath(player.getSpeedX(), player.getSpeedY())) {
-			player.loseHealth(10);
+			player.loseHealth(10); //TODO Change this line to check for type of enemy and lose health based on that with separate method
 			if(player.getLives() == 0) {
 				tm.stop();
 				program.switchToMainMenu();
@@ -353,22 +354,19 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		return player.getGOval().getX() >= 500;
 	}
 
-	//Removes all drawings and then resets
+	//Removes all drawings
 	private void clearScreen() {
-		for(GRect obs: mapObstacles) {
-			program.remove(obs);
-		}
-		for(GOval enemy: mapEnemies) {
-			program.remove(enemy);
-		}
-		program.remove(player.getGOval());
+		program.removeAll();
 		program.remove(lives);
 		program.remove(powerups);
+	}
+
+	private void resetAll() {
 		resetArrayLists();
 		resetPositions();
 		player.resetAll();
 	}
-
+	
 	//Removes all objects from all arraylists
 	private void resetArrayLists() {
 		mapObstacles.clear();
@@ -388,14 +386,9 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 	
 	//redraw from level text file with less life
+	//Used after losing a life. Currently has the player restart the level with one less life
 	private void reset() {
-		for(GRect obs: mapObstacles) {
-			program.remove(obs);
-		}
-		for(GOval enemy: mapEnemies) {
-			program.remove(enemy);
-		}
-		program.remove(player.getGOval());
+		program.removeAll();
 		resetArrayLists();
 		resetPositions();
 		player.reset();
@@ -412,9 +405,13 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	@Override
 	public void hideContents() {
+		tm.stop();
 		clearScreen();
+		if(lastPressed != KeyEvent.VK_ESCAPE) {
+			resetAll();
+		}
 	}
-
+	
 	@Override
 	public void mousePressed(MouseEvent e) {
 
