@@ -21,18 +21,27 @@ public class MainApplication extends GraphicsApplication {
 		score = new ScorePane(this);
 		switchToMainMenu();
 	}
-	
-	
+
+
 	public void switchToMainMenu() {
 		switchToScreen(mainMenu);
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	}
 
 	public void switchToGame() {
-		switchToScreen(game);
+		GraphicsPane temp = getCurrentScreen();
+		if(temp.equals(help)) {
+			switchTo(game);
+			game.returnToGame();
+		} else {
+			if(temp.equals(mainMenu)) {
+				game.resetAll();
+			}
+			switchToScreen(game);
+		}
 		setSize(WINDOW_WIDTH*2, WINDOW_HEIGHT);
 	}
-	
+
 	public void switchToHelp() {
 		GraphicsPane temp = getCurrentScreen();
 		switchToScreen(help);
@@ -41,7 +50,7 @@ public class MainApplication extends GraphicsApplication {
 		}
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	}
-	
+
 	public void switchToScore() {
 		switchToScreen(score);
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -52,5 +61,5 @@ public class MainApplication extends GraphicsApplication {
 		AudioPlayer audio = AudioPlayer.getInstance();
 		audio.playSound(MUSIC_FOLDER, SOUND_FILES[count % SOUND_FILES.length]);
 	}
-	*/
+	 */
 }

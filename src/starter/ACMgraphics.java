@@ -47,13 +47,14 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		level = new Map();
 		mapObstacles = new ArrayList<GRect>();
 		mapEnemies = new ArrayList<GOval>();
+		player = new Player(0, 0);
 	}
 
 	public void run(MainApplication program) {
+		//resetArrayLists();
 		setupLevel(program);
 		tm.start();
 	}
-
 
 	public void updateLives() {
 		try {
@@ -292,6 +293,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		if(enemyBounce(player.getSpeedY())) {
 			player.setSpeedY(-1 * player.getJumpSpeed());
 			program.remove(collidingO);
+			mapEnemies.remove(collidingO);
 		}
 	}
 
@@ -361,7 +363,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		program.remove(powerups);
 	}
 
-	private void resetAll() {
+	public void resetAll() {
 		resetArrayLists();
 		resetPositions();
 		player.resetAll();
@@ -396,6 +398,19 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		updatePowerUps();
 		
 		setupLevel(program);
+	}
+	
+	public void returnToGame() {
+		for(GRect obs: mapObstacles) {
+			program.add(obs);
+		}
+		for(GOval enem: mapEnemies) {
+			program.add(enem);
+		}
+		program.add(player.getGOval());
+		program.add(lives);
+		program.add(powerups);
+		tm.start();
 	}
 
 	@Override
