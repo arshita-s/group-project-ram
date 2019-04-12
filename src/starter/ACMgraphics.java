@@ -23,6 +23,7 @@ import acm.graphics.GRectangle;
 public class ACMgraphics extends GraphicsPane implements ActionListener, KeyListener {
 
 	private static final String BACKGROUND = "background.png";
+	private GImage backGround = new GImage(BACKGROUND, 0, 0);
 
 	private MainApplication program;
 	private ArrayList<GRect> mapObstacles;
@@ -141,7 +142,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	public void setupLevel(MainApplication program) {
-		GImage backGround = new GImage(BACKGROUND, 0, 0);
 		backGround.setSize(program.GAME_WINDOW_WIDTH , program.getHeight());
 		program.add(backGround);
 		GRect obstacle;
@@ -298,6 +298,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			player.setSpeedY(-1 * player.getJumpSpeed());
 			program.remove(collidingO);
 			mapEnemies.remove(collidingO);
+			
 		}
 	}
 
@@ -405,6 +406,8 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 	
 	public void returnToGame() {
+		backGround.setSize(program.GAME_WINDOW_WIDTH , program.getHeight());
+		program.add(backGround);
 		for(GRect obs: mapObstacles) {
 			program.add(obs);
 		}
