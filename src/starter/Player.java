@@ -238,4 +238,8 @@ public class Player {
 	public double getJumpSpeed() {
 		return JUMP;
 	}
+	
+	public void stop() {
+		speedX = 0;
+	}
 }

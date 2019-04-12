@@ -40,6 +40,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private GLabel lives;
 	private GLabel powerups;
 	private int lastPressed;
+	boolean moving = false;
 
 	public ACMgraphics(MainApplication app) {
 		super();
@@ -75,7 +76,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	public void actionPerformed(ActionEvent e) {
 		//if(player.getGOval() != null) {
 		//if(!playerAtEnd()) {
-		//setCameraSpeed(player.getGOval().getX(), player.getSpeedX());
+		//setCameraSpeed();
 		player.setLastPos(new Position(player.getGImage().getX(), player.getGImage().getY()));
 
 		moveMapObstacles(vX);
@@ -97,7 +98,25 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		//}
 	}
 
-	private void setCameraSpeed(double x, double speedX) {
+	/*
+	private void setCameraSpeed() {
+		double x = player.getPosition().getX();
+		double pixelsMoved = 0;
+		if(x > 500 && x < 600) {
+			moving = true;
+			vX = 4;
+			while(moving) {
+				if(pixelsMoved < 500) {
+					pixelsMoved++;
+					player.stop();
+				}
+				else {
+					vX = 0;
+					moving = false;
+				}
+			}
+		}
+		
 		if (x < 200 && speedX != 0 && player.getCurrent() == PlayerMovement.LEFT) {
 			vX = 4;
 		} else if (x > 400 && speedX != 0 && player.getCurrent() == PlayerMovement.RIGHT) {
@@ -106,9 +125,9 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		else {
 			vX = 0;
 		}
-
+		
 	}
-
+*/
 	@Override
 	public void keyPressed(KeyEvent e) {
 		lastPressed = e.getKeyCode();
@@ -204,7 +223,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	//Gets all the points of an object
 	private void checkBounds(GObject p) {
-		GRectangle b = p.getBounds();
 		pointNE = new GPoint(p.getX() + p.getWidth(), p.getY());
 		pointSW = new GPoint(p.getX(), p.getY() + p.getHeight());
 		pointNW = new GPoint(p.getX(), p.getY());
