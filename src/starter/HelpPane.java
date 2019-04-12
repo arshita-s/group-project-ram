@@ -9,42 +9,47 @@ import acm.graphics.GObject;
 
 public class HelpPane extends GraphicsPane{
 
-	private static final int numHelpElements = 7;
+	private static final int numHelpElements = 6;
+	private int XLabel = 110;
+	private int YLabel = 250;
+	private int XImage = 100;
+	private int YImage = 160;
+	private static int finalXLabel = 280;
+	private static int finalYLabel = 490;
+	private static int finalXImage = 270;
+	private static int finalYImage = 400;
 	private MainApplication program;
 	private GLabel title;
 	private GButton backToMenu;
 	private GButton backToGame;
-	private ArrayList<GLabel> elements = new ArrayList<GLabel>(6);
-	private ArrayList<GImage> images = new ArrayList<GImage>(6);
-	private static String[] options = {"Right", "Left", "Jump", "Attack", "PowerUp", "Masks"};
-	private static String[] imageNames = {"d_key.png", "a_key.png", "w_key.png", "z_key.png", "x_key.png", "maniaxe_mask.png"};
+	private ArrayList<GLabel> elements = new ArrayList<GLabel>(7);
+	private ArrayList<GImage> images = new ArrayList<GImage>(7);
+	private static String[] labels = {"Right", "Left", "Jump", "Attack", "PowerUp", "Masks", "Pause"};
+	private static String[] imageNames = {"d_key.png", "a_key.png", "w_key.png", "z_key.png", "x_key.png", "maniaxe_mask.png", "esc_key.png"};
 	
 	public HelpPane(MainApplication app) {
 		super();
 		program = app;
 		title = new GLabel("HELP", 225, 100);
 		title.setFont("Arial-70");
-		backToMenu = new GButton("Back to Title", 250, 450, 100, 50);
-		backToGame = new GButton("Back to Game", 250, 500, 100, 50);
-
-		int x = 110;
-		int y = 250;
-		int z = 160;
-		int w = 100;
+		backToMenu = new GButton("Back to Title", 400, 450, 100, 50);
+		backToGame = new GButton("Back to Game", 400, 500, 100, 50);
 		for(int i = 0; i < 6; i++) {
 			if(i == 3) {
-				x = 110;
-				y += 120;
-				z += 120;
-				w = 100;
+				XLabel = 110;
+				YLabel += 120;
+				YImage += 120;
+				XImage = 100;
 			}
-			GImage im = new GImage(imageNames[i], w, z);
-			GLabel g = new GLabel(options[i], x, y);
-			images.add(i, im);
-			elements.add(i, g);
-			x+=170;
-			w+=170;
+			GImage image = new GImage(imageNames[i], XImage, YImage);
+			GLabel label = new GLabel(labels[i], XLabel, YLabel);
+			images.add(i, image);
+			elements.add(i, label);
+			XLabel+=170;
+			XImage+=170;
 		}
+		elements.add(new GLabel(labels[numHelpElements], finalXLabel, finalYLabel));
+		images.add(new GImage(imageNames[numHelpElements], finalXImage, finalYImage));
 
 	}
 	
@@ -61,7 +66,7 @@ public class HelpPane extends GraphicsPane{
 		program.add(title);
 		program.add(backToMenu);
 		program.add(backToGame);
-		for(int i = 0; i < numHelpElements; i++) {
+		for(int i = 0; i < numHelpElements+1; i++) {
 			program.add(elements.get(i));
 			program.add(images.get(i));
 		}
@@ -72,7 +77,7 @@ public class HelpPane extends GraphicsPane{
 		program.remove(title);
 		program.remove(backToMenu);
 		removeGameButton();
-		for(int i = 0; i < 6; i++) {
+		for(int i = 0; i < numHelpElements+1; i++) {
 			program.remove(elements.get(i));
 			program.remove(images.get(i));
 		}
