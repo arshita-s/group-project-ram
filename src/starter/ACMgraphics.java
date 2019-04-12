@@ -1,6 +1,7 @@
 package starter;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -20,6 +21,8 @@ import acm.graphics.GRectangle;
 
 // Here I will take obstacles and put them on the screen
 public class ACMgraphics extends GraphicsPane implements ActionListener, KeyListener {
+
+	private static final String BACKGROUND = "background.png";
 
 	private MainApplication program;
 	private ArrayList<GRect> mapObstacles;
@@ -138,6 +141,9 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	public void setupLevel(MainApplication program) {
+		GImage backGround = new GImage(BACKGROUND, 0, 0);
+		backGround.setSize(program.getSize().getWidth(), program.getSize().getHeight());
+		program.add(backGround);
 		GRect obstacle;
 		for(Obstacle obst: level.getObstacleList())
 		{
@@ -167,7 +173,8 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	public GRect createObstacle(Obstacle obs) {
 		GRect rec = new GRect(obs.getSpawnPosition().getX(), obs.getSpawnPosition().getY(), obs.getSize().getWidth(), obs.getSize().getHeight());
-		rec.setFillColor(Color.BLACK);
+		rec.setFillColor(Color.RED);
+		rec.setColor(Color.RED);
 		rec.setFilled(true);
 		return rec;
 	}
