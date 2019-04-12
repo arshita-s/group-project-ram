@@ -2,6 +2,7 @@ package starter;
 public class MainApplication extends GraphicsApplication {
 	public static final int WINDOW_WIDTH = 600;
 	public static final int WINDOW_HEIGHT = 600;
+	public final int GAME_WINDOW_WIDTH = 1200;
 	//public static final String MUSIC_FOLDER = "sounds";
 	//private static final String[] SOUND_FILES = { "r2d2.mp3", "somethinlikethis.mp3" };
 
@@ -39,7 +40,7 @@ public class MainApplication extends GraphicsApplication {
 			}
 			switchToScreen(game);
 		}
-		setSize(WINDOW_WIDTH*2, WINDOW_HEIGHT);
+		setSize(GAME_WINDOW_WIDTH, WINDOW_HEIGHT);
 	}
 
 	public void switchToHelp() {

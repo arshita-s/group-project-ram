@@ -142,7 +142,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	public void setupLevel(MainApplication program) {
 		GImage backGround = new GImage(BACKGROUND, 0, 0);
-		backGround.setSize(program.getSize().getWidth(), program.getSize().getHeight());
+		backGround.setSize(program.GAME_WINDOW_WIDTH , program.getHeight());
 		program.add(backGround);
 		GRect obstacle;
 		for(Obstacle obst: level.getObstacleList())
