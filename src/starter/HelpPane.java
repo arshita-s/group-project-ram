@@ -9,6 +9,7 @@ import acm.graphics.GObject;
 
 public class HelpPane extends GraphicsPane{
 
+	private static final int numHelpElements = 7;
 	private MainApplication program;
 	private GLabel title;
 	private GButton backToMenu;
@@ -60,7 +61,7 @@ public class HelpPane extends GraphicsPane{
 		program.add(title);
 		program.add(backToMenu);
 		program.add(backToGame);
-		for(int i = 0; i < 6; i++) {
+		for(int i = 0; i < numHelpElements; i++) {
 			program.add(elements.get(i));
 			program.add(images.get(i));
 		}
