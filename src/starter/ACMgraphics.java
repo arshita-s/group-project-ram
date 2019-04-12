@@ -21,7 +21,6 @@ import acm.graphics.GRectangle;
 
 // Here I will take obstacles and put them on the screen
 public class ACMgraphics extends GraphicsPane implements ActionListener, KeyListener {
-
 	private static final String BACKGROUND = "background.png";
 	private GImage backGround = new GImage(BACKGROUND, 0, 0);
 
