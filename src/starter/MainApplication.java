@@ -9,6 +9,7 @@ public class MainApplication extends GraphicsApplication {
 	private HelpPane help;
 	private ScorePane score;
 
+
 	public void init() {
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	}
@@ -54,11 +55,4 @@ public class MainApplication extends GraphicsApplication {
 		switchToScreen(score);
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	}
-
-	/*
-	private void playRandomSound() {
-		AudioPlayer audio = AudioPlayer.getInstance();
-		audio.playSound(MUSIC_FOLDER, SOUND_FILES[count % SOUND_FILES.length]);
-	}
-	 */
 }

@@ -40,7 +40,11 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private int lastPressed;
 	boolean moving = false;
 	
-	private static final String[] SOUND_FILES = { "Our-Mountain_v003.mp3" };
+	/*
+	 * Background Music: "Our Mountain" by Eric Matyas
+	 */
+	
+	private static final String[] SOUND_FILES = {"Our-Mountain_v003.mp3" };
 	public static final String MUSIC_FOLDER = "sounds";
 
 	public ACMgraphics(MainApplication app) {
@@ -432,13 +436,15 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	
-	
 	private void playBackgroundMusic() {
 		AudioPlayer audio = AudioPlayer.getInstance();
 		audio.playSound(MUSIC_FOLDER, SOUND_FILES[0]);
 	}
 	
-	
+	private void stopBackgroundMusic() {
+		AudioPlayer audio = AudioPlayer.getInstance();
+		audio.stopSound(MUSIC_FOLDER, SOUND_FILES[0]);
+	}
 	
 	@Override
 	public void showContents() {
@@ -452,6 +458,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		if(lastPressed != KeyEvent.VK_ESCAPE) {
 			resetAll();
 		}
+		stopBackgroundMusic();
 	}
 	
 	@Override

@@ -26,6 +26,8 @@ public class HelpPane extends GraphicsPane{
 	private ArrayList<GImage> images = new ArrayList<GImage>(7);
 	private static String[] labels = {"Right", "Left", "Jump", "Attack", "PowerUp", "Masks", "Pause"};
 	private static String[] imageNames = {"d_key.png", "a_key.png", "w_key.png", "z_key.png", "x_key.png", "maniaxe_mask.png", "esc_key.png"};
+	public static final String MUSIC_FOLDER = "sounds";
+	private static final String[] SOUND_FILES = {"Fantasy_Game_Background.mp3" };
 	
 	public HelpPane(MainApplication app) {
 		super();
@@ -50,7 +52,6 @@ public class HelpPane extends GraphicsPane{
 		}
 		elements.add(new GLabel(labels[numHelpElements], finalXLabel, finalYLabel));
 		images.add(new GImage(imageNames[numHelpElements], finalXImage, finalYImage));
-
 	}
 	
 	public void removeGameButton() {
@@ -59,6 +60,16 @@ public class HelpPane extends GraphicsPane{
 		} catch(NullPointerException e) {
 			
 		}
+	}
+	
+	private void playBackgroundMusic() {
+		AudioPlayer audio = AudioPlayer.getInstance();
+		audio.playSound(MUSIC_FOLDER, SOUND_FILES[0]);
+	}
+	
+	private void stopBackgroundMusic() {
+		AudioPlayer audio = AudioPlayer.getInstance();
+		audio.stopSound(MUSIC_FOLDER, SOUND_FILES[0]);
 	}
 	
 	@Override
@@ -89,6 +100,7 @@ public class HelpPane extends GraphicsPane{
 		if(obj == backToMenu) {
 			program.switchToMainMenu();
 		} else if(obj == backToGame) {
+			stopBackgroundMusic();
 			program.switchToGame();
 		}
 	}
