@@ -55,7 +55,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	public void run(MainApplication program) {
-		//resetArrayLists();
 		setupLevel(program);
 		tm.start();
 	}
@@ -88,14 +87,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		processEnemyCollision();
 		player.move();
 		
-		//System.out.println(player.speedX());
-		//} else {
-		//if(playerAtEnd()) {
-		//	tm.stop();
-		//	program.switchToScore();
-		//}
-		//}
-		//}
 	}
 
 	private void moveScreen() {
@@ -352,11 +343,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			}
 		}
 		return false;
-	}
-
-	//Checks if player is at the end
-	private boolean playerAtEnd() {
-		return player.getGImage().getX() >= 500;
 	}
 
 	//Removes all drawings
