@@ -11,11 +11,11 @@ public class Obstacle {
 	private Velocity velocity;
 	private boolean instantDeath;
 	private GImage obstacle;
-	private final String skin = "floor.png";
+	private final String skin = "floor1500x50.png";
 	
 	public Obstacle(int width, int length, boolean move, int x, int y, int horizontal, int vertical, boolean death) {
 		setSize(new Size(width, length));
-		setMovement(move);
+		setMovement(move); 
 		setSpawnPosition(new Position(x, y));
 		setCurrentPosition(new Position(x, y));
 		setVelocity(new Velocity(horizontal, vertical));
