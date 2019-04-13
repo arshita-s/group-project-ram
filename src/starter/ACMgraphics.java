@@ -1,6 +1,7 @@
 package starter;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -15,14 +16,16 @@ import acm.graphics.GLabel;
 import acm.graphics.GObject;
 import acm.graphics.GOval;
 import acm.graphics.GPoint;
-import acm.graphics.GRect;
-import acm.graphics.GRectangle;
+import acm.graphics.GImage;
 
 // Here I will take obstacles and put them on the screen
 public class ACMgraphics extends GraphicsPane implements ActionListener, KeyListener {
+	private static final String BACKGROUND = "background.png";
+	private GImage backGround = new GImage(BACKGROUND, 0, 0);
+	private static final int BOUND = 5;
 
 	private MainApplication program;
-	private ArrayList<GRect> mapObstacles;
+	private ArrayList<GImage> mapObstacles;
 	private ArrayList<GImage> mapEnemies;
 	private Player player;
 	private Map level;
@@ -46,13 +49,12 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		super();
 		this.program = app;
 		level = new Map();
-		mapObstacles = new ArrayList<GRect>();
+		mapObstacles = new ArrayList<GImage>();
 		mapEnemies = new ArrayList<GImage>();
 		player = new Player(0, 0);
 	}
 
 	public void run(MainApplication program) {
-		//resetArrayLists();
 		setupLevel(program);
 		tm.start();
 	}
@@ -77,9 +79,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		//if(player.getGOval() != null) {
 		//if(!playerAtEnd()) {
 		//setCameraSpeed();
+
 		player.setLastPos(new Position(player.getGImage().getX(), player.getGImage().getY()));
 
-		moveMapObstacles(vX);
+		//moveScreen();
 		moveMapEnemies(vX);
 		player.addFriction();
 		player.addForce();
@@ -88,14 +91,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		processEnemyCollision();
 		player.move();
 		
-		//System.out.println(player.speedX());
-		//} else {
-		//if(playerAtEnd()) {
-		//	tm.stop();
-		//	program.switchToScore();
-		//}
-		//}
-		//}
 	}
 
 	/*
@@ -121,11 +116,23 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			vX = 4;
 		} else if (x > 400 && speedX != 0 && player.getCurrent() == PlayerMovement.RIGHT) {
 			vX = -4;
+=======
+	private void moveScreen() {
+		if(player.getGImage().getX() + player.getGImage().getWidth() > program.getWidth() - BOUND) {
+			player.getGImage().setLocation(BOUND + player.getGImage().getWidth(), player.getGImage().getY());
+			moveMapObstacles(-program.getWidth());
+			moveMapEnemies(-program.getWidth());
+>>>>>>> branch 'master' of https://github.com/comp55-spr19/group-project-ram.git
 		}
-		else {
-			vX = 0;
+		if(player.getGImage().getX() < BOUND) {
+			player.getGImage().setLocation(program.getWidth() - BOUND - player.getGImage().getWidth(), player.getGImage().getY());
+			moveMapObstacles(program.getWidth());
+			moveMapEnemies(program.getWidth());
 		}
+<<<<<<< HEAD
 		
+=======
+>>>>>>> branch 'master' of https://github.com/comp55-spr19/group-project-ram.git
 	}
 */
 	@Override
@@ -157,7 +164,9 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	public void setupLevel(MainApplication program) {
-		GRect obstacle;
+		backGround.setSize(program.GAME_WINDOW_WIDTH , program.getHeight());
+		program.add(backGround);
+		GImage obstacle;
 		for(Obstacle obst: level.getObstacleList())
 		{
 			obstacle = createObstacle(obst);
@@ -184,16 +193,13 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		return e.getSkin();
 	}
 
-	public GRect createObstacle(Obstacle obs) {
-		GRect rec = new GRect(obs.getSpawnPosition().getX(), obs.getSpawnPosition().getY(), obs.getSize().getWidth(), obs.getSize().getHeight());
-		rec.setFillColor(Color.BLACK);
-		rec.setFilled(true);
-		return rec;
+	public GImage createObstacle(Obstacle obs) {
+		return obs.getGImage();
 	}
 
 	public void moveMapObstacles(double vX2) {
 		for(int i = 0; i < mapObstacles.size(); i++) {
-			GRect o = mapObstacles.get(i);
+			GImage o = mapObstacles.get(i);
 			o.move(vX2, 0);
 			level.getObstacleList().get(i).setCurrentPosition(new Position((int) o.getX(), (int) o.getY()));
 		}
@@ -235,7 +241,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	//Returns true if player collided with obstacle in x direction
 	private boolean obstacleCollisionX(double speed) {
-		for(GRect obs: mapObstacles) {
+		for(GImage obs: mapObstacles) {
 			if(obs == program.getElementAt(pointNE.getX() + speed, pointNE.getY() +1)) {
 				collidingO = program.getElementAt(pointNE.getX() + speed, pointNE.getY()+1);
 				return true;
@@ -261,7 +267,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	//Returns true if player collided with obstacle in y direction
 	private boolean obstacleCollisionY(double speed) {
-		for(GRect obs: mapObstacles) {
+		for(GImage obs: mapObstacles) {
 			if(obs == program.getElementAt(pointSE.getX(), pointSE.getY() + speed)) {
 				collidingO = program.getElementAt(pointSE.getX(), pointSE.getY() + speed);
 				player.setOnGround(true);
@@ -310,6 +316,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			player.setSpeedY(-1 * player.getJumpSpeed());
 			program.remove(collidingO);
 			mapEnemies.remove(collidingO);
+			
 		}
 	}
 
@@ -367,11 +374,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		return false;
 	}
 
-	//Checks if player is at the end
-	private boolean playerAtEnd() {
-		return player.getGImage().getX() >= 500;
-	}
-
 	//Removes all drawings
 	private void clearScreen() {
 		program.removeAll();
@@ -417,7 +419,9 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 	
 	public void returnToGame() {
-		for(GRect obs: mapObstacles) {
+		backGround.setSize(program.GAME_WINDOW_WIDTH , program.getHeight());
+		program.add(backGround);
+		for(GImage obs: mapObstacles) {
 			program.add(obs);
 		}
 		for(GImage enem: mapEnemies) {

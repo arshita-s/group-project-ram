@@ -1,4 +1,7 @@
 package starter;
+import java.awt.Color;
+
+import acm.graphics.GImage;
 
 public class Obstacle {
 	private Size size;
@@ -7,14 +10,17 @@ public class Obstacle {
 	private Position currentPosition;
 	private Velocity velocity;
 	private boolean instantDeath;
+	private GImage obstacle;
+	private final String skin = "floor1500x50.png";
 	
 	public Obstacle(int width, int length, boolean move, int x, int y, int horizontal, int vertical, boolean death) {
 		setSize(new Size(width, length));
-		setMovement(move);
+		setMovement(move); 
 		setSpawnPosition(new Position(x, y));
 		setCurrentPosition(new Position(x, y));
 		setVelocity(new Velocity(horizontal, vertical));
 		setInstantDeath(death);
+		setGImage();
 	}
 
 	public boolean isInstantDeath() {
@@ -63,5 +69,12 @@ public class Obstacle {
 
 	public void setSpawnPosition(Position spawnPosition) {
 		this.spawnPosition = spawnPosition;
+	}
+	public void setGImage() {
+		obstacle = new GImage(skin, spawnPosition.getX(), spawnPosition.getY());
+		obstacle.setSize(size.getWidth(), size.getHeight());
+	}
+	public GImage getGImage() {
+		return obstacle;
 	}
 }
