@@ -300,7 +300,8 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			if(player.getLives() == 0) {
 				tm.stop();
 				program.switchToMainMenu();
-			} else {
+			} 
+			else {
 				reset();
 				tm.start();
 			}
