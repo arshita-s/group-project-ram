@@ -24,21 +24,21 @@ public class HelpPane extends GraphicsPane{
 	private GButton backToGame;
 	private ArrayList<GLabel> elements = new ArrayList<GLabel>(7);
 	private ArrayList<GImage> images = new ArrayList<GImage>(7);
-	private static String[] labels = {"Right", "Left", "Jump", "Attack", "PowerUp", "Masks", "Pause"};
-	private static String[] imageNames = {"d_key.png", "a_key.png", "w_key.png", "z_key.png", "x_key.png", "maniaxe_mask.png", "esc_key.png"};
+	private static String[] labels = {"Right", "Left", "Jump", "Jump On Top to Attack", "PowerUp", "Masks", "Pause"};
+	private static String[] imageNames = {"d_key.png", "a_key.png", "w_key.png", "w_key.png", "x_key.png", "maniaxe_mask.png", "esc_key.png"};
 	public static final String MUSIC_FOLDER = "sounds";
 	private static final String[] SOUND_FILES = {"Fantasy_Game_Background.mp3" };
 	
 	public HelpPane(MainApplication app) {
 		super();
 		program = app;
-		title = new GLabel("HELP", 225, 100);
+		title = new GLabel("HELP", 210, 100);
 		title.setFont("Arial-70");
 		backToMenu = new GButton("Back to Title", 400, 450, 100, 50);
 		backToGame = new GButton("Back to Game", 400, 500, 100, 50);
 		for(int i = 0; i < 6; i++) {
 			if(i == 3) {
-				XLabel = 110;
+				XLabel = 70;
 				YLabel += 120;
 				YImage += 120;
 				XImage = 100;
@@ -47,6 +47,9 @@ public class HelpPane extends GraphicsPane{
 			GLabel label = new GLabel(labels[i], XLabel, YLabel);
 			images.add(i, image);
 			elements.add(i, label);
+			if(i == 3) {
+				XLabel+=30;
+			}
 			XLabel+=170;
 			XImage+=170;
 		}
@@ -62,10 +65,6 @@ public class HelpPane extends GraphicsPane{
 		}
 	}
 	
-	private void playBackgroundMusic() {
-		AudioPlayer audio = AudioPlayer.getInstance();
-		audio.playSound(MUSIC_FOLDER, SOUND_FILES[0]);
-	}
 	
 	private void stopBackgroundMusic() {
 		AudioPlayer audio = AudioPlayer.getInstance();
