@@ -37,7 +37,7 @@ public class Enemy {
 	}
 	/*
 	 * Enemy's movements
-	 */
+	 */ 
 	public void move() {
 		if (currentPosition.getX() + dX > (spawnPosition.getX() + movesWithin) || currentPosition.getX() + dX < (spawnPosition.getX() - movesWithin)) {
 			setdX(getdX() * -1);

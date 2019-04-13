@@ -16,8 +16,7 @@ import acm.graphics.GLabel;
 import acm.graphics.GObject;
 import acm.graphics.GOval;
 import acm.graphics.GPoint;
-import acm.graphics.GRect;
-import acm.graphics.GRectangle;
+import acm.graphics.GImage;
 
 // Here I will take obstacles and put them on the screen
 public class ACMgraphics extends GraphicsPane implements ActionListener, KeyListener {
@@ -25,7 +24,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private GImage backGround = new GImage(BACKGROUND, 0, 0);
 
 	private MainApplication program;
-	private ArrayList<GRect> mapObstacles;
+	private ArrayList<GImage> mapObstacles;
 	private ArrayList<GImage> mapEnemies;
 	private Player player;
 	private Map level;
@@ -48,7 +47,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		super();
 		this.program = app;
 		level = new Map();
-		mapObstacles = new ArrayList<GRect>();
+		mapObstacles = new ArrayList<GImage>();
 		mapEnemies = new ArrayList<GImage>();
 		player = new Player(0, 0);
 	}
@@ -143,7 +142,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	public void setupLevel(MainApplication program) {
 		backGround.setSize(program.GAME_WINDOW_WIDTH , program.getHeight());
 		program.add(backGround);
-		GRect obstacle;
+		GImage obstacle;
 		for(Obstacle obst: level.getObstacleList())
 		{
 			obstacle = createObstacle(obst);
@@ -170,17 +169,13 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		return e.getSkin();
 	}
 
-	public GRect createObstacle(Obstacle obs) {
-		GRect rec = new GRect(obs.getSpawnPosition().getX(), obs.getSpawnPosition().getY(), obs.getSize().getWidth(), obs.getSize().getHeight());
-		rec.setFillColor(Color.RED);
-		rec.setColor(Color.RED);
-		rec.setFilled(true);
-		return rec;
+	public GImage createObstacle(Obstacle obs) {
+		return obs.getGImage();
 	}
 
 	public void moveMapObstacles(double vX2) {
 		for(int i = 0; i < mapObstacles.size(); i++) {
-			GRect o = mapObstacles.get(i);
+			GImage o = mapObstacles.get(i);
 			o.move(vX2, 0);
 			level.getObstacleList().get(i).setCurrentPosition(new Position((int) o.getX(), (int) o.getY()));
 		}
@@ -210,7 +205,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	//Gets all the points of an object
 	private void checkBounds(GObject p) {
-		GRectangle b = p.getBounds();
 		pointNE = new GPoint(p.getX() + p.getWidth(), p.getY());
 		pointSW = new GPoint(p.getX(), p.getY() + p.getHeight());
 		pointNW = new GPoint(p.getX(), p.getY());
@@ -223,7 +217,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	//Returns true if player collided with obstacle in x direction
 	private boolean obstacleCollisionX(double speed) {
-		for(GRect obs: mapObstacles) {
+		for(GImage obs: mapObstacles) {
 			if(obs == program.getElementAt(pointNE.getX() + speed, pointNE.getY() +1)) {
 				collidingO = program.getElementAt(pointNE.getX() + speed, pointNE.getY()+1);
 				return true;
@@ -249,7 +243,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	//Returns true if player collided with obstacle in y direction
 	private boolean obstacleCollisionY(double speed) {
-		for(GRect obs: mapObstacles) {
+		for(GImage obs: mapObstacles) {
 			if(obs == program.getElementAt(pointSE.getX(), pointSE.getY() + speed)) {
 				collidingO = program.getElementAt(pointSE.getX(), pointSE.getY() + speed);
 				player.setOnGround(true);
@@ -407,7 +401,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	public void returnToGame() {
 		backGround.setSize(program.GAME_WINDOW_WIDTH , program.getHeight());
 		program.add(backGround);
-		for(GRect obs: mapObstacles) {
+		for(GImage obs: mapObstacles) {
 			program.add(obs);
 		}
 		for(GImage enem: mapEnemies) {
