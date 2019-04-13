@@ -47,7 +47,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	 * 					 "Fantasy Game Background" by Eric Matyas
 	 */
 	
-	private static final String[] SOUND_FILES = {"Our-Mountain_v003.mp3", "enemy_sound.wav"};
+	private static final String[] SOUND_FILES = {"Our-Mountain_v003.mp3", "enemy_sound.wav", "death_sound.wav"};
 	public static final String MUSIC_FOLDER = "sounds";
 
 	public ACMgraphics(MainApplication app) {
@@ -285,6 +285,9 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 				program.switchToMainMenu();
 			} 
 			else {
+				SoundClip fx = new SoundClip("sounds/" + SOUND_FILES[2]);
+				fx.setVolume(1);
+				fx.play();
 				reset();
 				tm.start();
 			}
