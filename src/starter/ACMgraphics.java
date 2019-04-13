@@ -17,7 +17,7 @@ import acm.graphics.GPoint;
 public class ACMgraphics extends GraphicsPane implements ActionListener, KeyListener {
 	private static final String BACKGROUND = "background.png";
 	private GImage backGround = new GImage(BACKGROUND, 0, 0);
-	//private static final int BOUND = 5;
+	private static final int BOUND = 5;
 
 	private MainApplication program;
 	private ArrayList<GImage> mapObstacles;
@@ -84,7 +84,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		playBackgroundMusic();
 		player.setLastPos(new Position(player.getGImage().getX(), player.getGImage().getY()));
 
-		//moveScreen();
+		moveScreen();
 		moveMapEnemies(vX);
 		player.addFriction();
 		player.addForce();
@@ -95,48 +95,19 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		
 	}
 
-	/*
-	private void setCameraSpeed() {
-		double x = player.getPosition().getX();
-		double pixelsMoved = 0;
-		if(x > 500 && x < 600) {
-			moving = true;
-			vX = 4;
-			while(moving) {
-				if(pixelsMoved < 500) {
-					pixelsMoved++;
-					player.stop();
-				}
-				else {
-					vX = 0;
-					moving = false;
-				}
-			}
-		}
-		
-		if (x < 200 && speedX != 0 && player.getCurrent() == PlayerMovement.LEFT) {
-			vX = 4;
-		} else if (x > 400 && speedX != 0 && player.getCurrent() == PlayerMovement.RIGHT) {
-			vX = -4;
-=======
 	private void moveScreen() {
 		if(player.getGImage().getX() + player.getGImage().getWidth() > program.getWidth() - BOUND) {
 			player.getGImage().setLocation(BOUND + player.getGImage().getWidth(), player.getGImage().getY());
 			moveMapObstacles(-program.getWidth());
 			moveMapEnemies(-program.getWidth());
->>>>>>> branch 'master' of https://github.com/comp55-spr19/group-project-ram.git
 		}
 		if(player.getGImage().getX() < BOUND) {
 			player.getGImage().setLocation(program.getWidth() - BOUND - player.getGImage().getWidth(), player.getGImage().getY());
 			moveMapObstacles(program.getWidth());
 			moveMapEnemies(program.getWidth());
 		}
-<<<<<<< HEAD
-		
-=======
->>>>>>> branch 'master' of https://github.com/comp55-spr19/group-project-ram.git
 	}
-*/
+	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		lastPressed = e.getKeyCode();
