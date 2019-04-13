@@ -22,6 +22,7 @@ import acm.graphics.GImage;
 public class ACMgraphics extends GraphicsPane implements ActionListener, KeyListener {
 	private static final String BACKGROUND = "background.png";
 	private GImage backGround = new GImage(BACKGROUND, 0, 0);
+	private static final int BOUND = 5;
 
 	private MainApplication program;
 	private ArrayList<GImage> mapObstacles;
@@ -53,7 +54,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	public void run(MainApplication program) {
-		//resetArrayLists();
 		setupLevel(program);
 		tm.start();
 	}
@@ -75,12 +75,9 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		//if(player.getGOval() != null) {
-		//if(!playerAtEnd()) {
-		//setCameraSpeed(player.getGOval().getX(), player.getSpeedX());
 		player.setLastPos(new Position(player.getGImage().getX(), player.getGImage().getY()));
 
-		moveMapObstacles(vX);
+		moveScreen();
 		moveMapEnemies(vX);
 		player.addFriction();
 		player.addForce();
@@ -89,26 +86,19 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		processEnemyCollision();
 		player.move();
 		
-		//System.out.println(player.speedX());
-		//} else {
-		//if(playerAtEnd()) {
-		//	tm.stop();
-		//	program.switchToScore();
-		//}
-		//}
-		//}
 	}
 
-	private void setCameraSpeed(double x, double speedX) {
-		if (x < 200 && speedX != 0 && player.getCurrent() == PlayerMovement.LEFT) {
-			vX = 4;
-		} else if (x > 400 && speedX != 0 && player.getCurrent() == PlayerMovement.RIGHT) {
-			vX = -4;
+	private void moveScreen() {
+		if(player.getGImage().getX() + player.getGImage().getWidth() > program.getWidth() - BOUND) {
+			player.getGImage().setLocation(BOUND + player.getGImage().getWidth(), player.getGImage().getY());
+			moveMapObstacles(-program.getWidth());
+			moveMapEnemies(-program.getWidth());
 		}
-		else {
-			vX = 0;
+		if(player.getGImage().getX() < BOUND) {
+			player.getGImage().setLocation(program.getWidth() - BOUND - player.getGImage().getWidth(), player.getGImage().getY());
+			moveMapObstacles(program.getWidth());
+			moveMapEnemies(program.getWidth());
 		}
-
 	}
 
 	@Override
@@ -347,11 +337,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			}
 		}
 		return false;
-	}
-
-	//Checks if player is at the end
-	private boolean playerAtEnd() {
-		return player.getGImage().getX() >= 500;
 	}
 
 	//Removes all drawings
