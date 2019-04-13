@@ -1,7 +1,5 @@
 package starter;
 
-import java.awt.Color;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -10,19 +8,16 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.Timer;
-import acm.graphics.GCanvas;
 import acm.graphics.GImage;
 import acm.graphics.GLabel;
 import acm.graphics.GObject;
-import acm.graphics.GOval;
 import acm.graphics.GPoint;
-import acm.graphics.GImage;
 
 // Here I will take obstacles and put them on the screen
 public class ACMgraphics extends GraphicsPane implements ActionListener, KeyListener {
 	private static final String BACKGROUND = "background.png";
 	private GImage backGround = new GImage(BACKGROUND, 0, 0);
-	private static final int BOUND = 5;
+	//private static final int BOUND = 5;
 
 	private MainApplication program;
 	private ArrayList<GImage> mapObstacles;
@@ -44,6 +39,9 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private GLabel powerups;
 	private int lastPressed;
 	boolean moving = false;
+	
+	private static final String[] SOUND_FILES = { "Our-Mountain_v003.mp3" };
+	public static final String MUSIC_FOLDER = "sounds";
 
 	public ACMgraphics(MainApplication app) {
 		super();
@@ -79,7 +77,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		//if(player.getGOval() != null) {
 		//if(!playerAtEnd()) {
 		//setCameraSpeed();
-
+		playBackgroundMusic();
 		player.setLastPos(new Position(player.getGImage().getX(), player.getGImage().getY()));
 
 		//moveScreen();
@@ -433,6 +431,15 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		tm.start();
 	}
 
+	
+	
+	private void playBackgroundMusic() {
+		AudioPlayer audio = AudioPlayer.getInstance();
+		audio.playSound(MUSIC_FOLDER, SOUND_FILES[0]);
+	}
+	
+	
+	
 	@Override
 	public void showContents() {
 		run(program);
