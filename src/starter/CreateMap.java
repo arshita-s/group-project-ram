@@ -40,7 +40,7 @@ public class CreateMap extends GraphicsProgram {
 	}
 	public void run() {
 		setupSettings();
-		add(new GLabel("Hello World", 300, 300));
+		//add(new GLabel("Hello World", 300, 300));
 		addMouseListeners();
 	}
 	private void removeObstacle(GObject o) {
