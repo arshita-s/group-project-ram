@@ -1,5 +1,6 @@
 package starter;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -12,6 +13,7 @@ import acm.graphics.GImage;
 import acm.graphics.GLabel;
 import acm.graphics.GObject;
 import acm.graphics.GPoint;
+import acm.util.SoundClip;
 
 // Here I will take obstacles and put them on the screen
 public class ACMgraphics extends GraphicsPane implements ActionListener, KeyListener {
@@ -42,9 +44,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	
 	/*
 	 * Background Music: "Our Mountain" by Eric Matyas
+	 * 					 "Fantasy Game Background" by Eric Matyas
 	 */
 	
-	private static final String[] SOUND_FILES = {"Our-Mountain_v003.mp3" };
+	private static final String[] SOUND_FILES = {"Our-Mountain_v003.mp3", "enemy_sound.wav"};
 	public static final String MUSIC_FOLDER = "sounds";
 
 	public ACMgraphics(MainApplication app) {
@@ -67,20 +70,21 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		} catch(NullPointerException e) {}
 		lives = new GLabel("Lives: " + player.getLives(), 10, 50);
 		lives.setFont("Arial-18");
+		lives.setColor(new Color(255,255,255));
 	}
 
 	public void updatePowerUps() {
 		try {
 			program.remove(powerups);
 		} catch(NullPointerException e) {}
-		powerups = new GLabel("Power-Ups: " + player.getPowerUps(), 475, 50);
+		powerups = new GLabel("Power-Ups: " + player.getPowerUps(), program.getGameWidth()-120, 50);
 		powerups.setFont("Arial-18");
+		powerups.setColor(new Color(255,255,255));
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		//if(player.getGOval() != null) {
 		//if(!playerAtEnd()) {
-		//setCameraSpeed();
 		playBackgroundMusic();
 		player.setLastPos(new Position(player.getGImage().getX(), player.getGImage().getY()));
 
@@ -286,6 +290,9 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			}
 		}
 		if(enemyBounce(player.getSpeedY())) {
+			SoundClip fx = new SoundClip("sounds/" + SOUND_FILES[1]);
+			fx.setVolume(1);
+			fx.play();
 			player.setSpeedY(-1 * player.getJumpSpeed());
 			program.remove(collidingO);
 			mapEnemies.remove(collidingO);

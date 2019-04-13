@@ -41,7 +41,10 @@ public class MainApplication extends GraphicsApplication {
 		}
 		setSize(GAME_WINDOW_WIDTH, WINDOW_HEIGHT);
 	}
-
+	public int getGameWidth() {
+		return GAME_WINDOW_WIDTH;
+	}
+	
 	public void switchToHelp() {
 		GraphicsPane temp = getCurrentScreen();
 		switchToScreen(help);

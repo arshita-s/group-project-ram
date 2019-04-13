@@ -26,7 +26,7 @@ public final class AudioPlayer {
 		public static final AudioPlayer INSTANCE = new AudioPlayer();
 	}
 
-	private AudioPlayer() {
+	AudioPlayer() {
 		final JFXPanel fxPanel = new JFXPanel();
 		players = new HashMap<String, MediaPlayer>();
 	}
