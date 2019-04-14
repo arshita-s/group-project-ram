@@ -5,6 +5,7 @@ import java.awt.Color;
 import acm.graphics.GImage;
 
 public class Enemy {
+	private static final double DX = .6;
 	private int spawnHealth;
 	private int health; // Health that enemy starts with
 	private Size size; // Enemies size
@@ -33,7 +34,7 @@ public class Enemy {
 		this.setCurrentPosition(p);
 		this.setJumping(false);
 		this.setCanJump(false);
-		this.setdX(.8);
+		this.setdX(DX);
 		enemy = new GImage(skin, p.getX(), p.getY());
 		enemy.setSize(s.getWidth(), s.getHeight());
 	}
@@ -45,7 +46,6 @@ public class Enemy {
 			setdX(getdX() * -1);
 		}
 		enemy.move(getdX(), 0);
-		
 	}
 	
 	public void resetAll() {

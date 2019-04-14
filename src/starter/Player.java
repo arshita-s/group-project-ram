@@ -1,7 +1,5 @@
 package starter;
 
-import java.awt.Color;
-
 import acm.graphics.GImage;
 
 public class Player {
@@ -17,6 +15,8 @@ public class Player {
 	private static double JUMP = 7;
 	private static final int PLAYER_SIZE_X = 30;
 	private static final int PLAYER_SIZE_Y = 30;
+	private static final int STARTING_HEALTH = 110;
+	private static final int LIFE_VARIABLE = 30;
 	private static final String skin = "player.png";
 	private double speedX;
 	private double speedY;
@@ -30,6 +30,7 @@ public class Player {
 	private int lives;
 	private int health;
 	private int powerUps;
+	private boolean lostLife;
 
 	/*
 	 * Constructor
@@ -41,11 +42,11 @@ public class Player {
 		player.setSize(PLAYER_SIZE_X, PLAYER_SIZE_Y);
 		speedX = 0;
 		speedY = 0;
-		//onGround = true;
 		currentMove = PlayerMovement.STANDING;
 		currentJump = PlayerJump.STAND;
-		lives = 3;
-		health = 30;
+		lives = STARTING_HEALTH/LIFE_VARIABLE;
+		lostLife = false;
+		health = STARTING_HEALTH;
 		powerUps = 0;
 	}
 
@@ -102,7 +103,7 @@ public class Player {
 		setSpeedY(0);
 		setCurrentMove(PlayerMovement.STANDING);
 		setCurrentJump(PlayerJump.STAND);
-		setHealth(30);
+		setHealth(STARTING_HEALTH);
 		calculateLives();
 		setPowerUps(0);
 	}
@@ -122,9 +123,14 @@ public class Player {
 	}
 
 	private void calculateLives() {
-		setLives((int)Math.ceil(getHealth()/10));
+		lostLife = lostALife((int)(getHealth()/30));
+		setLives((int)(getHealth()/30));
 	}
 
+	public boolean lostALife(int after) {
+		return after < lives && after < STARTING_HEALTH / LIFE_VARIABLE;
+	}
+	
 	public void addForce() {
 		if (currentJump == PlayerJump.JUMP && onGround) {
 			speedY -= JUMP;
@@ -143,6 +149,14 @@ public class Player {
 		}
 	}
 	
+	public boolean isLifeLost() {
+		return lostLife;
+	}
+	
+	public void setLifeLost(boolean b) {
+		lostLife = b;
+	}
+	
 	public void loseHealth(int health) {
 		setHealth(getHealth() - health);
 		calculateLives();
@@ -153,28 +167,13 @@ public class Player {
 	}
 
 	public void processGravity() {
-		//onGround = player.getY() + player.getHeight() >= GROUND;
 		if (onGround) {
 			speedY = 0;
-			//player.setLocation(player.getX(), GROUND - player.getHeight());
 		} else {
 			speedY = Math.min(speedY + SPEED_DY / 3, MAX_GRAVITY);
 		}
 	}
 	
-	public void collided() {
-		
-	}
-
-	/*public void processFalling() {
-		if (player.getY() < GROUND) {
-			speedY += SPEED_DY;
-		}
-	}*/
-
-	public void processImage() {
-
-	}
 
 	/*
 	 * Setters and Getters below.
@@ -237,9 +236,5 @@ public class Player {
 	
 	public double getJumpSpeed() {
 		return JUMP;
-	}
-	
-	public void stop() {
-		speedX = 0;
 	}
 }

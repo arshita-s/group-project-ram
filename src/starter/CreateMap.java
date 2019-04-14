@@ -1,27 +1,14 @@
 package starter;
 import acm.graphics.*;
 import acm.program.*;
-import acm.util.*;
-import java.awt.*;
-import java.awt.event.*;
 import java.awt.Color;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Formatter;
 
-import javax.swing.Timer;
-import acm.graphics.GCanvas;
-import acm.graphics.GImage;
 import acm.graphics.GLabel;
 import acm.graphics.GObject;
 import acm.graphics.GOval;
-import acm.graphics.GPoint;
-import acm.graphics.GImage;
 
 /*
  * This class helps create maps. I still need to fix the obstacles skin but for now
@@ -53,7 +40,7 @@ public class CreateMap extends GraphicsProgram {
 	}
 	public void run() {
 		setupSettings();
-		add(new GLabel("Hello World", 300, 300));
+		//add(new GLabel("Hello World", 300, 300));
 		addMouseListeners();
 	}
 	private void removeObstacle(GObject o) {

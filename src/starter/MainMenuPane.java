@@ -1,6 +1,5 @@
 package starter;
 
-import java.awt.Color;
 import java.awt.event.MouseEvent;
 
 import acm.graphics.GLabel;
@@ -13,6 +12,9 @@ public class MainMenuPane extends GraphicsPane{
 	private GButton help;
 	private GLabel titleOne;
 	private GLabel titleTwo;
+	
+	public static final String MUSIC_FOLDER = "sounds";
+	private static final String[] SOUND_FILES = {"Fantasy_Game_Background.mp3" };
 	
 	public MainMenuPane(MainApplication app) {
 		super();
@@ -31,6 +33,7 @@ public class MainMenuPane extends GraphicsPane{
 		program.add(help);
 		program.add(titleOne);
 		program.add(titleTwo);
+		playBackgroundMusic();
 	}
 	
 	@Override
@@ -45,10 +48,20 @@ public class MainMenuPane extends GraphicsPane{
 	public void mousePressed(MouseEvent e) {
 		GObject obj = program.getElementAt(e.getX(), e.getY());
 		if(obj == start) {
+			stopBackgroundMusic();
 			program.switchToGame();
 		} else if(obj == help) {
 			program.switchToHelp();
 		}
 	}
 	
+	private void playBackgroundMusic() {
+		AudioPlayer audio = AudioPlayer.getInstance();
+		audio.playSound(MUSIC_FOLDER, SOUND_FILES[0]);
+	}
+	
+	private void stopBackgroundMusic() {
+		AudioPlayer audio = AudioPlayer.getInstance();
+		audio.stopSound(MUSIC_FOLDER, SOUND_FILES[0]);
+	}
 }
