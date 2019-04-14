@@ -4,22 +4,45 @@
 **Player positionx positiony
 
 Player 10 530
-Obstacle 30 30 false 112 425 0 0 false
-Obstacle 30 30 false 152 425 0 0 false
-Obstacle 30 30 false 825 350 0 0 false
-Obstacle 30 30 false 865 350 0 0 false
-Obstacle 30 30 false 905 350 0 0 false
-Obstacle 3600 30 false 500 540 0 0 false
-Obstacle 3600 30 false 600 510 0 0 false
-Obstacle 3600 30 false 0 570 0 0 false
-Obstacle 3600 60 false 700 480 0 0 false
-Obstacle 30 30 false 1190 350 0 0 false
-Obstacle 30 30 false 1240 350 0 0 false
-Obstacle 30 30 false 1280 350 0 0 false
 
-Obstacle 5 10000 false 00 0 0 0 false
-
-Obstacle 5 10000 false 3595 0 0 0 false
+Obstacle 600 49 false -7 551 0 0 false
+Obstacle 600 49 false 590 551 0 0 false
+Obstacle 600 49 false 1173 551 0 0 false
+Obstacle 600 49 false 303 501 0 0 false
+Obstacle 300 49 false 372 452 0 0 false
+Obstacle 300 49 false 561 452 0 0 false
+Obstacle 49 49 false 536 359 0 0 false
+Obstacle 49 49 false 586 359 0 0 false
+Obstacle 49 49 false 637 359 0 0 false
+Obstacle 49 49 false 580 309 0 0 false
+Obstacle 49 49 false 628 309 0 0 false
+Obstacle 49 49 false 604 258 0 0 false
+Obstacle 300 49 false 440 402 0 0 false
+Obstacle 49 49 false 740 402 0 0 false
+Obstacle 49 49 false 679 357 0 0 false
+Obstacle 600 49 false 1771 551 0 0 false
+Obstacle 49 49 false 2371 551 0 0 false
+Obstacle 49 49 false 2391 500 0 0 false
+Obstacle 49 49 false 2391 454 0 0 false
+Obstacle 49 49 false 2391 403 0 0 false
+Obstacle 49 49 false 2391 352 0 0 false
+Obstacle 49 49 false 2391 302 0 0 false
+Obstacle 300 49 false 1258 501 0 0 false
+Obstacle 300 49 false 1489 451 0 0 false
+Obstacle 300 49 false 1780 501 0 0 false
+Obstacle 300 49 false 1728 401 0 0 false
+Obstacle 300 49 false 2027 451 0 0 false
+Obstacle 49 49 false 2309 501 0 0 false
+Obstacle 300 49 false 2091 400 0 0 false
+Obstacle 300 49 false 1825 351 0 0 false
+Obstacle 49 49 false 2269 350 0 0 false
+Obstacle 300 49 false 2090 302 0 0 false
+Obstacle 600 49 false 2420 549 0 0 false
+Obstacle 600 49 false 3018 549 0 0 false
+Obstacle 49 49 false 3588 498 0 0 false
+Obstacle 49 49 false 3588 447 0 0 false
+Obstacle 49 49 false 3588 397 0 0 false
+Obstacle 49 49 false 3588 347 0 0 false
 
 // health, damage, width, length, xPosition, yPosition, movesWithin
 Enemy 1 1 30 30 170 540 50
