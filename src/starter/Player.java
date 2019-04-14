@@ -28,6 +28,7 @@ public class Player {
 	private int lives;
 	private int health;
 	private int powerUps;
+	private boolean lostLife;
 
 	/*
 	 * Constructor
@@ -43,7 +44,8 @@ public class Player {
 		currentMove = PlayerMovement.STANDING;
 		currentJump = PlayerJump.STAND;
 		lives = 3;
-		health = 30;
+		lostLife = false;
+		health = 120;
 		powerUps = 0;
 	}
 
@@ -120,9 +122,17 @@ public class Player {
 	}
 
 	private void calculateLives() {
-		setLives((int)Math.ceil(getHealth()/10));
+		lostLife = lostALife((int)(getHealth()/30));
+		setLives((int)(getHealth()/30));
 	}
 
+	public boolean lostALife(int after) {
+		if(after < lives) {
+			return true;
+		}
+		return false;
+	}
+	
 	public void addForce() {
 		if (currentJump == PlayerJump.JUMP && onGround) {
 			speedY -= JUMP;
@@ -141,6 +151,14 @@ public class Player {
 		}
 	}
 	
+	public boolean isLifeLost() {
+		return lostLife;
+	}
+	
+	public void setLifeLost(boolean b) {
+		lostLife = b;
+	}
+	
 	public void loseHealth(int health) {
 		setHealth(getHealth() - health);
 		calculateLives();
@@ -151,28 +169,13 @@ public class Player {
 	}
 
 	public void processGravity() {
-		//onGround = player.getY() + player.getHeight() >= GROUND;
 		if (onGround) {
 			speedY = 0;
-			//player.setLocation(player.getX(), GROUND - player.getHeight());
 		} else {
 			speedY = Math.min(speedY + SPEED_DY / 3, MAX_GRAVITY);
 		}
 	}
 	
-	public void collided() {
-		
-	}
-
-	/*public void processFalling() {
-		if (player.getY() < GROUND) {
-			speedY += SPEED_DY;
-		}
-	}*/
-
-	public void processImage() {
-
-	}
 
 	/*
 	 * Setters and Getters below.
@@ -235,9 +238,5 @@ public class Player {
 	
 	public double getJumpSpeed() {
 		return JUMP;
-	}
-	
-	public void stop() {
-		speedX = 0;
 	}
 }

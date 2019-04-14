@@ -279,11 +279,17 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private void processEnemyCollision() {
 		checkBounds(player.getGImage());
 		if(enemyCollisionDeath(player.getSpeedX(), player.getSpeedY())) {
-			player.loseHealth(10); //TODO Change this line to check for type of enemy and lose health based on that with separate method
+			player.loseHealth(10); 
+			System.out.println(player.getLives());
+			System.out.println(player.getHealth());
 			if(player.getLives() == 0) {
 				tm.stop();
 				program.switchToMainMenu();
 			} 
+			else if(!player.isLifeLost()) {
+				player.setSpeedX(-2*player.getSpeedX());
+				player.setLifeLost(false);
+			}
 			else {
 				SoundClip fx = new SoundClip("sounds/" + SOUND_FILES[2]);
 				fx.setVolume(1);
