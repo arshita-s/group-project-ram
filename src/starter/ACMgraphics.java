@@ -76,13 +76,9 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		//if(player.getGOval() != null) {
-		//if(!playerAtEnd()) {
-		//setCameraSpeed();
-
 		player.setLastPos(new Position(player.getGImage().getX(), player.getGImage().getY()));
 
-		//moveScreen();
+		moveScreen();
 		moveMapEnemies(vX);
 		player.addFriction();
 		player.addForce();
@@ -92,49 +88,19 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		player.move();
 		
 	}
-
-	/*
-	private void setCameraSpeed() {
-		double x = player.getPosition().getX();
-		double pixelsMoved = 0;
-		if(x > 500 && x < 600) {
-			moving = true;
-			vX = 4;
-			while(moving) {
-				if(pixelsMoved < 500) {
-					pixelsMoved++;
-					player.stop();
-				}
-				else {
-					vX = 0;
-					moving = false;
-				}
-			}
-		}
-		
-		if (x < 200 && speedX != 0 && player.getCurrent() == PlayerMovement.LEFT) {
-			vX = 4;
-		} else if (x > 400 && speedX != 0 && player.getCurrent() == PlayerMovement.RIGHT) {
-			vX = -4;
-=======
 	private void moveScreen() {
 		if(player.getGImage().getX() + player.getGImage().getWidth() > program.getWidth() - BOUND) {
 			player.getGImage().setLocation(BOUND + player.getGImage().getWidth(), player.getGImage().getY());
 			moveMapObstacles(-program.getWidth());
 			moveMapEnemies(-program.getWidth());
->>>>>>> branch 'master' of https://github.com/comp55-spr19/group-project-ram.git
 		}
 		if(player.getGImage().getX() < BOUND) {
 			player.getGImage().setLocation(program.getWidth() - BOUND - player.getGImage().getWidth(), player.getGImage().getY());
 			moveMapObstacles(program.getWidth());
 			moveMapEnemies(program.getWidth());
 		}
-<<<<<<< HEAD
-		
-=======
->>>>>>> branch 'master' of https://github.com/comp55-spr19/group-project-ram.git
 	}
-*/
+	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		lastPressed = e.getKeyCode();
@@ -197,20 +163,19 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		return obs.getGImage();
 	}
 
-	public void moveMapObstacles(double vX2) {
+	public void moveMapObstacles(double distance) {
 		for(int i = 0; i < mapObstacles.size(); i++) {
 			GImage o = mapObstacles.get(i);
-			o.move(vX2, 0);
+			o.move(distance, 0);
 			level.getObstacleList().get(i).setCurrentPosition(new Position((int) o.getX(), (int) o.getY()));
 		}
 	}
 
-	private void moveMapEnemies(double vX2) {
+	private void moveMapEnemies(double distance) {
 		int i = 0;
 		for(GObject current: mapEnemies) {
 			level.getEnemyList().get(i).move();
-			int enemyDirection = level.getEnemyList().get(i).getdX();
-			current.move(vX2 + enemyDirection , 0);
+			current.move(distance, 0);
 			level.getEnemyList().get(i).setCurrentPosition(new Position((int) current.getX(), (int) current.getY()));
 			i++;
 		}
@@ -418,6 +383,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		setupLevel(program);
 	}
 	
+	//adds images to game
 	public void returnToGame() {
 		backGround.setSize(program.GAME_WINDOW_WIDTH , program.getHeight());
 		program.add(backGround);
