@@ -47,7 +47,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	 * 					 "Fantasy Game Background" by Eric Matyas
 	 */
 	
-	private static final String[] SOUND_FILES = {"Our-Mountain_v003.mp3", "enemy_sound.wav", "death_sound.wav"};
+	private static final String[] SOUND_FILES = {"Our-Mountain_v003.mp3", "enemy_sound.wav", "death_sound.wav", "damage_sound.wav"};
 	public static final String MUSIC_FOLDER = "sounds";
 
 	public ACMgraphics(MainApplication app) {
@@ -278,20 +278,22 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	//Logic for colliding with enemies
 	private void processEnemyCollision() {
 		checkBounds(player.getGImage());
+		SoundClip fx;
 		if(enemyCollisionDeath(player.getSpeedX(), player.getSpeedY())) {
 			player.loseHealth(10); 
-			System.out.println(player.getLives());
-			System.out.println(player.getHealth());
 			if(player.getLives() == 0) {
 				tm.stop();
 				program.switchToMainMenu();
 			} 
 			else if(!player.isLifeLost()) {
+				fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[3]);
+				fx.setVolume(1);
+				fx.play();
 				player.setSpeedX(-2*player.getSpeedX());
 				player.setLifeLost(false);
 			}
 			else {
-				SoundClip fx = new SoundClip("sounds/" + SOUND_FILES[2]);
+				fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[2]);
 				fx.setVolume(1);
 				fx.play();
 				reset();
@@ -299,7 +301,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			}
 		}
 		if(enemyBounce(player.getSpeedY())) {
-			SoundClip fx = new SoundClip("sounds/" + SOUND_FILES[1]);
+			fx = new SoundClip("sounds/" + SOUND_FILES[1]);
 			fx.setVolume(1);
 			fx.play();
 			player.setSpeedY(-1 * player.getJumpSpeed());

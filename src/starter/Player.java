@@ -127,7 +127,7 @@ public class Player {
 	}
 
 	public boolean lostALife(int after) {
-		if(after < lives) {
+		if(after < lives && after < 3) {
 			return true;
 		}
 		return false;
