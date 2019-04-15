@@ -102,7 +102,7 @@ public class Player {
 		setSpeedY(0);
 		setCurrentMove(PlayerMovement.STANDING);
 		setCurrentJump(PlayerJump.STAND);
-		setHealth(30);
+		setHealth(120);
 		calculateLives();
 		setPowerUps(0);
 	}
