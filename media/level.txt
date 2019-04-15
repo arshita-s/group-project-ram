@@ -2,7 +2,7 @@
 Player 32 49
 
 *Enemy health damage width length xPosition yPosition movesWithin
-Enemy 1 1 32 49 437 502 50
+Enemy 1 1 32 49 437 502 40
 
 *Obstacle width length movesBoolean xPosition yPosition xVelocity yVelocity instantDeathBoolean
 Obstacle 400 49 false -1 553 0 0 false
