@@ -85,7 +85,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		playBackgroundMusic();
 		player.setLastPos(new Position(player.getGImage().getX(), player.getGImage().getY()));
 		moveScreen();
 		moveMapEnemies(0);
@@ -185,6 +184,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	public GImage createEnemy(Enemy e) {
+		e.resetPosition();
 		return e.getSkin();
 	}
 
@@ -414,7 +414,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	//Resets positions of all objects in the game
 	private void resetPositions() {
 		for(Obstacle obs: level.getObstacleList()) {
-			obs.setCurrentPosition(obs.getSpawnPosition());
+			obs.setGImage();
 		}
 		for(Enemy enem: level.getEnemyList()) {
 			enem.setCurrentPosition(enem.getSpawnPoint());
@@ -466,6 +466,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	@Override
 	public void showContents() {
+		playBackgroundMusic();
 		run(program);
 	}
 

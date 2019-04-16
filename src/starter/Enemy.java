@@ -42,16 +42,19 @@ public class Enemy {
 	 * Enemy's movements
 	 */ 
 	public void move() {
-		if (currentPosition.getX() + dX > (spawnPosition.getX() + movesWithin) || currentPosition.getX() + dX < (spawnPosition.getX() - movesWithin)) {
+		Position newPos = spawnPosition;
+		/*if(spawnPosition.getX() > 800 && currentPosition.getX() < 800) {
+			newPos.setX(spawnPosition.getX() - 800);
+		}*/
+		if (currentPosition.getX() + dX > (newPos.getX() + movesWithin) || currentPosition.getX() + dX < (newPos.getX() - movesWithin)) {
 			setdX(getdX() * -1);
 		}
 		enemy.move(getdX(), 0);
 	}
 	
-	public void resetAll() {
-		enemy = new GImage(skin, currentPosition.getX(), currentPosition.getY());
+	public void resetPosition() {
+		enemy.setLocation(spawnPosition.getX(), spawnPosition.getY());
 		setCurrentPosition(spawnPosition);
-		setHealth(getSpawnHealth());
 	}
 	
 	/*

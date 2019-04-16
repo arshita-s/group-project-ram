@@ -3,8 +3,6 @@ Player 32 49
 
 *Enemy health damage width length xPosition yPosition movesWithin
 Enemy 1 1 32 49 437 502 40
-Enemy 1 1 32 49 937 502 40
-
 
 *Obstacle width length movesBoolean xPosition yPosition xVelocity yVelocity instantDeath terrain visible
 Obstacle 400 49 false -1 553 0 0 false terrain true
@@ -18,4 +16,4 @@ Obstacle 49 49 false 1105 502 0 0 false terrain true
 Obstacle 49 49 false 1105 451 0 0 false terrain true
 Obstacle 49 49 false 1105 401 0 0 false terrain true
 
-Obstacle 49 600 false 1055 0 0 0 false terrain false
+Obstacle 49 600 false 1095 0 0 0 false terrain false
