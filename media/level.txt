@@ -67,8 +67,8 @@ Obstacle 200 50 false 2144 177 0 0 false purple_grass_dirt_6x1.png true
 Obstacle 200 150 false 2144 70 0 0 false djoj.gif true
 Obstacle 50 50 false 2144 90 0 0 false djojgline.png true
 
-Obstacle 50 600 false 2300 0 0 0 false dirt_6x1.png false
 Obstacle 50 50 false 2303 501 0 0 false door.png true
+Obstacle 50 600 false 2300 0 0 0 false dirt_6x1.png false
 
 *PowerUp xPosition yPosition width height
 PowerUp 385 512 16 24
