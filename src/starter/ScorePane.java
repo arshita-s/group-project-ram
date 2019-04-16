@@ -51,4 +51,8 @@ public class ScorePane extends GraphicsPane{
 		}
 	}
 	
+	public void setScore(int score) {
+		num.setLabel("" + score);
+	}
+	
 }

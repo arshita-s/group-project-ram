@@ -20,6 +20,9 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private static final String BACKGROUND = "background.png";
 	private GImage backGround = new GImage(BACKGROUND, 0, 0);
 	private static final int BOUND = 5;
+	private static final int STARTING_SCORE = 1000;
+	
+	private long score;
 
 	private MainApplication program;
 	private ArrayList<GObject> mapObstacles;
@@ -90,17 +93,18 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		player.addForce();
 		player.processGravity();
 		processObstacleCollision();
+		if(playerAtEnd()) {
+			program.switchToScore((int)score);
+		}
 		processEnemyCollision();
 		player.move();
 		player.playerAnimation();
-		if(playerAtEnd()) {
-			program.switchToScore();
-		}
 	}
 
 	private boolean playerAtEnd() {
 		for(GObject obj: mapObstacles) {
 			if(obstacleCollisionX(player.getSpeedX(), obj) && !obj.isVisible()) {
+				score = STARTING_SCORE - (System.currentTimeMillis() - score)/100;
 				return true;
 			}
 		}
@@ -175,6 +179,9 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		updatePowerUps();
 		program.add(lives);
 		program.add(powerups);
+		if(player.getLives() == 3) {
+			score = System.currentTimeMillis();
+		}
 	}
 
 	public GImage createEnemy(Enemy e) {
@@ -207,6 +214,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private void processObstacleCollision() {
 		checkBounds(player.getGImage());
 		for(GObject obj: mapObstacles) {
+			if(!obj.isVisible()) break;
 			if(obstacleCollisionX(player.getSpeedX(), obj)) {
 				player.setSpeedX(0);
 			}
