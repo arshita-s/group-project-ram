@@ -57,7 +57,7 @@ public class CreateMap extends GraphicsProgram {
 
 	private void setupSettings() {
 		// top tab settings
-		GRect settingsTab = new GRect(0, 0, 1200, TOP_SETTINGS_TAB_HEIGHT);
+		GRect settingsTab = new GRect(0, 0, PROGRAM_WIDTH, TOP_SETTINGS_TAB_HEIGHT);
 		settingsTab.setFilled(true);
 		settingsTab.setColor(Color.GRAY);
 		add(settingsTab);
@@ -263,20 +263,20 @@ public class CreateMap extends GraphicsProgram {
 			System.out.println("Error with textfile.");
 		}
 		// Write player in file
-		x.format("*Player xPosition yPosition");
+		x.format("\n*Player xPosition yPosition\n");
 		for(GObject mP: mapPlayer) {
 			x.format("Player %d %d\n", 
 					(int)mP.getWidth(),  (int)mP.getHeight());
 		}
 		// Write enemy in file
-		x.format("\n*Enemy health damage width length xPosition yPosition movesWithin");
+		x.format("\n*Enemy health damage width length xPosition yPosition movesWithin\n");
 		for(GObject mE: mapEnemies) {
 			x.format("Enemy 1 1 %d %d %d %d 50\n", 
 					(int)mE.getWidth(),  (int)mE.getHeight(), 
 					(int)mE.getX() + (PROGRAM_WIDTH * (screen-1)), (int)mE.getY()-TOP_SETTINGS_TAB_HEIGHT);
 		}
 		// Write obstacle to file
-		x.format("\n*Obstacle width length movesBoolean xPosition yPosition xVelocity yVelocity instantDeathBoolean");
+		x.format("\n*Obstacle width length movesBoolean xPosition yPosition xVelocity yVelocity instantDeathBoolean\n");
 		for(GObject mO: mapObstacles) {
 			x.format("Obstacle %d %d false %d %d 0 0 false\n", 
 					(int)mO.getWidth(),  (int)mO.getHeight(), 
