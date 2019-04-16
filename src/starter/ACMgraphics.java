@@ -456,6 +456,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	//adds images to game
 	public void returnToGame() {
+		playBackgroundMusic();
 		backGround.setSize(program.GAME_WINDOW_WIDTH , program.getHeight());
 		program.add(backGround);
 		for(GObject obs: mapObstacles) {

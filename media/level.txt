@@ -3,21 +3,9 @@ Player 32 500
 
 *Enemy health damage width length xPosition yPosition movesWithin
 
-Enemy 1 1 32 40 385 512 35
+Enemy 10 10 32 40 385 511 35
 
 *Obstacle width length movesBoolean xPosition yPosition xVelocity yVelocity instantDeath terrain visible
-1Obstacle 400 49 false -1 553 0 0 false terrain true
-1Obstacle 400 49 false 387 553 0 0 false terrain true
-1Obstacle 400 49 false 755 553 0 0 false terrain true
-1Obstacle 200 49 false 199 503 0 0 false terrain true
-1Obstacle 200 49 false 507 502 0 0 false terrain true
-1Obstacle 200 49 false 355 289 0 0 false terrain true
-1Obstacle 49 49 false 431 339 0 0 false terrain true
-1Obstacle 49 49 false 1105 502 0 0 false terrain true
-1Obstacle 49 49 false 1105 451 0 0 false terrain true
-1Obstacle 49 49 false 1105 401 0 0 false terrain true
-
-1Obstacle 49 600 false 1095 0 0 0 false terrain false
 
 Obstacle 5 600 false 0 0 0 0 false dirt_6x1.png true
 Obstacle 99999 20 false 0 600 0 0 false dirt_6x1.png true
@@ -67,8 +55,8 @@ Obstacle 200 50 false 2144 177 0 0 false purple_grass_dirt_6x1.png true
 Obstacle 200 150 false 2144 70 0 0 false djoj.gif true
 Obstacle 50 50 false 2144 90 0 0 false djojgline.png true
 
-Obstacle 50 600 false 2300 0 0 0 false dirt_6x1.png false
 Obstacle 50 50 false 2303 501 0 0 false door.png true
+Obstacle 50 600 false 2300 0 0 0 false dirt_6x1.png false
 
 *PowerUp xPosition yPosition width height
 PowerUp 385 512 16 24
