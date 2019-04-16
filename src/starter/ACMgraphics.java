@@ -100,6 +100,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		processEnemyCollision();
 		player.move();
 		player.playerAnimation();
+		playBackgroundMusic();
 	}
 
 	private boolean playerAtEnd() {
