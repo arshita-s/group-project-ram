@@ -9,13 +9,12 @@ public class Player {
 	 * the power-up used.
 	 */
 	private static double MAX_SPEED = 4;
-	private static double SPEED_DX = .4;
+	private static double SPEED_DX = .2;
 	private static double SPEED_DY = .605;
 	private static int MAX_GRAVITY = 10;
 	private static double JUMP = 7;
-	private static final int PLAYER_SIZE_X = 30;
-	private static final int PLAYER_SIZE_Y = 30;
-	private static final String skin = "player.png";
+	private static final int PLAYER_SIZE_X = 50;
+	private static final int PLAYER_SIZE_Y = 50;
 	private double speedX;
 	private double speedY;
 	private boolean onGround;
@@ -29,6 +28,14 @@ public class Player {
 	private int health;
 	private int powerUps;
 	private boolean lostLife;
+	
+	private static final String skin = "player_standing_right.png";
+	private String[] animationWalkRight;
+	private double animationWalkRightFrame = 0;
+	private String[] animationWalkLeft;
+	private double animationWalkLeftFrame = 0;
+	private double animationSpeed = SPEED_DX;
+	private PlayerMovement lastXDirection = PlayerMovement.RIGHT;
 
 	/*
 	 * Constructor
@@ -47,16 +54,80 @@ public class Player {
 		lostLife = false;
 		health = 120;
 		powerUps = 0;
+		setWalkingAnimation();
 	}
-
+	private void setWalkingAnimation() {
+		int totalImages = 8;
+		animationWalkRight = new String[totalImages];	
+		animationWalkLeft = new String[totalImages];	
+		for (int i = 0; i < totalImages; i++) {
+			animationWalkRight[i] = "player_walk_right_" + Integer.toString(i+1) + ".png";
+		}
+		for (int i = 0; i < totalImages; i++) {
+			animationWalkLeft[i] = "player_walk_left_" + Integer.toString(i+1) + ".png";
+		}
+	}
 	public int getLives() {
 		return lives;
 	}
-
+//player.setImage(animationWalkRight[frame]);
 	public int getHealth() {
 		return health;
 	}
-
+	public void playerAnimation() {
+		System.out.println("speedX: " + speedX + "\nspeedY: " + speedY);
+		playerWalkLeftNextFrame();
+		playerWalkRightNextFrame();
+		playerStandingAnimation();
+		playerJumpAnimation();
+	}
+	public void playerWalkRightNextFrame() {
+		if(speedX > 0) {
+			lastXDirection = PlayerMovement.RIGHT;
+			animationWalkRightFrame+=animationSpeed;
+			System.out.println("Right: " + animationWalkRight[(int)(animationWalkRightFrame%8)]);
+			player.setImage(animationWalkRight[(int)(animationWalkRightFrame%8)]);
+			player.setSize(player.getWidth(), PLAYER_SIZE_Y);
+		}
+	}
+	public void playerWalkLeftNextFrame() {
+		if(speedX < 0) {
+			lastXDirection = PlayerMovement.LEFT;
+			animationWalkLeftFrame+=animationSpeed;
+			System.out.println("Left: " + animationWalkLeft[(int)(animationWalkLeftFrame%8)]);
+			player.setImage(animationWalkLeft[(int)(animationWalkLeftFrame%8)]);
+			player.setSize(player.getWidth(), PLAYER_SIZE_Y);
+		}
+	}
+	public void playerStandingAnimation() {
+		if(speedX == 0) {
+			if(lastXDirection == PlayerMovement.RIGHT) player.setImage("player_standing_right.png");
+			else player.setImage("player_standing_left.png");
+			player.setSize(player.getWidth(), PLAYER_SIZE_Y);
+		}
+	}
+	public void playerJumpAnimation() {
+		if(lastXDirection == PlayerMovement.RIGHT) {
+			if(speedY < 0) {
+				player.setImage("player_jump_right_1.png");
+				player.setSize(player.getWidth(), PLAYER_SIZE_Y);
+			}
+			if(speedY > 0) {
+				player.setImage("player_jump_right_2.png");
+				player.setSize(player.getWidth(), PLAYER_SIZE_Y);
+			}			
+		}
+		if(lastXDirection == PlayerMovement.LEFT) {
+			if(speedY < 0) {
+				player.setImage("player_jump_left_1.png");
+				player.setSize(player.getWidth(), PLAYER_SIZE_Y);
+			}
+			if(speedY > 0) {
+				player.setImage("player_jump_left_2.png");
+				player.setSize(player.getWidth(), PLAYER_SIZE_Y);
+			}	
+		}
+	}
 	public void setLives(int l) {
 		lives = l;
 	}
