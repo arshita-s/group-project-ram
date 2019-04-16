@@ -1,51 +1,18 @@
+*Player xPosition yPosition
+Player 32 49
 
-**Format
-**Obstacle width length moves positionx positiony velocityx velocityy instantDeath
-**Player positionx positiony
+*Enemy health damage width length xPosition yPosition movesWithin
+Enemy 1 1 32 49 437 502 40
 
-Player 10 530
 
-Obstacle 600 49 false -7 551 0 0 false
-Obstacle 600 49 false 590 551 0 0 false
-Obstacle 600 49 false 1173 551 0 0 false
-Obstacle 600 49 false 303 501 0 0 false
-Obstacle 300 49 false 372 452 0 0 false
-Obstacle 300 49 false 561 452 0 0 false
-Obstacle 49 49 false 536 359 0 0 false
-Obstacle 49 49 false 586 359 0 0 false
-Obstacle 49 49 false 637 359 0 0 false
-Obstacle 49 49 false 580 309 0 0 false
-Obstacle 49 49 false 628 309 0 0 false
-Obstacle 49 49 false 604 258 0 0 false
-Obstacle 300 49 false 440 402 0 0 false
-Obstacle 49 49 false 740 402 0 0 false
-Obstacle 49 49 false 679 357 0 0 false
-Obstacle 600 49 false 1771 551 0 0 false
-Obstacle 49 49 false 2371 551 0 0 false
-Obstacle 49 49 false 2391 500 0 0 false
-Obstacle 49 49 false 2391 454 0 0 false
-Obstacle 49 49 false 2391 403 0 0 false
-Obstacle 49 49 false 2391 352 0 0 false
-Obstacle 49 49 false 2391 302 0 0 false
-Obstacle 300 49 false 1258 501 0 0 false
-Obstacle 300 49 false 1489 451 0 0 false
-Obstacle 300 49 false 1780 501 0 0 false
-Obstacle 300 49 false 1728 401 0 0 false
-Obstacle 300 49 false 2027 451 0 0 false
-Obstacle 49 49 false 2309 501 0 0 false
-Obstacle 300 49 false 2091 400 0 0 false
-Obstacle 300 49 false 1825 351 0 0 false
-Obstacle 49 49 false 2269 350 0 0 false
-Obstacle 300 49 false 2090 302 0 0 false
-Obstacle 600 49 false 2420 549 0 0 false
-Obstacle 600 49 false 3018 549 0 0 false
-Obstacle 49 49 false 3588 498 0 0 false
-Obstacle 49 49 false 3588 447 0 0 false
-Obstacle 49 49 false 3588 397 0 0 false
-Obstacle 49 49 false 3588 347 0 0 false
-
-// health, damage, width, length, xPosition, yPosition, movesWithin
-Enemy 1 1 30 30 170 521 50
-Enemy 1 1 30 30 210 521 50
-Enemy 1 1 30 30 800 420 15
-Enemy 1 1 30 30 1010 521 100
+*Obstacle width length movesBoolean xPosition yPosition xVelocity yVelocity instantDeathBoolean
+Obstacle 400 49 false -1 553 0 0 false
+Obstacle 400 49 false 387 553 0 0 false
+Obstacle 400 49 false 755 553 0 0 false
+Obstacle 200 49 false 199 503 0 0 false
+Obstacle 200 49 false 507 502 0 0 false
+Obstacle 200 49 false 355 289 0 0 false
+Obstacle 49 49 false 431 339 0 0 false
+Obstacle 49 49 false 1105 502 0 0 false
+Obstacle 49 49 false 1105 451 0 0 false
+Obstacle 49 49 false 1105 401 0 0 false

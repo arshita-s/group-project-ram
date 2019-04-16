@@ -22,14 +22,16 @@ import acm.graphics.GOval;
  */
 
 public class CreateMap extends GraphicsProgram {
-	private static final int PROGRAM_WIDTH = 1200;
+	private static final int PROGRAM_WIDTH = 800;
 	private static final int PROGRAM_HEIGHT = 600;
 	private static final double STANDARD_BLOCK_SIZE = PROGRAM_HEIGHT * 0.083;
 	private static final double SPACE_BETWEEN_SETTINGS = PROGRAM_WIDTH * 0.005;
-	private static final int TOP_SETTINGS_TAB_HEIGHT = (int) (STANDARD_BLOCK_SIZE + ( 2 * SPACE_BETWEEN_SETTINGS) );
+	private static final int TOP_SETTINGS_TAB_HEIGHT = (int) (STANDARD_BLOCK_SIZE + ( 2 * SPACE_BETWEEN_SETTINGS) ) * 2;
 	private static final String FILENAME = "levelCreated.txt";
 	
 	private ArrayList<GObject> mapObstacles = new ArrayList<GObject>();
+	private ArrayList<GObject> mapPlayer = new ArrayList<GObject>();
+	private ArrayList<GObject> mapEnemies = new ArrayList<GObject>();
 	private ArrayList<GObject> settings = new ArrayList<GObject>();
 	private int screen = 1; // should equal 1 or more
 	private GObject toDrag;
@@ -37,9 +39,13 @@ public class CreateMap extends GraphicsProgram {
 	private int lastX;
 	private int lastY;
 	private Formatter x;
-	private Color moveLeftButtonColor = Color.RED;
+	private Color obstacleColor = Color.BLACK;
+	private Color playerColor = Color.YELLOW;
+	private Color enemyColor = Color.RED;
+	private Color moveLeftButtonColor = Color.ORANGE;
 	private Color moveRightButtonColor = Color.BLUE;
 	private Color saveButtonColor = Color.GREEN;
+	
 	public void init() {
 		setSize(PROGRAM_WIDTH, PROGRAM_HEIGHT+TOP_SETTINGS_TAB_HEIGHT);
 		requestFocus();
@@ -48,14 +54,7 @@ public class CreateMap extends GraphicsProgram {
 		setupSettings();
 		addMouseListeners();
 	}
-	private void removeObstacle(GObject o) {
-		mapObstacles.remove(o);
-		remove(o);
-	}
-	private void addObstacle(GObject o) {
-		mapObstacles.add(o);
-		add(o);
-	}
+
 	private void setupSettings() {
 		// top tab settings
 		GRect settingsTab = new GRect(0, 0, 1200, TOP_SETTINGS_TAB_HEIGHT);
@@ -66,19 +65,19 @@ public class CreateMap extends GraphicsProgram {
 		//obstacle settings
 		GRect o1 = new GRect(SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS, STANDARD_BLOCK_SIZE, STANDARD_BLOCK_SIZE);
 		o1.setFilled(true);
-		o1.setColor(Color.BLACK);
+		o1.setColor(obstacleColor);
 		add(o1);
 		settings.add(o1);
 		
 		GRect o2 = new GRect( rightPointOf(o1) + SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS, PROGRAM_WIDTH/4, STANDARD_BLOCK_SIZE);
 		o2.setFilled(true);
-		o2.setColor(Color.BLACK);
+		o2.setColor(obstacleColor);
 		add(o2);
 		settings.add(o2);
 		
 		GRect o3 = new GRect( rightPointOf(o2) + SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS, PROGRAM_WIDTH/2, STANDARD_BLOCK_SIZE);
 		o3.setFilled(true);
-		o3.setColor(Color.BLACK);
+		o3.setColor(obstacleColor);
 		add(o3);
 		settings.add(o3);
 		
@@ -102,17 +101,49 @@ public class CreateMap extends GraphicsProgram {
 		saveButton.setFilled(true);
 		saveButton.setColor(saveButtonColor);
 		add(saveButton);
+		
+		//player settings
+		int bodyHeight = (int) (STANDARD_BLOCK_SIZE);
+		int bodyWidth = (int) (0.6666666667 * bodyHeight);
+		GRect player = new GRect(SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS*2 + STANDARD_BLOCK_SIZE, bodyWidth, bodyHeight);
+		player.setFilled(true);
+		player.setColor(playerColor);
+		add(player);
+		
+		//enemy settings
+		GRect enemy = new GRect(rightPointOf(player) + SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS*2 + STANDARD_BLOCK_SIZE, bodyWidth, bodyHeight);
+		enemy.setFilled(true);
+		enemy.setColor(enemyColor);
+		add(enemy);
+		
+		
 	}
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
-		lastX = e.getX();
-		lastY = e.getY();
-		mousePressedObstacle(e);
+		if(e != null) {
+			lastX = e.getX();
+			lastY = e.getY();
+			mousePressedObstacle(e);
+			mousePressedPlayer(e);
+			mousePressedEnemy(e);
+		}
 	}	
 	public void mousePressedObstacle(MouseEvent e) {
 		toDrag = getElementAt(e.getX(), e.getY());
 		if (isObstacleInSettings(e)) {
+			duplicateToDrag();
+		}
+	}
+	public void mousePressedPlayer(MouseEvent e) {
+		toDrag = getElementAt(e.getX(), e.getY());
+		if (isPlayerInSettings(e)) {
+			duplicateToDrag();
+		}
+	}
+	public void mousePressedEnemy(MouseEvent e) {
+		toDrag = getElementAt(e.getX(), e.getY());
+		if (isEnemyInSettings(e)) {
 			duplicateToDrag();
 		}
 	}
@@ -123,9 +154,25 @@ public class CreateMap extends GraphicsProgram {
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		mouseDraggedObstacle(e);
+		mouseDraggedPlayer(e);
+		mouseDraggedEnemy(e);
 	}
 	public void mouseDraggedObstacle(MouseEvent e) {
 		if (isObstacle(e)) {
+			toDrag.move((e.getX()-lastX), (e.getY()-lastY));
+			lastX = e.getX();
+			lastY = e.getY();
+		}
+	}
+	public void mouseDraggedPlayer(MouseEvent e) {
+		if (isPlayer(e)) {
+			toDrag.move((e.getX()-lastX), (e.getY()-lastY));
+			lastX = e.getX();
+			lastY = e.getY();
+		}
+	}
+	public void mouseDraggedEnemy(MouseEvent e) {
+		if (isEnemy(e)) {
 			toDrag.move((e.getX()-lastX), (e.getY()-lastY));
 			lastX = e.getX();
 			lastY = e.getY();
@@ -138,6 +185,9 @@ public class CreateMap extends GraphicsProgram {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		mouseReleasedObstacle(e);
+		mouseReleasedPlayer(e);
+		mouseReleasedEnemy(e);
+		toDrag = null;
 	}
 	public void mouseReleasedObstacle(MouseEvent e) {
 		if (isObstacleInSettings(e)) {
@@ -148,7 +198,26 @@ public class CreateMap extends GraphicsProgram {
 			add(toDrag);
 			addObstacle(toDrag);
 		}
-		toDrag = null;
+	}
+	public void mouseReleasedPlayer(MouseEvent e) {
+		if (isPlayerInSettings(e)) {
+			removePlayer(toDrag);
+		}
+		if (isPlayerInMap(e)) {
+			removePlayer(toDrag);
+			add(toDrag);
+			addPlayer(toDrag);
+		}
+	}
+	public void mouseReleasedEnemy(MouseEvent e) {
+		if (isEnemyInSettings(e)) {
+			removeEnemy(toDrag);
+		}
+		if (isEnemyInMap(e)) {
+			removeEnemy(toDrag);
+			add(toDrag);
+			addEnemy(toDrag);
+		}
 	}
 	/*
 	 * 
@@ -156,7 +225,6 @@ public class CreateMap extends GraphicsProgram {
 	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		System.out.println("Mouse clicked.");
 		toClick = getElementAt(e.getX(), e.getY());
 		mouseClickedSaveButton(e);
 		mouseClickedMoveLeftButton(e);
@@ -165,23 +233,27 @@ public class CreateMap extends GraphicsProgram {
 	}
 	public void mouseClickedSaveButton(MouseEvent e) {
 		if(isSaveButton(e)) {
-			saveObstaclesToFile();
+			saveMapToFile();
 		}
 	}
 	public void mouseClickedMoveLeftButton(MouseEvent e) {
 		if(isMoveLeftButton(e) && screen > 1) {
 			moveObstacles(+1);
+			movePlayer(+1);
+			moveEnemies(+1);
 			screen--;
 		}
 	}
 	public void mouseClickedMoveRightButton(MouseEvent e) {
 		if(isMoveRightButton(e)) {
 			moveObstacles(-1);
+			movePlayer(-1);
+			moveEnemies(-1);
 			screen++;
 		}
 	}
 	
-	private void saveObstaclesToFile() {
+	private void saveMapToFile() {
 		System.out.println("Save Button Clicked!");
 		// Open file
 		try {
@@ -190,40 +262,116 @@ public class CreateMap extends GraphicsProgram {
 		catch(Exception e) {
 			System.out.println("Error with textfile.");
 		}
-		// Write obstacle to file
-		for(GObject s: mapObstacles) {
-			x.format("Obstacle %d %d false %d %d 0 0 false\n", 
-					(int)s.getWidth(),  (int)s.getHeight(), 
-					(int)s.getX() + (PROGRAM_WIDTH * (screen-1)), (int)s.getY()-TOP_SETTINGS_TAB_HEIGHT);
+		// Write player in file
+		x.format("*Player xPosition yPosition");
+		for(GObject mP: mapPlayer) {
+			x.format("Player %d %d\n", 
+					(int)mP.getWidth(),  (int)mP.getHeight());
 		}
-		// Close file
+		// Write enemy in file
+		x.format("\n*Enemy health damage width length xPosition yPosition movesWithin");
+		for(GObject mE: mapEnemies) {
+			x.format("Enemy 1 1 %d %d %d %d 50\n", 
+					(int)mE.getWidth(),  (int)mE.getHeight(), 
+					(int)mE.getX() + (PROGRAM_WIDTH * (screen-1)), (int)mE.getY()-TOP_SETTINGS_TAB_HEIGHT);
+		}
+		// Write obstacle to file
+		x.format("\n*Obstacle width length movesBoolean xPosition yPosition xVelocity yVelocity instantDeathBoolean");
+		for(GObject mO: mapObstacles) {
+			x.format("Obstacle %d %d false %d %d 0 0 false\n", 
+					(int)mO.getWidth(),  (int)mO.getHeight(), 
+					(int)mO.getX() + (PROGRAM_WIDTH * (screen-1)), (int)mO.getY()-TOP_SETTINGS_TAB_HEIGHT);
+		}
 		x.close();
 	}
 	private void duplicateToDrag() {
 		GRect d = new GRect(toDrag.getX(), toDrag.getY(), toDrag.getWidth(), toDrag.getHeight());
 		d.setFilled(true);
-		d.setColor(Color.BLACK);
+		d.setColor(toDrag.getColor());
 		add(d);
 	}
-	public GObject getObjectSettingFromXY(int x, int y) {
-		for(GObject s: settings) {
-			if (s.getX() >= x && x <= s.getX()+s.getWidth()
-					&& s.getY() >= y && y <= s.getY()+s.getHeight()) return s;
-		}
-		return null;
-	}
-	public boolean isObstacleInSettings(MouseEvent e) {
-		return (toDrag != null && toDrag instanceof GRect 
-				&& toDrag.getColor() == Color.BLACK && e.getY() <= TOP_SETTINGS_TAB_HEIGHT);
-	}
+
+	//OBSTACLE
 	public boolean isObstacle(MouseEvent e) {
 		return (toDrag != null && toDrag instanceof GRect 
-				&& toDrag.getColor() == Color.BLACK);
+				&& toDrag.getColor() == obstacleColor);
 	}
 	private boolean isObstacleInMap(MouseEvent e) {
 		return (toDrag != null && toDrag instanceof GRect 
-				&& toDrag.getColor() == Color.BLACK && e.getY() > TOP_SETTINGS_TAB_HEIGHT);
+				&& toDrag.getColor() == obstacleColor && e.getY() > TOP_SETTINGS_TAB_HEIGHT);
 	}
+	public boolean isObstacleInSettings(MouseEvent e) {
+		return (toDrag != null && toDrag instanceof GRect 
+				&& toDrag.getColor() == obstacleColor && e.getY() <= TOP_SETTINGS_TAB_HEIGHT);
+	}
+	private void moveObstacles(int direction) {
+		for(GObject s: mapObstacles) {
+			s.move(PROGRAM_WIDTH * direction, 0);
+		}
+	}
+	private void removeObstacle(GObject o) {
+		mapObstacles.remove(o);
+		remove(o);
+	}
+	private void addObstacle(GObject o) {
+		mapObstacles.add(o);
+		add(o);
+	}
+	
+	//PLAYER
+	public boolean isPlayer(MouseEvent e) {
+		return (toDrag != null && toDrag instanceof GRect 
+				&& toDrag.getColor() == playerColor);
+	}
+	private boolean isPlayerInMap(MouseEvent e) {
+		return (toDrag != null && toDrag instanceof GRect 
+				&& toDrag.getColor() == playerColor && e.getY() > TOP_SETTINGS_TAB_HEIGHT);
+	}
+	public boolean isPlayerInSettings(MouseEvent e) {
+		return (toDrag != null && toDrag instanceof GRect 
+				&& toDrag.getColor() == playerColor && e.getY() <= TOP_SETTINGS_TAB_HEIGHT);
+	}
+	private void movePlayer(int direction) {
+		for(GObject mP: mapPlayer) {
+			mP.move(PROGRAM_WIDTH * direction, 0);
+		}
+	}
+	private void removePlayer(GObject p) {
+		mapPlayer.remove(p);
+		remove(p);
+	}
+	private void addPlayer(GObject p) {
+		mapPlayer.add(p);
+		add(p);
+	}
+	
+	//ENEMY
+	public boolean isEnemy(MouseEvent e) {
+		return (toDrag != null && toDrag instanceof GRect 
+				&& toDrag.getColor() == enemyColor);
+	}
+	private boolean isEnemyInMap(MouseEvent e) {
+		return (toDrag != null && toDrag instanceof GRect 
+				&& toDrag.getColor() == enemyColor && e.getY() > TOP_SETTINGS_TAB_HEIGHT);
+	}
+	public boolean isEnemyInSettings(MouseEvent e) {
+		return (toDrag != null && toDrag instanceof GRect 
+				&& toDrag.getColor() == enemyColor && e.getY() <= TOP_SETTINGS_TAB_HEIGHT);
+	}
+	private void moveEnemies(int direction) {
+		for(GObject mE: mapEnemies) {
+			mE.move(PROGRAM_WIDTH * direction, 0);
+		}
+	}
+	private void removeEnemy(GObject e) {
+		mapEnemies.remove(e);
+		remove(e);
+	}
+	private void addEnemy(GObject e) {
+		mapEnemies.add(e);
+		add(e);
+	}
+	
 	private boolean isSaveButton(MouseEvent e) {
 		return (toClick != null && toClick instanceof GOval 
 				&&  toClick.getColor() == saveButtonColor && e.getY() <= TOP_SETTINGS_TAB_HEIGHT);
@@ -236,40 +384,11 @@ public class CreateMap extends GraphicsProgram {
 		return (toClick != null && toClick instanceof GOval 
 				&&  toClick.getColor() == moveRightButtonColor && e.getY() <= TOP_SETTINGS_TAB_HEIGHT);
 	}
-	private void moveObstacles(int direction) {
-		for(GObject s: mapObstacles) {
-			s.move(PROGRAM_WIDTH * direction, 0);
-		}
-	}
 	private double rightPointOf(GObject o) {
 		return (o.getX() + o.getWidth());
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

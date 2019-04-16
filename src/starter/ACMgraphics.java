@@ -82,8 +82,8 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		playBackgroundMusic();
 		player.setLastPos(new Position(player.getGImage().getX(), player.getGImage().getY()));
-
 		moveScreen();
 		moveMapEnemies(0);
 		player.addFriction();
@@ -92,7 +92,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		processObstacleCollision();
 		processEnemyCollision();
 		player.move();
-
+		player.playerAnimation();
 	}
 
 	private void moveScreen() {
@@ -110,6 +110,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+
 		lastPressed = e.getKeyCode();
 		if (lastPressed == KeyEvent.VK_D) {
 			player.setCurrentMove(PlayerMovement.RIGHT);

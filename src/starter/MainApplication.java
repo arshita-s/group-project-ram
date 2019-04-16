@@ -2,7 +2,7 @@ package starter;
 public class MainApplication extends GraphicsApplication {
 	public static final int WINDOW_WIDTH = 600;
 	public static final int WINDOW_HEIGHT = 600;
-	public final int GAME_WINDOW_WIDTH = 1200;
+	public final int GAME_WINDOW_WIDTH = 800;
 
 	private ACMgraphics game;
 	private MainMenuPane mainMenu;
