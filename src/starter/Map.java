@@ -9,11 +9,13 @@ public class Map {
 	
 	private ArrayList<Obstacle> Obstacles;
 	private ArrayList<Enemy> Enemies;
+	private ArrayList<PowerUp> PowerUps;
 	private Player mainPlayer;
 	
 	public Map() {
 		Obstacles = new ArrayList<Obstacle>();
 		Enemies = new ArrayList<Enemy>();
+		PowerUps = new ArrayList<PowerUp>();
 		this.readFromFile();
 	}
 	
@@ -56,6 +58,11 @@ public class Map {
 					int movesWithin = read.nextInt();
 					Enemy temp = new Enemy(health, damage, new Size(width, height), new Position(xPos, yPos), movesWithin);
 					Enemies.add(temp);
+				}
+				if(str.contentEquals("PowerUp")) {
+					int xPos = read.nextInt();
+					int yPos = read.nextInt();
+					PowerUp powerup = new PowerUp(new Position(xPos, yPos));
 				}
 			}
 			read.close();

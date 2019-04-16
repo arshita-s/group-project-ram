@@ -20,13 +20,10 @@ public class Enemy {
 	private final String skin = "enemy.png";
 	private double dX;
 	
-	
 	/*
 	 * Constructor
 	 */
 	public Enemy(int h, int d, Size s, Position p, int movesW) {
-		this.setSpawnHealth(h);
-		this.setHealth(h);
 		this.setDamage(d);
 		this.setSize(s);
 		this.movesWithin = movesW;
@@ -35,6 +32,8 @@ public class Enemy {
 		this.setJumping(false);
 		this.setCanJump(false);
 		this.setdX(DX);
+		
+		
 		enemy = new GImage(skin, p.getX(), p.getY());
 		enemy.setSize(s.getWidth(), s.getHeight());
 	}
@@ -136,4 +135,5 @@ public class Enemy {
 	public GImage getSkin() {
 		return enemy;
 	}
+	
 }
