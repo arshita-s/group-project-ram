@@ -35,8 +35,10 @@ public class Map {
 					int velocityx = read.nextInt();
 					int velocityy = read.nextInt();
 					boolean instantDeath = read.nextBoolean();
+					String terrain = read.next();
+					boolean visible = read.nextBoolean();
 					
-					Obstacle temp = new Obstacle(width, length, moves, x, y, velocityx, velocityy, instantDeath);
+					Obstacle temp = new Obstacle(width, length, moves, x, y, velocityx, velocityy, instantDeath, terrain, visible);
 					Obstacles.add(temp);
 				}
 				

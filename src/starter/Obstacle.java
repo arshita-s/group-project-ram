@@ -11,20 +11,30 @@ public class Obstacle {
 	private Velocity velocity;
 	private boolean instantDeath;
 	private GImage obstacle;
+	private boolean visible;
 	private final String[] skin = {"stoneTexture1x1.png", "stoneTexture1x6.png", "stoneTexture1x12.png", "brickGrass1x1.png", "brickGrass1x6.png", "brickGrass1x12.png"};
 	
-	public Obstacle(int width, int length, boolean move, int x, int y, int horizontal, int vertical, boolean death) {
+	public Obstacle(int width, int length, boolean move, int x, int y, int horizontal, int vertical, boolean death, String terrain, boolean visible) {
 		setSize(new Size(width, length));
 		setMovement(move); 
 		setSpawnPosition(new Position(x, y));
 		setCurrentPosition(new Position(x, y));
 		setVelocity(new Velocity(horizontal, vertical));
 		setInstantDeath(death);
+		setVisible(visible);
 		setGImage();
 	}
 	
 	public void resetLocation() {
 		setCurrentPosition(spawnPosition);
+	}
+
+	public boolean visible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
 	}
 
 	public boolean isInstantDeath() {
@@ -83,6 +93,7 @@ public class Obstacle {
 			
 		obstacle = new GImage(skin[i+0], spawnPosition.getX(), spawnPosition.getY());
 		obstacle.setSize(size.getWidth(), size.getHeight());
+		obstacle.setVisible(visible);
 	}
 	public GImage getGImage() {
 		return obstacle;

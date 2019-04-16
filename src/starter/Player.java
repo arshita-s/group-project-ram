@@ -76,7 +76,7 @@ public class Player {
 		return health;
 	}
 	public void playerAnimation() {
-		System.out.println("speedX: " + speedX + "\nspeedY: " + speedY);
+		//System.out.println("speedX: " + speedX + "\nspeedY: " + speedY);
 		playerWalkLeftNextFrame();
 		playerWalkRightNextFrame();
 		playerStandingAnimation();

@@ -93,6 +93,18 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		processEnemyCollision();
 		player.move();
 		player.playerAnimation();
+		if(playerAtEnd()) {
+			program.switchToScore();
+		}
+	}
+
+	private boolean playerAtEnd() {
+		for(GObject obj: mapObstacles) {
+			if(obstacleCollisionX(player.getSpeedX(), obj) && !obj.isVisible()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void moveScreen() {
@@ -194,8 +206,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	//Logic for colliding with obstacles
 	private void processObstacleCollision() {
 		checkBounds(player.getGImage());
-		if(obstacleCollisionX(player.getSpeedX())) {
-			player.setSpeedX(0);
+		for(GObject obj: mapObstacles) {
+			if(obstacleCollisionX(player.getSpeedX(), obj)) {
+				player.setSpeedX(0);
+			}
 		}
 		if(obstacleCollisionY(player.getSpeedY())) {
 			player.setSpeedY(0);
@@ -215,28 +229,27 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	//Returns true if player collided with obstacle in x direction
-	private boolean obstacleCollisionX(double speed) {
-		for(GObject obs: mapObstacles) {
-			if(obs == program.getElementAt(pointNE.getX() + speed, pointNE.getY() +1)) {
-				collidingO = program.getElementAt(pointNE.getX() + speed, pointNE.getY()+1);
-				return true;
-			} else if(obs == program.getElementAt(pointNW.getX() + speed, pointNW.getY()+1)) {
-				collidingO = program.getElementAt(pointNW.getX() + speed, pointNW.getY()+1);
-				return true;
-			} else if(obs == program.getElementAt(pointSE.getX() + speed, pointSE.getY()-1)) {
-				collidingO = program.getElementAt(pointSE.getX() + speed, pointSE.getY()-1);
-				return true;
-			} else if(obs == program.getElementAt(pointSW.getX() + speed, pointSW.getY()-1)) {
-				collidingO = program.getElementAt(pointSW.getX() + speed, pointSW.getY()-1);
-				return true;
-			} else if(obs == program.getElementAt(pointE.getX() + speed, pointE.getY()-1)) {
-				collidingO = program.getElementAt(pointE.getX() + speed, pointE.getY()-1);
-				return true;
-			} else if(obs == program.getElementAt(pointW.getX() + speed, pointW.getY()-1)) {
-				collidingO = program.getElementAt(pointW.getX() + speed, pointW.getY()-1);
-				return true;
-			}
+	private boolean obstacleCollisionX(double speed, GObject obs) {
+		if(obs == program.getElementAt(pointNE.getX() + speed, pointNE.getY() +1)) {
+			collidingO = program.getElementAt(pointNE.getX() + speed, pointNE.getY()+1);
+			return true;
+		} else if(obs == program.getElementAt(pointNW.getX() + speed, pointNW.getY()+1)) {
+			collidingO = program.getElementAt(pointNW.getX() + speed, pointNW.getY()+1);
+			return true;
+		} else if(obs == program.getElementAt(pointSE.getX() + speed, pointSE.getY()-1)) {
+			collidingO = program.getElementAt(pointSE.getX() + speed, pointSE.getY()-1);
+			return true;
+		} else if(obs == program.getElementAt(pointSW.getX() + speed, pointSW.getY()-1)) {
+			collidingO = program.getElementAt(pointSW.getX() + speed, pointSW.getY()-1);
+			return true;
+		} else if(obs == program.getElementAt(pointE.getX() + speed, pointE.getY()-1)) {
+			collidingO = program.getElementAt(pointE.getX() + speed, pointE.getY()-1);
+			return true;
+		} else if(obs == program.getElementAt(pointW.getX() + speed, pointW.getY()-1)) {
+			collidingO = program.getElementAt(pointW.getX() + speed, pointW.getY()-1);
+			return true;
 		}
+
 		return false;
 	}
 
