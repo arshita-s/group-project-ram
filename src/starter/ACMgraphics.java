@@ -22,7 +22,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private static final int BOUND = 5;
 
 	private MainApplication program;
-	private ArrayList<GImage> mapObstacles;
+	private ArrayList<GObject> mapObstacles;
 	private GImage[] mapEnemies;
 	private Player player;
 	private Map level;
@@ -53,7 +53,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		super();
 		this.program = app;
 		level = new Map();
-		mapObstacles = new ArrayList<GImage>();
+		mapObstacles = new ArrayList<GObject>();
 		mapEnemies = new GImage[level.getEnemyList().size()];
 		player = new Player(0, 0);
 	}
@@ -174,7 +174,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	public void moveMapObstacles(double distance) {
 		for(int i = 0; i < mapObstacles.size(); i++) {
-			GImage o = mapObstacles.get(i);
+			GObject o = mapObstacles.get(i);
 			o.move(distance, 0);
 			level.getObstacleList().get(i).setCurrentPosition(new Position((int) o.getX(), (int) o.getY()));
 		}
@@ -215,7 +215,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	//Returns true if player collided with obstacle in x direction
 	private boolean obstacleCollisionX(double speed) {
-		for(GImage obs: mapObstacles) {
+		for(GObject obs: mapObstacles) {
 			if(obs == program.getElementAt(pointNE.getX() + speed, pointNE.getY() +1)) {
 				collidingO = program.getElementAt(pointNE.getX() + speed, pointNE.getY()+1);
 				return true;
@@ -241,7 +241,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	//Returns true if player collided with obstacle in y direction
 	private boolean obstacleCollisionY(double speed) {
-		for(GImage obs: mapObstacles) {
+		for(GObject obs: mapObstacles) {
 			if(obs == program.getElementAt(pointSE.getX(), pointSE.getY() + speed)) {
 				collidingO = program.getElementAt(pointSE.getX(), pointSE.getY() + speed);
 				player.setOnGround(true);
@@ -314,7 +314,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	//Returns true if player collided with enemy from every direction except top 
 	private boolean enemyCollisionDeath(double speedX, double speedY) {
-		for(GImage enem: mapEnemies) {
+		for(GObject enem: mapEnemies) {
 			if(enem != null) {
 				if(enem == program.getElementAt(pointNE.getX() + speedX, pointNE.getY() +1)) {
 					collidingO = program.getElementAt(pointNE.getX() + speedX, pointNE.getY()+1);
@@ -351,7 +351,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	//Returns true if player collided with enemy from the top
 	private boolean enemyBounce(double speedY) {
-		for(GImage enem: mapEnemies) {
+		for(GObject enem: mapEnemies) {
 			if(enem != null) {
 				if(enem == program.getElementAt(pointSE.getX(), pointSE.getY() + speedY)) {
 					collidingO = program.getElementAt(pointSE.getX(), pointSE.getY() + speedY);
@@ -418,10 +418,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	public void returnToGame() {
 		backGround.setSize(program.GAME_WINDOW_WIDTH , program.getHeight());
 		program.add(backGround);
-		for(GImage obs: mapObstacles) {
+		for(GObject obs: mapObstacles) {
 			program.add(obs);
 		}
-		for(GImage enem: mapEnemies) {
+		for(GObject enem: mapEnemies) {
 			if(enem != null) {
 				program.add(enem);
 			}

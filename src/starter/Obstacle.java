@@ -11,7 +11,7 @@ public class Obstacle {
 	private Velocity velocity;
 	private boolean instantDeath;
 	private GImage obstacle;
-	private final String skin = "floor1500x50.png";
+	private final String[] skin = {"stoneTexture1x1.png", "stoneTexture1x6.png", "stoneTexture1x12.png", "brickGrass1x1.png", "brickGrass1x6.png", "brickGrass1x12.png"};
 	
 	public Obstacle(int width, int length, boolean move, int x, int y, int horizontal, int vertical, boolean death) {
 		setSize(new Size(width, length));
@@ -75,7 +75,13 @@ public class Obstacle {
 		this.spawnPosition = spawnPosition;
 	}
 	public void setGImage() {
-		obstacle = new GImage(skin, spawnPosition.getX(), spawnPosition.getY());
+		int i = 0 ;
+		if (getSize().getWidth() <= 600) i = 2;
+		if (getSize().getWidth() <= 300) i = 1;
+		if (getSize().getWidth() <= 50) i = 0;
+		
+			
+		obstacle = new GImage(skin[i+0], spawnPosition.getX(), spawnPosition.getY());
 		obstacle.setSize(size.getWidth(), size.getHeight());
 	}
 	public GImage getGImage() {
