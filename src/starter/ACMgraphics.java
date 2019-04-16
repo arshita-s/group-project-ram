@@ -289,9 +289,8 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 				fx.setVolume(1);
 				fx.play();
 				player.setSpeedX(-2*player.getSpeedX());
-				player.setLifeLost(false);
 			}
-			else {
+			else if(player.isLifeLost()){
 				fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[2]);
 				fx.setVolume(1);
 				fx.play();

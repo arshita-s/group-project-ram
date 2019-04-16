@@ -85,7 +85,7 @@ public class Player {
 		if(speedX > 0) {
 			lastXDirection = PlayerMovement.RIGHT;
 			animationWalkRightFrame+=animationSpeed;
-			System.out.println("Right: " + animationWalkRight[(int)(animationWalkRightFrame%8)]);
+			//System.out.println("Right: " + animationWalkRight[(int)(animationWalkRightFrame%8)]);
 			player.setImage(animationWalkRight[(int)(animationWalkRightFrame%8)]);
 			player.setSize(player.getWidth(), PLAYER_SIZE_Y);
 		}
@@ -94,7 +94,7 @@ public class Player {
 		if(speedX < 0) {
 			lastXDirection = PlayerMovement.LEFT;
 			animationWalkLeftFrame+=animationSpeed;
-			System.out.println("Left: " + animationWalkLeft[(int)(animationWalkLeftFrame%8)]);
+			//System.out.println("Left: " + animationWalkLeft[(int)(animationWalkLeftFrame%8)]);
 			player.setImage(animationWalkLeft[(int)(animationWalkLeftFrame%8)]);
 			player.setSize(player.getWidth(), PLAYER_SIZE_Y);
 		}
@@ -193,12 +193,12 @@ public class Player {
 	}
 
 	private void calculateLives() {
-		lostLife = lostALife((int)(getHealth()/30));
+		lostLife = lostALife(getHealth()/30);
 		setLives((int)(getHealth()/30));
 	}
 
 	public boolean lostALife(int after) {
-		if(after < lives && after < 3) {
+		if(after < lives) {
 			return true;
 		}
 		return false;
