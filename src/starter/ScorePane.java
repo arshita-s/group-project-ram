@@ -17,8 +17,8 @@ public class ScorePane extends GraphicsPane{
 	public ScorePane(MainApplication app) {
 		super();
 		program = app;
-		backToMenu = new GButton("Back to Menu", 600, 400, 100, 50);
-		next = new GButton("Next", 600, 475, 100, 50);
+		backToMenu = new GButton("Back to Menu", 350, 400, 100, 50);
+		next = new GButton("Next", 350, 475, 100, 50);
 		score = new GLabel("Score:", 120, 150);
 		score.setFont("Arial-70");
 		num = new GLabel("1000", 200, 220);
@@ -45,10 +45,14 @@ public class ScorePane extends GraphicsPane{
 	public void mousePressed(MouseEvent e) {
 		GObject obj = program.getElementAt(e.getX(), e.getY());
 		if(obj == backToMenu) {
-			//program.switchToMainMenu();
+			program.switchToMainMenu();
 		} else if(obj == next) {
 			//program.switchToGame();
 		}
+	}
+	
+	public void setScore(int score) {
+		num.setLabel("" + score);
 	}
 	
 }

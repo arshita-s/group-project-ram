@@ -54,7 +54,8 @@ public class MainApplication extends GraphicsApplication {
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	}
 
-	public void switchToScore() {
+	public void switchToScore(int score_num) {
+		score.setScore(score_num);
 		switchToScreen(score);
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	}

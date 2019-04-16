@@ -17,16 +17,13 @@ public class Enemy {
 	private boolean canJump;
 	
 	private GImage enemy;
-	private final String skin = "enemy.png";
+	private static final String skin = "enemy.png";
 	private double dX;
-	
 	
 	/*
 	 * Constructor
 	 */
 	public Enemy(int h, int d, Size s, Position p, int movesW) {
-		this.setSpawnHealth(h);
-		this.setHealth(h);
 		this.setDamage(d);
 		this.setSize(s);
 		this.movesWithin = movesW;
@@ -35,6 +32,8 @@ public class Enemy {
 		this.setJumping(false);
 		this.setCanJump(false);
 		this.setdX(DX);
+		
+		
 		enemy = new GImage(skin, p.getX(), p.getY());
 		enemy.setSize(s.getWidth(), s.getHeight());
 	}
@@ -42,16 +41,19 @@ public class Enemy {
 	 * Enemy's movements
 	 */ 
 	public void move() {
-		if (currentPosition.getX() + dX > (spawnPosition.getX() + movesWithin) || currentPosition.getX() + dX < (spawnPosition.getX() - movesWithin)) {
+		Position newPos = spawnPosition;
+		/*if(spawnPosition.getX() > 800 && currentPosition.getX() < 800) {
+			newPos.setX(spawnPosition.getX() - 800);
+		}*/
+		if (currentPosition.getX() + dX > (newPos.getX() + movesWithin) || currentPosition.getX() + dX < (newPos.getX() - movesWithin)) {
 			setdX(getdX() * -1);
 		}
 		enemy.move(getdX(), 0);
 	}
 	
-	public void resetAll() {
-		enemy = new GImage(skin, currentPosition.getX(), currentPosition.getY());
+	public void resetPosition() {
+		enemy.setLocation(spawnPosition.getX(), spawnPosition.getY());
 		setCurrentPosition(spawnPosition);
-		setHealth(getSpawnHealth());
 	}
 	
 	/*
@@ -136,4 +138,5 @@ public class Enemy {
 	public GImage getSkin() {
 		return enemy;
 	}
+	
 }
