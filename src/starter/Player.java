@@ -76,7 +76,6 @@ public class Player {
 		return health;
 	}
 	public void playerAnimation() {
-		//System.out.println("speedX: " + speedX + "\nspeedY: " + speedY);
 		playerWalkLeftNextFrame();
 		playerWalkRightNextFrame();
 		playerStandingAnimation();
@@ -86,7 +85,6 @@ public class Player {
 		if(speedX > 0) {
 			lastXDirection = PlayerMovement.RIGHT;
 			animationWalkRightFrame+=animationSpeed;
-			//System.out.println("Right: " + animationWalkRight[(int)(animationWalkRightFrame%8)]);
 			player.setImage(animationWalkRight[(int)(animationWalkRightFrame%8)]);
 			player.setSize(player.getWidth(), PLAYER_SIZE_Y);
 		}
@@ -95,7 +93,6 @@ public class Player {
 		if(speedX < 0) {
 			lastXDirection = PlayerMovement.LEFT;
 			animationWalkLeftFrame+=animationSpeed;
-			//System.out.println("Left: " + animationWalkLeft[(int)(animationWalkLeftFrame%8)]);
 			player.setImage(animationWalkLeft[(int)(animationWalkLeftFrame%8)]);
 			player.setSize(player.getWidth(), PLAYER_SIZE_Y);
 		}

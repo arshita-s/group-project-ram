@@ -9,11 +9,13 @@ public class Map {
 	
 	private ArrayList<Obstacle> Obstacles;
 	private ArrayList<Enemy> Enemies;
+	private ArrayList<PowerUp> PowerUps;
 	private Player mainPlayer;
 	
 	public Map() {
 		Obstacles = new ArrayList<Obstacle>();
 		Enemies = new ArrayList<Enemy>();
+		PowerUps = new ArrayList<PowerUp>();
 		this.readFromFile();
 	}
 	
@@ -35,10 +37,9 @@ public class Map {
 					int velocityx = read.nextInt();
 					int velocityy = read.nextInt();
 					boolean instantDeath = read.nextBoolean();
-					String terrain = read.next();
+					String skin = read.next();
 					boolean visible = read.nextBoolean();
-					
-					Obstacle temp = new Obstacle(width, length, moves, x, y, velocityx, velocityy, instantDeath, terrain, visible);
+					Obstacle temp = new Obstacle(width, length, moves, x, y, velocityx, velocityy, instantDeath, skin, visible);
 					Obstacles.add(temp);
 				}
 				
@@ -59,6 +60,14 @@ public class Map {
 					Enemy temp = new Enemy(health, damage, new Size(width, height), new Position(xPos, yPos), movesWithin);
 					Enemies.add(temp);
 				}
+				if(str.contentEquals("PowerUp")) {
+					int xPos = read.nextInt();
+					int yPos = read.nextInt();
+					int width = read.nextInt();
+					int height = read.nextInt();
+					PowerUp powerup = new PowerUp(new Position(xPos, yPos), new Size(width, height));
+					PowerUps.add(powerup);
+				}
 			}
 			read.close();
 		} catch (Exception e) {
@@ -74,5 +83,8 @@ public class Map {
 	}
 	public Player getPlayer() {
 		return mainPlayer;
+	}
+	public ArrayList<PowerUp> getPowerUpList() {
+		return PowerUps;
 	}
 }
