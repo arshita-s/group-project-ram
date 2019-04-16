@@ -23,6 +23,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	private MainApplication program;
 	private ArrayList<GObject> mapObstacles;
+	private ArrayList<GObject> mapPowerUps;
 	private GImage[] mapEnemies;
 	private Player player;
 	private Map level;
@@ -55,6 +56,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		level = new Map();
 		mapObstacles = new ArrayList<GObject>();
 		mapEnemies = new GImage[level.getEnemyList().size()];
+		mapPowerUps = new ArrayList<GObject>();
 		player = new Player(0, 0);
 	}
 
@@ -156,6 +158,15 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			program.add(enemy);
 			i++;
 		}
+		
+		/* COMMENTED OUT BECAUSE NO IMAGE FILE YET
+		GImage powerup;
+		for(PowerUp power: level.getPowerUpList()) {
+			powerup = createPowerUp(power);
+			mapPowerUps.add(powerup);
+			program.add(powerup);
+		}
+		*/
 		player = level.getPlayer();
 		program.add(player.getGImage());
 		player.setLastPos(player.getOriginalPosition());
@@ -165,6 +176,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		program.add(powerups);
 	}
 
+	
+	public GImage createPowerUp(PowerUp p) {
+		return p.getSkin();
+	}
 	public GImage createEnemy(Enemy e) {
 		return e.getSkin();
 	}

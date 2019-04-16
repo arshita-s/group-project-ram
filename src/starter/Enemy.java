@@ -17,7 +17,7 @@ public class Enemy {
 	private boolean canJump;
 	
 	private GImage enemy;
-	private final String skin = "enemy.png";
+	private static final String skin = "enemy.png";
 	private double dX;
 	
 	/*

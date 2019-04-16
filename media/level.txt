@@ -16,3 +16,6 @@ Obstacle 49 49 false 431 339 0 0 false
 Obstacle 49 49 false 1105 502 0 0 false
 Obstacle 49 49 false 1105 451 0 0 false
 Obstacle 49 49 false 1105 401 0 0 false
+
+*PowerUp xPosition yPosition width height
+PowerUp 100 553 16 24

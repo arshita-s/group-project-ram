@@ -62,7 +62,10 @@ public class Map {
 				if(str.contentEquals("PowerUp")) {
 					int xPos = read.nextInt();
 					int yPos = read.nextInt();
-					PowerUp powerup = new PowerUp(new Position(xPos, yPos));
+					int width = read.nextInt();
+					int height = read.nextInt();
+					PowerUp powerup = new PowerUp(new Position(xPos, yPos), new Size(width, height));
+					PowerUps.add(powerup);
 				}
 			}
 			read.close();
@@ -79,5 +82,8 @@ public class Map {
 	}
 	public Player getPlayer() {
 		return mainPlayer;
+	}
+	public ArrayList<PowerUp> getPowerUpList() {
+		return PowerUps;
 	}
 }
