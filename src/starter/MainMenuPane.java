@@ -29,11 +29,11 @@ public class MainMenuPane extends GraphicsPane{
 	
 	@Override
 	public void showContents() {
+		playBackgroundMusic();
 		program.add(start);
 		program.add(help);
 		program.add(titleOne);
 		program.add(titleTwo);
-		playBackgroundMusic();
 	}
 	
 	@Override
