@@ -5,6 +5,8 @@ import java.awt.Color;
 import acm.graphics.GImage;
 
 public class Enemy {
+	private static final double DX = .6;
+	private int spawnHealth;
 	private int health; // Health that enemy starts with
 	private Size size; // Enemies size
 	private Position spawnPosition; //Where enemy spawns
@@ -16,22 +18,23 @@ public class Enemy {
 	
 	private GImage enemy;
 	private final String skin = "enemy.png";
-	private int dX;
+	private double dX;
 	
 	
 	/*
 	 * Constructor
 	 */
 	public Enemy(int h, int d, Size s, Position p, int movesW) {
+		this.setSpawnHealth(h);
 		this.setHealth(h);
 		this.setDamage(d);
 		this.setSize(s);
 		this.movesWithin = movesW;
 		this.setSpawnPoint(p);
-		this.setCurrentPosition(new Position(p.getX(), p.getY()));
+		this.setCurrentPosition(p);
 		this.setJumping(false);
 		this.setCanJump(false);
-		this.setdX(1);
+		this.setdX(DX);
 		enemy = new GImage(skin, p.getX(), p.getY());
 		enemy.setSize(s.getWidth(), s.getHeight());
 	}
@@ -42,17 +45,29 @@ public class Enemy {
 		if (currentPosition.getX() + dX > (spawnPosition.getX() + movesWithin) || currentPosition.getX() + dX < (spawnPosition.getX() - movesWithin)) {
 			setdX(getdX() * -1);
 		}
-		currentPosition.setX(currentPosition.getX() + getdX());
-		
-	} 
+		enemy.move(getdX(), 0);
+	}
+	
+	public void resetAll() {
+		enemy = new GImage(skin, currentPosition.getX(), currentPosition.getY());
+		setCurrentPosition(spawnPosition);
+		setHealth(getSpawnHealth());
+	}
 	
 	/*
 	 * Setters and Getters below
 	 */
+	
 	public int getHealth() {
 		return health;
 	}
 
+	public int getSpawnHealth() {
+		return spawnHealth;
+	}
+	public void setSpawnHealth(int spawnHealth) {
+		this.spawnHealth = spawnHealth;
+	}
 	public void setHealth(int health) {
 		this.health = health;
 	}
@@ -112,11 +127,11 @@ public class Enemy {
 	public void setCurrentPosition(Position currentPosition) {
 		this.currentPosition = currentPosition;
 	}
-	public int getdX() {
+	public double getdX() {
 		return dX;
 	}
-	public void setdX(int dX) {
-		this.dX = dX;
+	public void setdX(double d) {
+		this.dX = d;
 	}
 	public GImage getSkin() {
 		return enemy;

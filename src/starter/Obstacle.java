@@ -22,6 +22,10 @@ public class Obstacle {
 		setInstantDeath(death);
 		setGImage();
 	}
+	
+	public void resetLocation() {
+		setCurrentPosition(spawnPosition);
+	}
 
 	public boolean isInstantDeath() {
 		return instantDeath;

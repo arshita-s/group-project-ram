@@ -15,6 +15,8 @@ public class Player {
 	private static double JUMP = 7;
 	private static final int PLAYER_SIZE_X = 50;
 	private static final int PLAYER_SIZE_Y = 50;
+	private static final int STARTING_HEALTH = 110;
+	private static final int LIFE_VARIABLE = 30;
 	private double speedX;
 	private double speedY;
 	private boolean onGround;
@@ -47,12 +49,11 @@ public class Player {
 		player.setSize(PLAYER_SIZE_X, PLAYER_SIZE_Y);
 		speedX = 0;
 		speedY = 0;
-		//onGround = true;
 		currentMove = PlayerMovement.STANDING;
 		currentJump = PlayerJump.STAND;
-		lives = 3;
+		lives = STARTING_HEALTH/LIFE_VARIABLE;
 		lostLife = false;
-		health = 120;
+		health = STARTING_HEALTH;
 		powerUps = 0;
 		setWalkingAnimation();
 	}
@@ -173,7 +174,7 @@ public class Player {
 		setSpeedY(0);
 		setCurrentMove(PlayerMovement.STANDING);
 		setCurrentJump(PlayerJump.STAND);
-		setHealth(120);
+		setHealth(STARTING_HEALTH);
 		calculateLives();
 		setPowerUps(0);
 	}
@@ -198,10 +199,7 @@ public class Player {
 	}
 
 	public boolean lostALife(int after) {
-		if(after < lives) {
-			return true;
-		}
-		return false;
+		return after < lives && after < STARTING_HEALTH / LIFE_VARIABLE;
 	}
 	
 	public void addForce() {
