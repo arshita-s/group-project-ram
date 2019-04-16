@@ -2,12 +2,12 @@
 Player 32 500
 
 *Enemy health damage width length xPosition yPosition movesWithin
-Enemy 1 1 32 40 385 512 30
 
+Enemy 10 10 32 40 385 512 35
 
-Enemy 999999999 99999 1000 1000 1200 600 0
 
 *Obstacle width length movesBoolean xPosition yPosition xVelocity yVelocity instantDeathBoolean
+
 Obstacle 5 600 false 0 0 0 0 false dirt_6x1.png
 Obstacle 99999 20 false 0 600 0 0 false dirt_6x1.png
 Obstacle 50 700 false 2370 0 0 0 false dirt_1x1.png
@@ -55,3 +55,7 @@ Obstacle 200 50 false 2144 177 0 0 false purple_grass_dirt_6x1.png
 
 Obstacle 200 150 false 2144 27 0 0 false djoj.gif
 Obstacle 50 50 false 2144 27 0 0 false djojgline.png
+
+
+*PowerUp xPosition yPosition width height
+PowerUp 385 512 16 24

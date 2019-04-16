@@ -23,6 +23,10 @@ public class Obstacle {
 		obstacle = new GImage(skin, spawnPosition.getX(), spawnPosition.getY());
 		obstacle.setSize(size.getWidth(), size.getHeight());
 	}
+	
+	public void resetLocation() {
+		setCurrentPosition(spawnPosition);
+	}
 
 	public boolean isInstantDeath() {
 		return instantDeath;

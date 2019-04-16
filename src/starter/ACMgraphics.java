@@ -23,10 +23,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	private MainApplication program;
 	private ArrayList<GObject> mapObstacles;
-	private ArrayList<GObject> mapEnemies;
+	private ArrayList<GObject> mapPowerUps;
+	private GImage[] mapEnemies;
 	private Player player;
 	private Map level;
-	private double vX = 0;
 	private GPoint pointNE;
 	private GPoint pointSW;
 	private GPoint pointNW;
@@ -41,12 +41,12 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private GLabel powerups;
 	private int lastPressed;
 	boolean moving = false;
-	
+
 	/*
 	 * Background Music: "Our Mountain" by Eric Matyas
 	 * 					 "Fantasy Game Background" by Eric Matyas
 	 */
-	
+
 	private static final String[] SOUND_FILES = {"Our-Mountain_v003.mp3", "enemy_sound.wav", "death_sound.wav", "damage_sound.wav"};
 	public static final String MUSIC_FOLDER = "sounds";
 
@@ -55,7 +55,8 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		this.program = app;
 		level = new Map();
 		mapObstacles = new ArrayList<GObject>();
-		mapEnemies = new ArrayList<GObject>();
+		mapEnemies = new GImage[level.getEnemyList().size()];
+		mapPowerUps = new ArrayList<GObject>();
 		player = new Player(0, 0);
 	}
 
@@ -86,7 +87,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		playBackgroundMusic();
 		player.setLastPos(new Position(player.getGImage().getX(), player.getGImage().getY()));
 		moveScreen();
-		moveMapEnemies(vX);
+		moveMapEnemies(0);
 		player.addFriction();
 		player.addForce();
 		player.processGravity();
@@ -94,7 +95,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		processEnemyCollision();
 		player.move();
 		player.playerAnimation();
-		
 	}
 
 	private void moveScreen() {
@@ -109,7 +109,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			moveMapEnemies(program.getWidth());
 		}
 	}
-	
+
 	@Override
 	public void keyPressed(KeyEvent e) {
 
@@ -150,12 +150,23 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			program.add(obstacle);
 		}
 		GImage enemy;
+		int i = 0;
 		for(Enemy enem: level.getEnemyList())
 		{
 			enemy = createEnemy(enem);
-			mapEnemies.add(enemy);
+			mapEnemies[i] = enemy;
 			program.add(enemy);
+			i++;
 		}
+		
+		/* COMMENTED OUT BECAUSE NO IMAGE FILE YET
+		GImage powerup;
+		for(PowerUp power: level.getPowerUpList()) {
+			powerup = createPowerUp(power);
+			mapPowerUps.add(powerup);
+			program.add(powerup);
+		}
+		*/
 		player = level.getPlayer();
 		program.add(player.getGImage());
 		player.setLastPos(player.getOriginalPosition());
@@ -165,6 +176,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		program.add(powerups);
 	}
 
+	
+	public GImage createPowerUp(PowerUp p) {
+		return p.getSkin();
+	}
 	public GImage createEnemy(Enemy e) {
 		return e.getSkin();
 	}
@@ -173,22 +188,21 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		return obs.getGImage();
 	}
 
-	public void moveMapObstacles(double vX2) {
+	public void moveMapObstacles(double distance) {
 		for(int i = 0; i < mapObstacles.size(); i++) {
 			GObject o = mapObstacles.get(i);
-			o.move(vX2, 0);
+			o.move(distance, 0);
 			level.getObstacleList().get(i).setCurrentPosition(new Position((int) o.getX(), (int) o.getY()));
 		}
 	}
 
-	private void moveMapEnemies(double vX2) {
-		int i = 0;
-		for(GObject current: mapEnemies) {
-			level.getEnemyList().get(i).move();
-			int enemyDirection = level.getEnemyList().get(i).getdX();
-			current.move(vX2 + enemyDirection , 0);
-			level.getEnemyList().get(i).setCurrentPosition(new Position((int) current.getX(), (int) current.getY()));
-			i++;
+	private void moveMapEnemies(double distance) {
+		for(int i = 0; i < mapEnemies.length; i++) {
+			if(mapEnemies[i] != null) {
+				level.getEnemyList().get(i).move();
+				mapEnemies[i].move(level.getEnemyList().get(i).getdX() + distance, 0);
+				level.getEnemyList().get(i).setCurrentPosition(new Position((int) mapEnemies[i].getX(), (int) mapEnemies[i].getY()));
+			}
 		}
 	}
 
@@ -289,9 +303,8 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 				fx.setVolume(1);
 				fx.play();
 				player.setSpeedX(-2*player.getSpeedX());
-				player.setLifeLost(false);
 			}
-			else {
+			else if(player.isLifeLost()){
 				fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[2]);
 				fx.setVolume(1);
 				fx.play();
@@ -305,41 +318,47 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			fx.play();
 			player.setSpeedY(-1 * player.getJumpSpeed());
 			program.remove(collidingO);
-			mapEnemies.remove(collidingO);
-			
+			for(int i = 0; i < mapEnemies.length; i++) {
+				if (mapEnemies[i] == collidingO) {
+					mapEnemies[i] = null;
+				}
+			}
+
 		}
 	}
 
 	//Returns true if player collided with enemy from every direction except top 
 	private boolean enemyCollisionDeath(double speedX, double speedY) {
 		for(GObject enem: mapEnemies) {
-			if(enem == program.getElementAt(pointNE.getX() + speedX, pointNE.getY() +1)) {
-				collidingO = program.getElementAt(pointNE.getX() + speedX, pointNE.getY()+1);
-				return true;
-			} else if(enem == program.getElementAt(pointNW.getX() + speedX, pointNW.getY()+1)) {
-				collidingO = program.getElementAt(pointNW.getX() + speedX, pointNW.getY()+1);
-				return true;
-			} else if(enem == program.getElementAt(pointSE.getX() + speedX, pointSE.getY()-1)) {
-				collidingO = program.getElementAt(pointSE.getX() + speedX, pointSE.getY()-1);
-				return true;
-			} else if(enem == program.getElementAt(pointSW.getX() + speedX, pointSW.getY()-1)) {
-				collidingO = program.getElementAt(pointSW.getX() + speedX, pointSW.getY()-1);
-				return true;
-			} else if(enem == program.getElementAt(pointNE.getX(), pointNE.getY() + speedY)) {
-				collidingO = program.getElementAt(pointNE.getX(), pointNE.getY() + speedY);
-				return true;
-			} else if(enem == program.getElementAt(pointNW.getX(), pointNW.getY() + speedY)) {
-				collidingO = program.getElementAt(pointNW.getX(), pointNW.getY() + speedY);
-				return true;
-			}  else if(enem == program.getElementAt(pointE.getX() + speedX, pointE.getY()-1)) {
-				collidingO = program.getElementAt(pointE.getX() + speedX, pointE.getY()-1);
-				return true;
-			} else if(enem == program.getElementAt(pointW.getX() + speedX, pointW.getY()-1)) {
-				collidingO = program.getElementAt(pointW.getX() + speedX, pointW.getY()-1);
-				return true;
-			} else if(enem == program.getElementAt(pointN.getX(), pointN.getY() + speedY)) {
-				collidingO = program.getElementAt(pointN.getX(), pointN.getY() + speedY);
-				return true;
+			if(enem != null) {
+				if(enem == program.getElementAt(pointNE.getX() + speedX, pointNE.getY() +1)) {
+					collidingO = program.getElementAt(pointNE.getX() + speedX, pointNE.getY()+1);
+					return true;
+				} else if(enem == program.getElementAt(pointNW.getX() + speedX, pointNW.getY()+1)) {
+					collidingO = program.getElementAt(pointNW.getX() + speedX, pointNW.getY()+1);
+					return true;
+				} else if(enem == program.getElementAt(pointSE.getX() + speedX, pointSE.getY()-1)) {
+					collidingO = program.getElementAt(pointSE.getX() + speedX, pointSE.getY()-1);
+					return true;
+				} else if(enem == program.getElementAt(pointSW.getX() + speedX, pointSW.getY()-1)) {
+					collidingO = program.getElementAt(pointSW.getX() + speedX, pointSW.getY()-1);
+					return true;
+				} else if(enem == program.getElementAt(pointNE.getX(), pointNE.getY() + speedY)) {
+					collidingO = program.getElementAt(pointNE.getX(), pointNE.getY() + speedY);
+					return true;
+				} else if(enem == program.getElementAt(pointNW.getX(), pointNW.getY() + speedY)) {
+					collidingO = program.getElementAt(pointNW.getX(), pointNW.getY() + speedY);
+					return true;
+				}  else if(enem == program.getElementAt(pointE.getX() + speedX, pointE.getY()-1)) {
+					collidingO = program.getElementAt(pointE.getX() + speedX, pointE.getY()-1);
+					return true;
+				} else if(enem == program.getElementAt(pointW.getX() + speedX, pointW.getY()-1)) {
+					collidingO = program.getElementAt(pointW.getX() + speedX, pointW.getY()-1);
+					return true;
+				} else if(enem == program.getElementAt(pointN.getX(), pointN.getY() + speedY)) {
+					collidingO = program.getElementAt(pointN.getX(), pointN.getY() + speedY);
+					return true;
+				}
 			}
 		}
 		return false;
@@ -348,17 +367,19 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	//Returns true if player collided with enemy from the top
 	private boolean enemyBounce(double speedY) {
 		for(GObject enem: mapEnemies) {
-			if(enem == program.getElementAt(pointSE.getX(), pointSE.getY() + speedY)) {
-				collidingO = program.getElementAt(pointSE.getX(), pointSE.getY() + speedY);
-				player.getGImage().setLocation(pointNW.getX(), collidingO.getY() - player.getGImage().getHeight());
-				return true;
-			} else if(enem == program.getElementAt(pointSW.getX(), pointSW.getY() + speedY)) {
-				collidingO = program.getElementAt(pointSW.getX(), pointSW.getY() + speedY);
-				player.getGImage().setLocation(pointNW.getX(), collidingO.getY() - player.getGImage().getHeight());
-				return true;
-			} else if(enem == program.getElementAt(pointS.getX(), pointS.getY() + speedY)) {
-				collidingO = program.getElementAt(pointS.getX(), pointS.getY() + speedY);
-				return true;
+			if(enem != null) {
+				if(enem == program.getElementAt(pointSE.getX(), pointSE.getY() + speedY)) {
+					collidingO = program.getElementAt(pointSE.getX(), pointSE.getY() + speedY);
+					player.getGImage().setLocation(pointNW.getX(), collidingO.getY() - player.getGImage().getHeight());
+					return true;
+				} else if(enem == program.getElementAt(pointSW.getX(), pointSW.getY() + speedY)) {
+					collidingO = program.getElementAt(pointSW.getX(), pointSW.getY() + speedY);
+					player.getGImage().setLocation(pointNW.getX(), collidingO.getY() - player.getGImage().getHeight());
+					return true;
+				} else if(enem == program.getElementAt(pointS.getX(), pointS.getY() + speedY)) {
+					collidingO = program.getElementAt(pointS.getX(), pointS.getY() + speedY);
+					return true;
+				}
 			}
 		}
 		return false;
@@ -376,11 +397,11 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		resetPositions();
 		player.resetAll();
 	}
-	
+
 	//Removes all objects from all arraylists
 	private void resetArrayLists() {
 		mapObstacles.clear();
-		mapEnemies.clear();
+		mapEnemies = new GImage[level.getEnemyList().size()];
 
 	}
 
@@ -394,7 +415,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 
 	}
-	
+
 	//redraw from level text file with less life
 	//Used after losing a life. Currently has the player restart the level with one less life
 	private void reset() {
@@ -404,10 +425,11 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		player.reset();
 		updateLives();
 		updatePowerUps();
-		
+
 		setupLevel(program);
 	}
-	
+
+	//adds images to game
 	public void returnToGame() {
 		backGround.setSize(program.GAME_WINDOW_WIDTH , program.getHeight());
 		program.add(backGround);
@@ -415,7 +437,9 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			program.add(obs);
 		}
 		for(GObject enem: mapEnemies) {
-			program.add(enem);
+			if(enem != null) {
+				program.add(enem);
+			}
 		}
 		program.add(player.getGImage());
 		program.add(lives);
@@ -423,17 +447,17 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		tm.start();
 	}
 
-	
+
 	private void playBackgroundMusic() {
 		AudioPlayer audio = AudioPlayer.getInstance();
 		audio.playSound(MUSIC_FOLDER, SOUND_FILES[0]);
 	}
-	
+
 	private void stopBackgroundMusic() {
 		AudioPlayer audio = AudioPlayer.getInstance();
 		audio.stopSound(MUSIC_FOLDER, SOUND_FILES[0]);
 	}
-	
+
 	@Override
 	public void showContents() {
 		run(program);
@@ -448,7 +472,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 		stopBackgroundMusic();
 	}
-	
+
 	@Override
 	public void mousePressed(MouseEvent e) {
 
