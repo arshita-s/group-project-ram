@@ -192,8 +192,8 @@ public class Player {
 	}
 
 	private void calculateLives() {
-		lostLife = lostALife(getHealth()/30);
-		setLives((int)(getHealth()/30));
+		lostLife = lostALife(getHealth()/LIFE_VARIABLE);
+		setLives((int)(getHealth()/LIFE_VARIABLE));
 	}
 
 	public boolean lostALife(int after) {
