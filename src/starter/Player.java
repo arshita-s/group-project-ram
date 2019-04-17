@@ -37,8 +37,11 @@ public class Player {
 	private double animationWalkRightFrame = 0;
 	private String[] animationWalkLeft;
 	private double animationWalkLeftFrame = 0;
+	private String[] animationDie;
+	private int animationDieFrame = 0;
 	private double animationSpeed = SPEED_DX;
 	private PlayerMovement lastXDirection = PlayerMovement.RIGHT;
+	
 
 	/*
 	 * Constructor
@@ -56,17 +59,21 @@ public class Player {
 		lostLife = false;
 		health = STARTING_HEALTH;
 		powerUps = 0;
-		setWalkingAnimation();
+		setAnimations();
 	}
-	private void setWalkingAnimation() {
+	private void setAnimations() {
 		int totalImages = 9;
 		animationWalkRight = new String[totalImages];	
-		animationWalkLeft = new String[totalImages];	
+		animationWalkLeft = new String[totalImages];
+		animationDie = new String[totalImages];
 		for (int i = 0; i < totalImages; i++) {
 			animationWalkRight[i] = DIRECTORY + "player_walk_right_" + Integer.toString(i+1) + ".png";
 		}
 		for (int i = 0; i < totalImages; i++) {
 			animationWalkLeft[i] = DIRECTORY + "player_walk_left_" + Integer.toString(i+1) + ".png";
+		}
+		for (int i = 0; i < 7; i++) {
+			animationDie[i] = DIRECTORY + "player_die_" + Integer.toString(i+1) + ".png";
 		}
 	}
 	public int getLives() {
@@ -126,6 +133,18 @@ public class Player {
 				player.setSize(player.getWidth(), PLAYER_SIZE_Y);
 			}	
 		}
+	}
+	public void playerDieAnimation() {
+		System.out.println(animationDie[animationDieFrame%7]);
+		player.setImage(animationDie[animationDieFrame]);
+		player.setSize(player.getWidth(), PLAYER_SIZE_Y);
+		for(double j=0; j<10; j+=0.001) {
+			for(double k=0; k<2; k+=0.001) {
+				System.out.print("");
+			}
+		}
+		animationDieFrame++;
+
 	}
 	public void setLives(int l) {
 		lives = l;

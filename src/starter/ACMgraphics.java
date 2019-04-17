@@ -316,7 +316,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		SoundClip fx;
 		if(enemyCollisionDeath(player.getSpeedX(), player.getSpeedY())) {
 			System.out.println("bleh");
-			player.loseHealth(10); 
+			player.loseHealth(10);
 			if(player.getLives() == 0) {
 				tm.stop();
 				program.switchToMainMenu();
@@ -329,6 +329,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			}
 			else {
 				System.out.println("YES");
+				player.playerDieAnimation();
 				fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[2]); //death
 				fx.setVolume(1);
 				fx.play();
