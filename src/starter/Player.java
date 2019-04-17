@@ -31,7 +31,8 @@ public class Player {
 	private int powerUps;
 	private boolean lostLife;
 	
-	private static final String skin = "player_standing_right.png";
+	private static final String DIRECTORY = System.getProperty("user.dir") + "/PlayerAnimations/";
+	private static final String skin = DIRECTORY+"player_standing_right.png";
 	private String[] animationWalkRight;
 	private double animationWalkRightFrame = 0;
 	private String[] animationWalkLeft;
@@ -58,14 +59,14 @@ public class Player {
 		setWalkingAnimation();
 	}
 	private void setWalkingAnimation() {
-		int totalImages = 8;
+		int totalImages = 9;
 		animationWalkRight = new String[totalImages];	
 		animationWalkLeft = new String[totalImages];	
 		for (int i = 0; i < totalImages; i++) {
-			animationWalkRight[i] = "player_walk_right_" + Integer.toString(i+1) + ".png";
+			animationWalkRight[i] = DIRECTORY + "player_walk_right_" + Integer.toString(i+1) + ".png";
 		}
 		for (int i = 0; i < totalImages; i++) {
-			animationWalkLeft[i] = "player_walk_left_" + Integer.toString(i+1) + ".png";
+			animationWalkLeft[i] = DIRECTORY + "player_walk_left_" + Integer.toString(i+1) + ".png";
 		}
 	}
 	public int getLives() {
@@ -99,29 +100,29 @@ public class Player {
 	}
 	public void playerStandingAnimation() {
 		if(speedX == 0) {
-			if(lastXDirection == PlayerMovement.RIGHT) player.setImage("player_standing_right.png");
-			else player.setImage("player_standing_left.png");
+			if(lastXDirection == PlayerMovement.RIGHT) player.setImage(DIRECTORY+"player_standing_right.png");
+			else player.setImage(DIRECTORY+"player_standing_left.png");
 			player.setSize(player.getWidth(), PLAYER_SIZE_Y);
 		}
 	}
 	public void playerJumpAnimation() {
 		if(lastXDirection == PlayerMovement.RIGHT) {
 			if(speedY < 0) {
-				player.setImage("player_jump_right_1.png");
+				player.setImage(DIRECTORY+"player_jump_right_1.png");
 				player.setSize(player.getWidth(), PLAYER_SIZE_Y);
 			}
 			if(speedY > 0) {
-				player.setImage("player_jump_right_2.png");
+				player.setImage(DIRECTORY+"player_jump_right_2.png");
 				player.setSize(player.getWidth(), PLAYER_SIZE_Y);
 			}			
 		}
 		if(lastXDirection == PlayerMovement.LEFT) {
 			if(speedY < 0) {
-				player.setImage("player_jump_left_1.png");
+				player.setImage(DIRECTORY+"player_jump_left_1.png");
 				player.setSize(player.getWidth(), PLAYER_SIZE_Y);
 			}
 			if(speedY > 0) {
-				player.setImage("player_jump_left_2.png");
+				player.setImage(DIRECTORY+"player_jump_left_2.png");
 				player.setSize(player.getWidth(), PLAYER_SIZE_Y);
 			}	
 		}
