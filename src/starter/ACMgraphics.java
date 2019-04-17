@@ -200,7 +200,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		return p.getSkin();
 	}
 	public GImage createEnemy(Enemy e) {
-		e.resetPosition();
 		return e.getSkin();
 	}
 
@@ -315,7 +314,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		checkBounds(player.getGImage());
 		SoundClip fx;
 		if(enemyCollisionDeath(player.getSpeedX(), player.getSpeedY())) {
-			System.out.println("bleh");
 			player.loseHealth(10);
 			if(player.getLives() == 0) {
 				tm.stop();
@@ -328,7 +326,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 				player.setSpeedX(-2*player.getSpeedX());
 			}
 			else {
-				System.out.println("YES");
 				player.playerDieAnimation();
 				fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[2]); //death
 				fx.setVolume(1);
@@ -338,7 +335,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			}
 		}
 		if(enemyBounce(player.getSpeedY())) {
-			System.out.println("NO");
 			fx = new SoundClip("sounds/" + SOUND_FILES[1]);
 			fx.setVolume(1);
 			fx.play();
@@ -437,7 +433,8 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			obs.resetLocation();
 		}
 		for(Enemy enem: level.getEnemyList()) {
-			enem.setCurrentPosition(enem.getSpawnPoint());
+			enem.resetPosition();
+			//enem.setCurrentPosition(enem.getSpawnPoint());
 		}
 
 	}
