@@ -41,7 +41,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	Timer tm = new Timer(10, this);
 	GObject collidingO;
 	private GLabel lives;
-	private GLabel powerups;
 	private int lastPressed;
 	boolean moving = false;
 
@@ -77,15 +76,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		lives.setColor(new Color(255,255,255));
 	}
 
-	public void updatePowerUps() {
-		try {
-			program.remove(powerups);
-		} catch(NullPointerException e) {}
-		powerups = new GLabel("Power-Ups: " + player.getPowerUps(), program.getGameWidth()-120, 50);
-		powerups.setFont("Arial-18");
-		powerups.setColor(new Color(255,255,255));
-	}
-
 	public void actionPerformed(ActionEvent e) {
 		player.setLastPos(new Position(player.getGImage().getX(), player.getGImage().getY()));
 		moveScreen();
@@ -101,6 +91,15 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		player.move();
 		player.playerAnimation();
 		playBackgroundMusic();
+		pitDeath();
+	}
+
+	private void pitDeath() {
+		if(player.getGImage().getY() + player.getGImage().getHeight() > program.WINDOW_HEIGHT) {
+			player.loseHealth(30);
+			checkForDeath();
+		}
+		
 	}
 
 	private boolean playerAtEnd() {
@@ -187,9 +186,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		program.add(player.getGImage());
 		player.setLastPos(player.getOriginalPosition());
 		updateLives();
-		updatePowerUps();
 		program.add(lives);
-		program.add(powerups);
 		if(player.getLives() == 3) {
 			score = System.currentTimeMillis();
 		}
@@ -315,24 +312,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		SoundClip fx;
 		if(enemyCollisionDeath(player.getSpeedX(), player.getSpeedY())) {
 			player.loseHealth(10);
-			if(player.getLives() == 0) {
-				tm.stop();
-				program.switchToMainMenu();
-			} 
-			else if(!player.isLifeLost()) {
-				fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[3]); //one hit
-				fx.setVolume(1);
-				fx.play();
-				player.setSpeedX(-2*player.getSpeedX());
-			}
-			else {
-				player.playerDieAnimation();
-				fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[2]); //death
-				fx.setVolume(1);
-				fx.play();
-				reset();
-				tm.start();
-			}
+			checkForDeath();
 		}
 		if(enemyBounce(player.getSpeedY())) {
 			fx = new SoundClip("sounds/" + SOUND_FILES[1]);
@@ -346,6 +326,28 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 				}
 			}
 
+		}
+	}
+
+	private void checkForDeath() {
+		SoundClip fx;
+		if(player.getLives() == 0) {
+			tm.stop();
+			program.switchToMainMenu();
+		} 
+		else if(!player.isLifeLost()) {
+			fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[3]); //one hit
+			fx.setVolume(1);
+			fx.play();
+			player.setSpeedX(-2*player.getSpeedX());
+		}
+		else {
+			player.playerDieAnimation();
+			fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[2]); //death
+			fx.setVolume(1);
+			fx.play();
+			reset();
+			tm.start();
 		}
 	}
 
@@ -411,7 +413,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private void clearScreen() {
 		program.removeAll();
 		program.remove(lives);
-		program.remove(powerups);
 	}
 
 	public void resetAll() {
@@ -447,7 +448,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		resetPositions();
 		player.reset();
 		updateLives();
-		updatePowerUps();
 
 		setupLevel(program);
 	}
@@ -467,7 +467,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 		program.add(player.getGImage());
 		program.add(lives);
-		program.add(powerups);
 		tm.start();
 	}
 
