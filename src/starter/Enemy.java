@@ -16,9 +16,16 @@ public class Enemy {
 	private boolean isJumping; 
 	private boolean canJump;
 	
+	private static final String DIRECTORY = System.getProperty("user.dir") + "/EnemyAnimations/";
+	private static final String skin = DIRECTORY + "enemy_walk_left_1.png";
 	private GImage enemy;
-	private static final String skin = "enemy.png";
 	private double dX;
+	private String[] animationWalkRight;
+	private double animationWalkRightFrame = 0;
+	private String[] animationWalkLeft;
+	private double animationWalkLeftFrame = 0;
+	private double animationSpeed = DX;
+	private int walkFrames = 6;
 	
 	/*
 	 * Constructor
@@ -33,9 +40,41 @@ public class Enemy {
 		this.setCanJump(false);
 		this.setdX(DX);
 		
-		
+		setWalkingAnimation();
 		enemy = new GImage(skin, p.getX(), p.getY());
 		enemy.setSize(s.getWidth(), s.getHeight());
+	}
+	/*
+	 * Animations
+	 */
+	private void setWalkingAnimation() {
+		int totalImages = walkFrames;
+		animationWalkRight = new String[totalImages];	
+		animationWalkLeft = new String[totalImages];	
+		for (int i = 0; i < totalImages; i++) {
+			animationWalkRight[i] = DIRECTORY + "enemy_walk_right_" + Integer.toString(i+1) + ".png";
+		}
+		for (int i = 0; i < totalImages; i++) {
+			animationWalkLeft[i] = DIRECTORY + "enemy_walk_left_" + Integer.toString(i+1) + ".png";
+		}
+	}
+	public void EnemyWalkRightNextFrame() {
+		if(dX > 0) {
+			animationWalkRightFrame+=animationSpeed/8;
+			enemy.setImage(animationWalkRight[(int)(animationWalkRightFrame%walkFrames)]);
+			enemy.setSize(enemy.getWidth(), size.getHeight());
+		}
+	}
+	public void EnemyWalkLeftNextFrame() {
+		if(dX < 0) {
+			animationWalkLeftFrame+=animationSpeed/8;
+			enemy.setImage(animationWalkLeft[(int)(animationWalkLeftFrame%walkFrames)]);
+			enemy.setSize(enemy.getWidth(), size.getHeight());
+		}
+	}
+	public void enemyAnimation() {
+		EnemyWalkLeftNextFrame();
+		EnemyWalkRightNextFrame();
 	}
 	/*
 	 * Enemy's movements
@@ -49,6 +88,7 @@ public class Enemy {
 			setdX(getdX() * -1);
 		}
 		enemy.move(getdX(), 0);
+		enemyAnimation();
 	}
 	
 	public void resetPosition() {
