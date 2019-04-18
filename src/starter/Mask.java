@@ -27,6 +27,18 @@ public class Mask {
 	public GImage getSkin() {
 		return mask;
 	}
+	
+	public void setPosition(Position p) {
+		spawnPosition = p;
+	}
+	
+	public Position getPosition() {
+		return spawnPosition;
+	}
+	
+	public void resetPosition() {
+		setPosition(spawnPosition);
+	}
 }
 
 
