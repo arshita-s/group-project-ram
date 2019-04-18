@@ -183,6 +183,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			program.add(powerup);
 		}
 		*/
+		
 		player = level.getPlayer();
 		program.add(player.getGImage());
 		player.setLastPos(player.getOriginalPosition());
@@ -315,21 +316,19 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		checkBounds(player.getGImage());
 		SoundClip fx;
 		if(enemyCollisionDeath(player.getSpeedX(), player.getSpeedY())) {
-			System.out.println("bleh");
 			player.loseHealth(10); 
 			if(player.getLives() == 0) {
 				tm.stop();
 				program.switchToMainMenu();
 			} 
 			else if(!player.isLifeLost()) {
-				fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[3]); //one hit
+				fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[3]);
 				fx.setVolume(1);
 				fx.play();
 				player.setSpeedX(-2*player.getSpeedX());
 			}
-			else {
-				System.out.println("YES");
-				fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[2]); //death
+			else if(player.isLifeLost()){
+				fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[2]);
 				fx.setVolume(1);
 				fx.play();
 				reset();
@@ -337,7 +336,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			}
 		}
 		if(enemyBounce(player.getSpeedY())) {
-			System.out.println("NO");
 			fx = new SoundClip("sounds/" + SOUND_FILES[1]);
 			fx.setVolume(1);
 			fx.play();
@@ -456,7 +454,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	//adds images to game
 	public void returnToGame() {
-		playBackgroundMusic();
 		backGround.setSize(program.GAME_WINDOW_WIDTH , program.getHeight());
 		program.add(backGround);
 		for(GObject obs: mapObstacles) {
