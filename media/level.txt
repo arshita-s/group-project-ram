@@ -1,63 +1,79 @@
+
 *Player xPosition yPosition
-Player 32 500
+Player 3210 0
 
 *Enemy health damage width length xPosition yPosition movesWithin
+Enemy 1 1 33 50 322 476 50
+Enemy 1 1 33 50 478 476 50
+Enemy 1 1 33 50 1005 303 50
+Enemy 1 1 33 50 1212 168 40
+Enemy 1 1 33 50 1420 168 50
+Enemy 1 1 33 50 1451 403 50
 
-Enemy 10 10 32 40 385 511 35
+Enemy 1 1 33 50 1844 71 50
+Enemy 1 1 33 50 1968 505 50
+Enemy 1 1 33 50 2287 54 50
 
-Enemy 10 10 32 40 1000 510 40
+*Obstacle width length movesBoolean xPosition yPosition xVelocity yVelocity instantDeathBoolean
+Obstacle 50 150 false 0 450 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 150 false 50 450 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 150 false 99 450 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 150 false 149 450 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 150 false 199 450 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 200 50 false 291 335 0 0 false purple_grass_dirt_4x1.png true
+Obstacle 50 150 false 248 527 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 150 false 296 527 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 150 false 345 527 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 150 false 395 527 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 150 false 444 527 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 150 false 494 527 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 150 false 543 527 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 300 false 593 480 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 300 false 643 480 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 50 false 515 290 0 0 false purple_grass_dirt_1x1.png true
+Obstacle 50 300 false 693 451 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 150 false 742 451 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 150 false 777 451 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 150 false 827 451 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 300 false 877 403 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 300 false 926 353 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 300 false 976 353 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 300 false 1026 353 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 300 false 1250 357 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 300 false 1299 406 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 300 false 1347 454 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 200 50 false 1272 218 0 0 false purple_grass_dirt_4x1.png true
+Obstacle 50 300 false 1550 1 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 150 false 1397 454 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 150 false 1447 454 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 150 false 1497 454 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 150 false 1546 454 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 150 false 1581 454 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 200 50 false 1154 218 0 0 false purple_grass_dirt_4x1.png true
+Obstacle 50 300 false 1076 405 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 50 false 820 240 0 0 false purple_grass_dirt_1x1.png true
+Obstacle 50 50 false 953 163 0 0 false purple_grass_dirt_1x1.png true
+Obstacle 50 300 false 1581 1 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 300 false 1631 429 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 300 false 1680 380 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 300 false 1729 332 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 300 50 false 1777 557 0 0 false purple_grass_dirt_6x1.png true
+Obstacle 50 150 false 1779 310 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 150 false 1828 310 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 150 false 1878 310 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 150 false 1927 278 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 150 false 1976 252 0 0 false purple_grass_dirt_1x3.png true
 
-*Obstacle width length movesBoolean xPosition yPosition xVelocity yVelocity instantDeath terrain visible
-
-Obstacle 5 600 false 0 0 0 0 false dirt_6x1.png true
-Obstacle 50 700 false 2370 0 0 0 false dirt_1x1.png true
-Obstacle 90 600 false 750 200 0 0 false dirt_1x1.png true
-
-
-Obstacle 400 50 false 0 551 0 0 false purple_grass_dirt_6x1.png true
-Obstacle 400 50 false 400 551 0 0 false purple_grass_dirt_6x1.png true
-Obstacle 50 50 false 304 503 0 0 false purple_grass_dirt_1x1.png true
-
-Obstacle 50 50 false 304 548 0 0 false dirt_1x1.png true
-Obstacle 50 50 false 447 503 0 0 false purple_grass_dirt_1x1.png true
-Obstacle 50 50 false 447 548 0 0 false dirt_1x1.png true
-
-Obstacle 400 50 false 194 345 0 0 false purple_grass_dirt_6x1.png true
-Obstacle 50 50 false 602 503 0 0 false purple_grass_dirt_1x1.png true
-Obstacle 50 50 false 602 548 0 0 false dirt_1x1.png true
-
-Obstacle 50 50 false 653 450 0 0 false purple_grass_dirt_1x1.png true
-Obstacle 50 50 false 695 399 0 0 false purple_grass_dirt_1x1.png true
-Obstacle 50 50 false 450 273 0 0 false purple_grass_dirt_1x1.png true
-Obstacle 50 50 false 360 199 0 0 false purple_grass_dirt_1x1.png true
-Obstacle 200 50 false 481 165 0 0 false purple_grass_dirt_6x1.png true
-Obstacle 200 50 false 677 165 0 0 false purple_grass_dirt_6x1.png true
-Obstacle 400 50 false 798 550 0 0 false dirt_6x1.png true
-
-
-Obstacle 50 50 false 974 4 0 0 false dirt_1x1.png true
-Obstacle 50 50 false 974 54 0 0 false dirt_1x1.png true
-Obstacle 50 50 false 974 104 0 0 false dirt_1x1.png true
-Obstacle 50 50 false 974 154 0 0 false dirt_1x1.png true
-Obstacle 50 50 false 974 203 0 0 false dirt_1x1.png true
-Obstacle 50 50 false 974 251 0 0 false dirt_1x1.png true
-Obstacle 50 50 false 974 300 0 0 false dirt_1x1.png true
-Obstacle 50 50 false 974 348 0 0 false dirt_1x1.png true
-Obstacle 50 50 false 974 393 0 0 false dirt_1x1.png true
-Obstacle 400 50 false 1274 550 0 0 false dirt_6x1.png true
-Obstacle 50 50 false 1208 379 0 0 false purple_grass_dirt_1x1.png true
-Obstacle 50 50 false 1309 503 0 0 false purple_grass_dirt_1x1.png true
-Obstacle 50 50 false 1388 358 0 0 false purple_grass_dirt_1x1.png true
-Obstacle 50 50 false 1482 503 0 0 false purple_grass_dirt_1x1.png true
-Obstacle 400 50 false 1672 550 0 0 false dirt_6x1.png true
-Obstacle 400 50 false 2000 550 0 0 false dirt_6x1.png true
-Obstacle 200 50 false 2144 177 0 0 false purple_grass_dirt_6x1.png true
-
-Obstacle 200 150 false 2144 70 0 0 false djoj.gif true
-Obstacle 50 50 false 2144 90 0 0 false djojgline.png true
-
-Obstacle 50 50 false 2303 501 0 0 false door.png true
-Obstacle 50 600 false 2300 0 0 0 false dirt_6x1.png false
-
-*PowerUp xPosition yPosition width height
-PowerUp 385 512 16 24
+Obstacle 200 50 false 1755 121 0 0 false purple_grass_dirt_4x1.png true
+Obstacle 50 50 false 2076 557 0 0 false purple_grass_dirt_1x1.png true
+Obstacle 50 150 false 2075 326 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 300 false 2075 151 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 300 false 2351 333 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 300 false 2350 244 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 300 false 2350 1 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 300 false 2301 319 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 300 false 2251 319 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 300 false 2301 105 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 300 false 2251 105 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 150 false 2026 276 0 0 false purple_grass_dirt_1x3.png true
+Obstacle 50 150 false 2026 198 0 0 false purple_grass_dirt_1x3.png true
