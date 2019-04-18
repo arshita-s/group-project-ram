@@ -88,7 +88,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			program.switchToScore((int)score);
 		}
 		processEnemyCollision();
-		//processMaskCollision();
+		processMaskCollision();
 		player.move();
 		player.playerAnimation();
 		playBackgroundMusic();
@@ -175,16 +175,14 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			i++;
 		}
 		
-		/* COMMENTED OUT BECAUSE NO IMAGE FILE YET
 		GImage mask;
 		i = 0;
 		for(Mask m: level.getMaskList()) {
-			mask = createMask(mask);
+			mask = createMask(m);
 			mapMasks[i] = mask;
 			program.add(mask);
 			i++;
 		}
-		*/
 		
 		player = level.getPlayer();
 		program.add(player.getGImage());
