@@ -60,13 +60,13 @@ public class Map {
 					Enemy temp = new Enemy(health, damage, new Size(width, height), new Position(xPos, yPos), movesWithin);
 					Enemies.add(temp);
 				}
-				if(str.contentEquals("PowerUp")) {
+				if(str.contentEquals("Mask")) {
 					int xPos = read.nextInt();
 					int yPos = read.nextInt();
 					int width = read.nextInt();
 					int height = read.nextInt();
-					Mask powerup = new Mask(new Position(xPos, yPos), new Size(width, height));
-					Masks.add(powerup);
+					Mask mask = new Mask(new Position(xPos, yPos), new Size(width, height));
+					Masks.add(mask);
 				}
 			}
 			read.close();
