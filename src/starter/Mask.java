@@ -2,17 +2,16 @@ package starter;
 
 import acm.graphics.GImage;
 
-public class PowerUp {
-	private static final int amtPower = 10;
+public class Mask {
 	private boolean taken;
 	public Position spawnPosition;
-	private GImage powerup;
+	private GImage mask;
 	private static final String skin = " ";
 	
-	public PowerUp(Position p, Size s) {
+	public Mask(Position p, Size s) {
 		taken = false;
-		powerup = new GImage(skin, p.getX(), p.getY());
-		powerup.setSize(s.getWidth(), s.getHeight());
+		mask = new GImage(skin, p.getX(), p.getY());
+		mask.setSize(s.getWidth(), s.getHeight());
 		
 	}
 	
@@ -24,12 +23,10 @@ public class PowerUp {
 		return taken;
 	}
 	
-	public int getPower() {
-		return amtPower;
-	}
 	
 	public GImage getSkin() {
-		return powerup;
+		return mask;
 	}
 }
+
 

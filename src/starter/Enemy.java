@@ -1,7 +1,5 @@
 package starter;
 
-import java.awt.Color;
-
 import acm.graphics.GImage;
 
 public class Enemy {
@@ -80,10 +78,10 @@ public class Enemy {
 	 * Enemy's movements
 	 */ 
 	public void move() {
-		Position newPos = spawnPosition;
-		/*if(spawnPosition.getX() > 800 && currentPosition.getX() < 800) {
+		Position newPos = new Position(spawnPosition.getX(), spawnPosition.getY());
+		if(spawnPosition.getX() > 800 && currentPosition.getX() < 800) {
 			newPos.setX(spawnPosition.getX() - 800);
-		}*/
+		}
 		if (currentPosition.getX() + dX > (newPos.getX() + movesWithin) || currentPosition.getX() + dX < (newPos.getX() - movesWithin)) {
 			setdX(getdX() * -1);
 		}
@@ -107,9 +105,11 @@ public class Enemy {
 	public int getSpawnHealth() {
 		return spawnHealth;
 	}
+
 	public void setSpawnHealth(int spawnHealth) {
 		this.spawnHealth = spawnHealth;
 	}
+	
 	public void setHealth(int health) {
 		this.health = health;
 	}
@@ -169,12 +169,15 @@ public class Enemy {
 	public void setCurrentPosition(Position currentPosition) {
 		this.currentPosition = currentPosition;
 	}
+	
 	public double getdX() {
 		return dX;
 	}
+	
 	public void setdX(double d) {
 		this.dX = d;
 	}
+	
 	public GImage getSkin() {
 		return enemy;
 	}

@@ -9,13 +9,13 @@ public class Map {
 	
 	private ArrayList<Obstacle> Obstacles;
 	private ArrayList<Enemy> Enemies;
-	private ArrayList<PowerUp> PowerUps;
+	private ArrayList<Mask> Masks;
 	private Player mainPlayer;
 	
 	public Map() {
 		Obstacles = new ArrayList<Obstacle>();
 		Enemies = new ArrayList<Enemy>();
-		PowerUps = new ArrayList<PowerUp>();
+		Masks = new ArrayList<Mask>();
 		this.readFromFile();
 	}
 	
@@ -65,8 +65,8 @@ public class Map {
 					int yPos = read.nextInt();
 					int width = read.nextInt();
 					int height = read.nextInt();
-					PowerUp powerup = new PowerUp(new Position(xPos, yPos), new Size(width, height));
-					PowerUps.add(powerup);
+					Mask powerup = new Mask(new Position(xPos, yPos), new Size(width, height));
+					Masks.add(powerup);
 				}
 			}
 			read.close();
@@ -84,7 +84,7 @@ public class Map {
 	public Player getPlayer() {
 		return mainPlayer;
 	}
-	public ArrayList<PowerUp> getPowerUpList() {
-		return PowerUps;
+	public ArrayList<Mask> getMaskList() {
+		return Masks;
 	}
 }

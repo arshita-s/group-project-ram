@@ -26,7 +26,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	private MainApplication program;
 	private ArrayList<GObject> mapObstacles;
-	private ArrayList<GObject> mapPowerUps;
+	private GImage[] mapMasks;
 	private GImage[] mapEnemies;
 	private Player player;
 	private Map level;
@@ -41,7 +41,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	Timer tm = new Timer(10, this);
 	GObject collidingO;
 	private GLabel lives;
-	private GLabel powerups;
 	private int lastPressed;
 	boolean moving = false;
 
@@ -59,7 +58,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		level = new Map();
 		mapObstacles = new ArrayList<GObject>();
 		mapEnemies = new GImage[level.getEnemyList().size()];
-		mapPowerUps = new ArrayList<GObject>();
+		mapMasks = new GImage[level.getMaskList().size()];
 		player = new Player(0, 0);
 	}
 
@@ -77,15 +76,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		lives.setColor(new Color(255,255,255));
 	}
 
-	public void updatePowerUps() {
-		try {
-			program.remove(powerups);
-		} catch(NullPointerException e) {}
-		powerups = new GLabel("Power-Ups: " + player.getPowerUps(), program.getGameWidth()-120, 50);
-		powerups.setFont("Arial-18");
-		powerups.setColor(new Color(255,255,255));
-	}
-
 	public void actionPerformed(ActionEvent e) {
 		player.setLastPos(new Position(player.getGImage().getX(), player.getGImage().getY()));
 		moveScreen();
@@ -98,9 +88,19 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			program.switchToScore((int)score);
 		}
 		processEnemyCollision();
+		//processMaskCollision();
 		player.move();
 		player.playerAnimation();
 		playBackgroundMusic();
+		pitDeath();
+	}
+
+	private void pitDeath() {
+		if(player.getGImage().getY() + player.getGImage().getHeight() > program.WINDOW_HEIGHT) {
+			player.loseHealth(30);
+			checkForDeath();
+		}
+		
 	}
 
 	private boolean playerAtEnd() {
@@ -176,31 +176,31 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 		
 		/* COMMENTED OUT BECAUSE NO IMAGE FILE YET
-		GImage powerup;
-		for(PowerUp power: level.getPowerUpList()) {
-			powerup = createPowerUp(power);
-			mapPowerUps.add(powerup);
-			program.add(powerup);
+		GImage mask;
+		i = 0;
+		for(Mask m: level.getMaskList()) {
+			mask = createMask(mask);
+			mapMasks[i] = mask;
+			program.add(mask);
+			i++;
 		}
 		*/
+		
 		player = level.getPlayer();
 		program.add(player.getGImage());
 		player.setLastPos(player.getOriginalPosition());
 		updateLives();
-		updatePowerUps();
 		program.add(lives);
-		program.add(powerups);
 		if(player.getLives() == 3) {
 			score = System.currentTimeMillis();
 		}
 	}
 
 	
-	public GImage createPowerUp(PowerUp p) {
+	public GImage createMask(Mask p) {
 		return p.getSkin();
 	}
 	public GImage createEnemy(Enemy e) {
-		e.resetPosition();
 		return e.getSkin();
 	}
 
@@ -315,30 +315,27 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		checkBounds(player.getGImage());
 		SoundClip fx;
 		if(enemyCollisionDeath(player.getSpeedX(), player.getSpeedY())) {
-			System.out.println("bleh");
-			player.loseHealth(10);
+			player.loseHealth(10); 
 			if(player.getLives() == 0) {
 				tm.stop();
 				program.switchToMainMenu();
 			} 
 			else if(!player.isLifeLost()) {
-				fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[3]); //one hit
+				fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[3]);
 				fx.setVolume(1);
 				fx.play();
 				player.setSpeedX(-2*player.getSpeedX());
 			}
-			else {
-				System.out.println("YES");
-				player.playerDieAnimation();
-				fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[2]); //death
+			else if(player.isLifeLost()){
+				fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[2]);
 				fx.setVolume(1);
 				fx.play();
 				reset();
 				tm.start();
 			}
+			checkForDeath();
 		}
 		if(enemyBounce(player.getSpeedY())) {
-			System.out.println("NO");
 			fx = new SoundClip("sounds/" + SOUND_FILES[1]);
 			fx.setVolume(1);
 			fx.play();
@@ -353,6 +350,83 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 	}
 
+	private void checkForDeath() {
+		SoundClip fx;
+		if(player.getLives() == 0) {
+			tm.stop();
+			program.switchToMainMenu();
+		} 
+		else if(!player.isLifeLost()) {
+			fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[3]); //one hit
+			fx.setVolume(1);
+			fx.play();
+			player.setSpeedX(-2*player.getSpeedX());
+		}
+		else {
+			player.playerDieAnimation();
+			fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[2]); //death
+			fx.setVolume(1);
+			fx.play();
+			reset();
+			tm.start();
+		}
+	}
+
+	private void processMaskCollision() {
+		if(maskCollision(player.getSpeedX(), player.getSpeedY())) {
+			//TODO SWITCH ANIMATION IMAGES OF THE PLAYER
+			program.remove(collidingO);
+		}
+	}
+	
+	private boolean maskCollision(double speedX, double speedY) {
+		for(GObject mask: mapMasks) {
+			if(mask != null) {
+				if(mask == program.getElementAt(pointNE.getX() + speedX, pointNE.getY() +1)) {
+					collidingO = program.getElementAt(pointNE.getX() + speedX, pointNE.getY()+1);
+					return true;
+				} else if(mask == program.getElementAt(pointNW.getX() + speedX, pointNW.getY()+1)) {
+					collidingO = program.getElementAt(pointNW.getX() + speedX, pointNW.getY()+1);
+					return true;
+				} else if(mask == program.getElementAt(pointSE.getX() + speedX, pointSE.getY()-1)) {
+					collidingO = program.getElementAt(pointSE.getX() + speedX, pointSE.getY()-1);
+					return true;
+				} else if(mask == program.getElementAt(pointSW.getX() + speedX, pointSW.getY()-1)) {
+					collidingO = program.getElementAt(pointSW.getX() + speedX, pointSW.getY()-1);
+					return true;
+				} else if(mask == program.getElementAt(pointNE.getX(), pointNE.getY() + speedY)) {
+					collidingO = program.getElementAt(pointNE.getX(), pointNE.getY() + speedY);
+					return true;
+				} else if(mask == program.getElementAt(pointNW.getX(), pointNW.getY() + speedY)) {
+					collidingO = program.getElementAt(pointNW.getX(), pointNW.getY() + speedY);
+					return true;
+				}  else if(mask == program.getElementAt(pointE.getX() + speedX, pointE.getY()-1)) {
+					collidingO = program.getElementAt(pointE.getX() + speedX, pointE.getY()-1);
+					return true;
+				} else if(mask == program.getElementAt(pointW.getX() + speedX, pointW.getY()-1)) {
+					collidingO = program.getElementAt(pointW.getX() + speedX, pointW.getY()-1);
+					return true;
+				} else if(mask == program.getElementAt(pointN.getX(), pointN.getY() + speedY)) {
+					collidingO = program.getElementAt(pointN.getX(), pointN.getY() + speedY);
+					return true;
+				} else if(mask == program.getElementAt(pointSE.getX(), pointSE.getY() + speedY)) {
+					collidingO = program.getElementAt(pointSE.getX(), pointSE.getY() + speedY);
+					player.getGImage().setLocation(pointNW.getX(), collidingO.getY() - player.getGImage().getHeight());
+					return true;
+				} else if(mask == program.getElementAt(pointSW.getX(), pointSW.getY() + speedY)) {
+					collidingO = program.getElementAt(pointSW.getX(), pointSW.getY() + speedY);
+					player.getGImage().setLocation(pointNW.getX(), collidingO.getY() - player.getGImage().getHeight());
+					return true;
+				} else if(mask == program.getElementAt(pointS.getX(), pointS.getY() + speedY)) {
+					collidingO = program.getElementAt(pointS.getX(), pointS.getY() + speedY);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	
 	//Returns true if player collided with enemy from every direction except top 
 	private boolean enemyCollisionDeath(double speedX, double speedY) {
 		for(GObject enem: mapEnemies) {
@@ -415,7 +489,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private void clearScreen() {
 		program.removeAll();
 		program.remove(lives);
-		program.remove(powerups);
 	}
 
 	public void resetAll() {
@@ -437,7 +510,8 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			obs.resetLocation();
 		}
 		for(Enemy enem: level.getEnemyList()) {
-			enem.setCurrentPosition(enem.getSpawnPoint());
+			enem.resetPosition();
+			//enem.setCurrentPosition(enem.getSpawnPoint());
 		}
 
 	}
@@ -450,14 +524,12 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		resetPositions();
 		player.reset();
 		updateLives();
-		updatePowerUps();
 
 		setupLevel(program);
 	}
 
 	//adds images to game
 	public void returnToGame() {
-		playBackgroundMusic();
 		backGround.setSize(program.GAME_WINDOW_WIDTH , program.getHeight());
 		program.add(backGround);
 		for(GObject obs: mapObstacles) {
@@ -470,7 +542,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 		program.add(player.getGImage());
 		program.add(lives);
-		program.add(powerups);
 		tm.start();
 	}
 
