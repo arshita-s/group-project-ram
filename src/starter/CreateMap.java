@@ -35,6 +35,7 @@ public class CreateMap extends GraphicsProgram {
 	private ArrayList<GObject> mapObstacles = new ArrayList<GObject>();
 	private ArrayList<GObject> mapPlayer = new ArrayList<GObject>();
 	private ArrayList<GObject> mapEnemies = new ArrayList<GObject>();
+	private ArrayList<GObject> mapMask = new ArrayList<GObject>();
 	private ArrayList<GObject> settings = new ArrayList<GObject>();
 	private int screen = 1;
 	private GObject toDrag;
@@ -64,7 +65,7 @@ public class CreateMap extends GraphicsProgram {
 		type.put(GImageType.PLAYER, getNewColor());
 		type.put(GImageType.ENEMY, getNewColor());
 		type.put(GImageType.OBSTACLE, getNewColor());
-		type.put(GImageType.POWERUP, getNewColor());
+		type.put(GImageType.MASK, getNewColor());
 	}
 	private Color getNewColor() {
 		colorCounter++;
@@ -106,9 +107,9 @@ public class CreateMap extends GraphicsProgram {
 		add(or2);
 		settings.add(or2);
 		
-		GImage or3 = new GImage("purple_grass_dirt_1x1.png" , PROGRAM_WIDTH + SPACE_BETWEEN_SETTINGS, bottomPointOf(or2) + SPACE_BETWEEN_SETTINGS);
-		or3.setSize(STANDARD_BLOCK_SIZE, STANDARD_BLOCK_SIZE*1);
-		or3.setColor(type.get(GImageType.OBSTACLE));
+		GImage or3 = new GImage("maniaxe_mask.png" , PROGRAM_WIDTH + SPACE_BETWEEN_SETTINGS, bottomPointOf(or2) + SPACE_BETWEEN_SETTINGS);
+		or3.setSize(STANDARD_BLOCK_SIZE * 2/3, STANDARD_BLOCK_SIZE*2/3);
+		or3.setColor(type.get(GImageType.MASK));
 		add(or3);
 		settings.add(or3);
 		
@@ -191,6 +192,7 @@ public class CreateMap extends GraphicsProgram {
 			mousePressedObstacle(e);
 			mousePressedPlayer(e);
 			mousePressedEnemy(e);
+			mousePressedMask(e);
 		}
 	}	
 	public void mousePressedObstacle(MouseEvent e) {
@@ -211,6 +213,12 @@ public class CreateMap extends GraphicsProgram {
 			duplicateToDrag();
 		}
 	}
+	public void mousePressedMask(MouseEvent e) {
+		toDrag = getElementAt(e.getX(), e.getY());
+		if (isMaskInSettings(e)) {
+			duplicateToDrag();
+		}
+	}
 	/*
 	 * 
 	 * 
@@ -220,6 +228,7 @@ public class CreateMap extends GraphicsProgram {
 		mouseDraggedObstacle(e);
 		mouseDraggedPlayer(e);
 		mouseDraggedEnemy(e);
+		mouseDraggedMask(e);
 	}
 	public void mouseDraggedObstacle(MouseEvent e) {
 		if (isObstacle(e)) {
@@ -242,6 +251,13 @@ public class CreateMap extends GraphicsProgram {
 			lastY = e.getY();
 		}
 	}
+	public void mouseDraggedMask(MouseEvent e) {
+		if (isMask(e)) {
+			toDrag.move((e.getX()-lastX), (e.getY()-lastY));
+			lastX = e.getX();
+			lastY = e.getY();
+		}
+	}
 	/*
 	 * 
 	 * 
@@ -251,6 +267,7 @@ public class CreateMap extends GraphicsProgram {
 		mouseReleasedObstacle(e);
 		mouseReleasedPlayer(e);
 		mouseReleasedEnemy(e);
+		mouseReleasedMask(e);
 		//prioritizeSettings();
 
 	}
@@ -284,6 +301,18 @@ public class CreateMap extends GraphicsProgram {
 			addEnemy(toDrag);
 		}
 	}
+	public void mouseReleasedMask(MouseEvent e) {
+		if (isMaskInSettings(e)) {
+			removeMask(toDrag);
+		}
+		if (isMaskInMap(e)) {
+			System.out.println("I am called");
+
+			removeMask(toDrag);
+			add(toDrag);
+			addMask(toDrag);
+		}
+	}
 	/*
 	 * 
 	 * 
@@ -306,6 +335,7 @@ public class CreateMap extends GraphicsProgram {
 			moveObstacles(+1);
 			movePlayer(+1);
 			moveEnemies(+1);
+			moveMask(+1);
 			screen--;
 		}
 	}
@@ -314,6 +344,7 @@ public class CreateMap extends GraphicsProgram {
 			moveObstacles(-1);
 			movePlayer(-1);
 			moveEnemies(-1);
+			moveMask(-1);
 			screen++;
 		}
 	}
@@ -331,7 +362,7 @@ public class CreateMap extends GraphicsProgram {
 		x.format("\n*Player xPosition yPosition\n");
 		for(GObject mP: mapPlayer) {
 			x.format("Player %d %d\n", 
-					(int)mP.getX(),  (int)mP.getY());
+					(int)mP.getX()+ (PROGRAM_WIDTH * (screen-1)),  (int)mP.getY()-TOP_SETTINGS_TAB_HEIGHT);
 		}
 		// Write enemy in file
 		x.format("\n*Enemy health damage width length xPosition yPosition movesWithin\n");
@@ -346,6 +377,12 @@ public class CreateMap extends GraphicsProgram {
 			x.format("Obstacle %d %d false %d %d 0 0 false %s true\n", 
 					(int)mO.getWidth(),  (int)mO.getHeight(), (int)mO.getX() + (PROGRAM_WIDTH * (screen-1)), 
 					(int)mO.getY()-TOP_SETTINGS_TAB_HEIGHT, filename(mO));
+		}
+		// Write mask to file
+		x.format("\n*Mask xPos yPos\n");
+		for(GObject mO: mapMask) {
+			x.format("Mask %d %d\n", 
+					(int)mO.getX()+ (PROGRAM_WIDTH * (screen-1)),  (int)mO.getY()-TOP_SETTINGS_TAB_HEIGHT);
 		}
 		x.close();
 	}
@@ -446,6 +483,38 @@ public class CreateMap extends GraphicsProgram {
 		mapEnemies.add(p);
 		add(p);
 	}
+	
+	//MASK
+	public boolean isMask(MouseEvent e) {
+		return (toDrag != null && toDrag instanceof GImage 
+				&& toDrag.getColor() == type.get(GImageType.MASK));
+	}
+	private boolean isMaskInMap(MouseEvent e) {
+		return (toDrag != null && toDrag instanceof GImage 
+				&& toDrag.getColor() == type.get(GImageType.MASK) && e.getY() > TOP_SETTINGS_TAB_HEIGHT);
+	}
+	public boolean isMaskInSettings(MouseEvent e) {
+		return (toDrag != null && toDrag instanceof GImage 
+				&& toDrag.getColor() == type.get(GImageType.MASK) && e.getY() <= TOP_SETTINGS_TAB_HEIGHT);
+	}
+	private void moveMask(int direction) {
+		for(GObject mM: mapMask) {
+			mM.move(PROGRAM_WIDTH * direction, 0);
+		}
+	}
+	private void removeMask(GObject p) {
+		mapMask.remove(p);
+		remove(p);
+	}
+	private void addMask(GObject p) {
+		mapMask.add(p);
+		add(p);
+	}
+	
+	
+	
+	
+	
 	
 	private boolean isSaveButton(MouseEvent e) {
 		return (toClick != null && toClick instanceof GImage 
