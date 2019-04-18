@@ -5,10 +5,9 @@ import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.HashMap;
 
-import acm.graphics.GLabel;
 import acm.graphics.GObject;
-import acm.graphics.GOval;
 
 /*
  * This class helps create maps. I still need to fix the obstacles skin but for now
@@ -22,9 +21,13 @@ import acm.graphics.GOval;
  */
 
 public class CreateMap extends GraphicsProgram {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final int PROGRAM_WIDTH = 800;
 	private static final int PROGRAM_HEIGHT = 600;
-	private static final double STANDARD_BLOCK_SIZE = PROGRAM_HEIGHT * 0.083;
+	private static final double STANDARD_BLOCK_SIZE = PROGRAM_HEIGHT * 0.08333333333333333333333333333;
 	private static final double SPACE_BETWEEN_SETTINGS = PROGRAM_WIDTH * 0.005;
 	private static final int TOP_SETTINGS_TAB_HEIGHT = (int) (STANDARD_BLOCK_SIZE + ( 2 * SPACE_BETWEEN_SETTINGS) ) * 2;
 	private static final String FILENAME = "levelCreated.txt";
@@ -33,21 +36,17 @@ public class CreateMap extends GraphicsProgram {
 	private ArrayList<GObject> mapPlayer = new ArrayList<GObject>();
 	private ArrayList<GObject> mapEnemies = new ArrayList<GObject>();
 	private ArrayList<GObject> settings = new ArrayList<GObject>();
-	private int screen = 1; // should equal 1 or more
+	private int screen = 1;
 	private GObject toDrag;
 	private GObject toClick;
 	private int lastX;
 	private int lastY;
 	private Formatter x;
-	private Color obstacleColor = Color.BLACK;
-	private Color playerColor = Color.YELLOW;
-	private Color enemyColor = Color.RED;
-	private Color moveLeftButtonColor = Color.ORANGE;
-	private Color moveRightButtonColor = Color.BLUE;
-	private Color saveButtonColor = Color.GREEN;
+	private HashMap<GImageType, Color> type = new HashMap<GImageType, Color>();
+	private static int colorCounter = 0;
 	
 	public void init() {
-		setSize(PROGRAM_WIDTH, PROGRAM_HEIGHT+TOP_SETTINGS_TAB_HEIGHT);
+		setSize(PROGRAM_WIDTH+TOP_SETTINGS_TAB_HEIGHT, PROGRAM_HEIGHT+TOP_SETTINGS_TAB_HEIGHT);
 		requestFocus();
 	}
 	public void run() {
@@ -55,70 +54,153 @@ public class CreateMap extends GraphicsProgram {
 		addMouseListeners();
 	}
 
+	private void setUpHashMap() {
+		type.put(GImageType.LEFT_BUTTON_SCREEN, getNewColor());
+		type.put(GImageType.RIGHT_BUTTON_SCREEN, getNewColor());
+		type.put(GImageType.LEFT_BUTTON_SETTINGS, getNewColor());
+		type.put(GImageType.RIGHT_BUTTON_SETTINGS, getNewColor());
+		type.put(GImageType.DOWNLOAD_BUTTON, getNewColor());
+		type.put(GImageType.SAVE_BUTTON, getNewColor());
+		type.put(GImageType.PLAYER, getNewColor());
+		type.put(GImageType.ENEMY, getNewColor());
+		type.put(GImageType.OBSTACLE, getNewColor());
+		type.put(GImageType.POWERUP, getNewColor());
+	}
+	private Color getNewColor() {
+		colorCounter++;
+		return new Color((colorCounter%255)%255, colorCounter%255, colorCounter/255);
+	}
+	private void setGImageType(GImage gI, GImageType gT) {
+		gI.setColor(type.get(gT));
+	}
+	private double row(int i) {
+		double row = (SPACE_BETWEEN_SETTINGS * i) + (i-1) * STANDARD_BLOCK_SIZE;
+		
+		return row;
+	}
 	private void setupSettings() {
-		// top tab settings
-		GRect settingsTab = new GRect(0, 0, PROGRAM_WIDTH, TOP_SETTINGS_TAB_HEIGHT);
-		settingsTab.setFilled(true);
-		settingsTab.setColor(Color.GRAY);
-		add(settingsTab);
+		setUpHashMap();
+		// top settings tab
+		GRect topST = new GRect(0, 0, PROGRAM_WIDTH, TOP_SETTINGS_TAB_HEIGHT);
+		topST.setFilled(true);
+		topST.setColor(Color.GRAY);
+		add(topST);
+		settings.add(topST);
+		
+		// right tab settings
+		GRect rightST = new GRect(800, 0, TOP_SETTINGS_TAB_HEIGHT, this.getHeight());
+		rightST.setFilled(true);
+		rightST.setColor(Color.GRAY);
+		add(rightST);
+		settings.add(rightST);
+		
+		GImage or1 = new GImage("purple_grass_dirt_1x6.png" , PROGRAM_WIDTH + SPACE_BETWEEN_SETTINGS, TOP_SETTINGS_TAB_HEIGHT + SPACE_BETWEEN_SETTINGS);
+		or1.setSize(STANDARD_BLOCK_SIZE, STANDARD_BLOCK_SIZE*6);
+		or1.setColor(type.get(GImageType.OBSTACLE));
+		add(or1);
+		settings.add(or1);
+		
+		GImage or2 = new GImage("purple_grass_dirt_1x3.png" , PROGRAM_WIDTH + SPACE_BETWEEN_SETTINGS, bottomPointOf(or1) + SPACE_BETWEEN_SETTINGS);
+		or2.setSize(STANDARD_BLOCK_SIZE, STANDARD_BLOCK_SIZE*3);
+		or2.setColor(type.get(GImageType.OBSTACLE));
+		add(or2);
+		settings.add(or2);
+		
+		GImage or3 = new GImage("purple_grass_dirt_1x1.png" , PROGRAM_WIDTH + SPACE_BETWEEN_SETTINGS, bottomPointOf(or2) + SPACE_BETWEEN_SETTINGS);
+		or3.setSize(STANDARD_BLOCK_SIZE, STANDARD_BLOCK_SIZE*1);
+		or3.setColor(type.get(GImageType.OBSTACLE));
+		add(or3);
+		settings.add(or3);
 		
 		//obstacle settings
-		GRect o1 = new GRect(SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS, STANDARD_BLOCK_SIZE, STANDARD_BLOCK_SIZE);
-		o1.setFilled(true);
-		o1.setColor(obstacleColor);
+		GImage o1 = new GImage("purple_grass_dirt_1x1.png", SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS);
+		o1.setSize(STANDARD_BLOCK_SIZE, STANDARD_BLOCK_SIZE);
+		setGImageType(o1, GImageType.OBSTACLE);
 		add(o1);
 		settings.add(o1);
 		
-		GRect o2 = new GRect( rightPointOf(o1) + SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS, PROGRAM_WIDTH/4, STANDARD_BLOCK_SIZE);
-		o2.setFilled(true);
-		o2.setColor(obstacleColor);
+		GImage o2 = new GImage("purple_grass_dirt_4x1.png" , rightPointOf(o1) + SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS); 
+		o2.setSize(STANDARD_BLOCK_SIZE*4, STANDARD_BLOCK_SIZE);
+		o2.setColor(type.get(GImageType.OBSTACLE));
 		add(o2);
 		settings.add(o2);
 		
-		GRect o3 = new GRect( rightPointOf(o2) + SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS, PROGRAM_WIDTH/2, STANDARD_BLOCK_SIZE);
-		o3.setFilled(true);
-		o3.setColor(obstacleColor);
+		GImage o3 = new GImage("purple_grass_dirt_6x1.png" , rightPointOf(o2) + SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS);
+		o3.setSize(STANDARD_BLOCK_SIZE*6, STANDARD_BLOCK_SIZE);
+		o3.setColor(type.get(GImageType.OBSTACLE));
 		add(o3);
 		settings.add(o3);
 		
+		
 		double rightSpaceLeft = PROGRAM_WIDTH - rightPointOf(o3);
 		double buttonSize = ( rightSpaceLeft - (SPACE_BETWEEN_SETTINGS * 4) ) / 3;
-		
-		//move left button
-		GOval moveLB = new GOval(rightPointOf(o3) + SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS, buttonSize, STANDARD_BLOCK_SIZE);
-		moveLB.setFilled(true);
-		moveLB.setColor(moveLeftButtonColor);
-		add(moveLB);
-		
-		//move right button
-		GOval moveRB = new GOval(rightPointOf(moveLB) + SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS, buttonSize, STANDARD_BLOCK_SIZE);
-		moveRB.setFilled(true);
-		moveRB.setColor(moveRightButtonColor);
-		add(moveRB);
-		
-		//save button
-		GOval saveButton = new GOval(rightPointOf(moveRB) + SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS, buttonSize, STANDARD_BLOCK_SIZE);
-		saveButton.setFilled(true);
-		saveButton.setColor(saveButtonColor);
-		add(saveButton);
-		
+
 		//player settings
 		int bodyHeight = (int) (STANDARD_BLOCK_SIZE);
 		int bodyWidth = (int) (0.6666666667 * bodyHeight);
-		GRect player = new GRect(SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS*2 + STANDARD_BLOCK_SIZE, bodyWidth, bodyHeight);
-		player.setFilled(true);
-		player.setColor(playerColor);
+		GImage player = new GImage(System.getProperty("user.dir") + "/PlayerAnimations/player_walk_right_1.png", rightPointOf(o3) + SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS);
+		player.setSize(bodyWidth, bodyHeight);
+		setGImageType(player, GImageType.PLAYER);
 		add(player);
+		settings.add(player);
 		
 		//enemy settings
-		GRect enemy = new GRect(rightPointOf(player) + SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS*2 + STANDARD_BLOCK_SIZE, bodyWidth, bodyHeight);
-		enemy.setFilled(true);
-		enemy.setColor(enemyColor);
+		GImage enemy = new GImage(System.getProperty("user.dir") + "/EnemyAnimations/enemy_walk_left_1.png", rightPointOf(player) + SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS);
+		enemy.setSize(bodyWidth, bodyHeight);
+		setGImageType(enemy, GImageType.ENEMY);
 		add(enemy);
+		settings.add(enemy);
+		
+		//move left button screen
+		GImage moveLB = new GImage("left_button_screen.png", rightPointOf(enemy) + SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS);
+		moveLB.setSize(buttonSize, STANDARD_BLOCK_SIZE);
+		setGImageType(moveLB, GImageType.LEFT_BUTTON_SCREEN);
+		add(moveLB);
+		settings.add(moveLB);
+		
+		//move right button screen
+		GImage moveRB = new GImage("right_button_screen.png", rightPointOf(moveLB) + SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS);
+		moveRB.setSize(buttonSize, STANDARD_BLOCK_SIZE);
+		setGImageType(moveRB, GImageType.RIGHT_BUTTON_SCREEN);
+		add(moveRB);
+		settings.add(moveRB);
+		
+		//save button
+		GImage saveButton = new GImage("save_button.png", rightPointOf(moveRB) + SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS);
+		saveButton.setSize(buttonSize, STANDARD_BLOCK_SIZE);
+		setGImageType(saveButton, GImageType.SAVE_BUTTON);
+		add(saveButton);
+		settings.add(saveButton);
+		
+		//download button
+		GImage downloadButton = new GImage("download_button.png", rightPointOf(moveRB) + SPACE_BETWEEN_SETTINGS, row(2));
+		downloadButton.setSize(buttonSize, STANDARD_BLOCK_SIZE);
+		setGImageType(downloadButton, GImageType.DOWNLOAD_BUTTON);
+		add(downloadButton);
+		settings.add(downloadButton);
+		
+		//move left button settings
+		GImage moveLBSs = new GImage("left_button_settings.png", rightPointOf(enemy) + SPACE_BETWEEN_SETTINGS, row(2));
+		moveLBSs.setSize(buttonSize, STANDARD_BLOCK_SIZE);
+		setGImageType(moveLBSs, GImageType.LEFT_BUTTON_SETTINGS);
+		add(moveLBSs);
+		settings.add(moveLBSs);
+		
+		//move right button settings
+		GImage moveRBSs = new GImage("right_button_settings.png", rightPointOf(moveLBSs) + SPACE_BETWEEN_SETTINGS, row(2));
+		moveRBSs.setSize(buttonSize, STANDARD_BLOCK_SIZE);
+		setGImageType(moveRBSs, GImageType.RIGHT_BUTTON_SETTINGS);
+		add(moveRBSs);
+		settings.add(moveRBSs);
 		
 		
 	}
-	
+	private void prioritizeSettings() {
+		for(GObject s: settings) {
+			remove(s);
+			add(s);
+		}
+	}
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if(e != null) {
@@ -156,6 +238,7 @@ public class CreateMap extends GraphicsProgram {
 		mouseDraggedObstacle(e);
 		mouseDraggedPlayer(e);
 		mouseDraggedEnemy(e);
+		prioritizeSettings();
 	}
 	public void mouseDraggedObstacle(MouseEvent e) {
 		if (isObstacle(e)) {
@@ -187,6 +270,7 @@ public class CreateMap extends GraphicsProgram {
 		mouseReleasedObstacle(e);
 		mouseReleasedPlayer(e);
 		mouseReleasedEnemy(e);
+		prioritizeSettings();
 		toDrag = null;
 	}
 	public void mouseReleasedObstacle(MouseEvent e) {
@@ -266,7 +350,7 @@ public class CreateMap extends GraphicsProgram {
 		x.format("\n*Player xPosition yPosition\n");
 		for(GObject mP: mapPlayer) {
 			x.format("Player %d %d\n", 
-					(int)mP.getWidth(),  (int)mP.getHeight());
+					(int)mP.getX(),  (int)mP.getY());
 		}
 		// Write enemy in file
 		x.format("\n*Enemy health damage width length xPosition yPosition movesWithin\n");
@@ -278,31 +362,41 @@ public class CreateMap extends GraphicsProgram {
 		// Write obstacle to file
 		x.format("\n*Obstacle width length movesBoolean xPosition yPosition xVelocity yVelocity instantDeathBoolean\n");
 		for(GObject mO: mapObstacles) {
-			x.format("Obstacle %d %d false %d %d 0 0 false\n", 
-					(int)mO.getWidth(),  (int)mO.getHeight(), 
-					(int)mO.getX() + (PROGRAM_WIDTH * (screen-1)), (int)mO.getY()-TOP_SETTINGS_TAB_HEIGHT);
+			x.format("Obstacle %d %d false %d %d 0 0 false %s true\n", 
+					(int)mO.getWidth(),  (int)mO.getHeight(), (int)mO.getX() + (PROGRAM_WIDTH * (screen-1)), 
+					(int)mO.getY()-TOP_SETTINGS_TAB_HEIGHT, filename(mO));
 		}
 		x.close();
 	}
-	private void duplicateToDrag() {
-		GRect d = new GRect(toDrag.getX(), toDrag.getY(), toDrag.getWidth(), toDrag.getHeight());
-		d.setFilled(true);
-		d.setColor(toDrag.getColor());
-		add(d);
+	private String filename(GObject mP) {
+		return "purple_grass_dirt_" + (int) mP.getWidth()/50 + "x" + (int) mP.getHeight()/50 + ".png";
+	}
+ 	private void duplicateToDrag() {
+		if (toDrag instanceof GRect) { 
+			GRect d = new GRect(toDrag.getX(), toDrag.getY(), toDrag.getWidth(), toDrag.getHeight());
+			d.setColor(toDrag.getColor());
+			add(d);
+		}
+		else if (toDrag instanceof GImage) {
+			GImage d = new GImage(((GImage) toDrag).getImage(), toDrag.getX(), toDrag.getY());
+			d.setSize(toDrag.getWidth(), toDrag.getHeight());
+			d.setColor(toDrag.getColor());
+			add(d);
+		}
 	}
 
 	//OBSTACLE
 	public boolean isObstacle(MouseEvent e) {
-		return (toDrag != null && toDrag instanceof GRect 
-				&& toDrag.getColor() == obstacleColor);
+		return (toDrag != null && toDrag instanceof GImage 
+				&& toDrag.getColor() == type.get(GImageType.OBSTACLE));
 	}
 	private boolean isObstacleInMap(MouseEvent e) {
-		return (toDrag != null && toDrag instanceof GRect 
-				&& toDrag.getColor() == obstacleColor && e.getY() > TOP_SETTINGS_TAB_HEIGHT);
+		return (toDrag != null && toDrag instanceof GImage 
+				&& toDrag.getColor() == type.get(GImageType.OBSTACLE) && e.getY() > TOP_SETTINGS_TAB_HEIGHT && e.getX() <= PROGRAM_WIDTH);
 	}
 	public boolean isObstacleInSettings(MouseEvent e) {
-		return (toDrag != null && toDrag instanceof GRect 
-				&& toDrag.getColor() == obstacleColor && e.getY() <= TOP_SETTINGS_TAB_HEIGHT);
+		return (toDrag != null && toDrag instanceof GImage 
+				&& toDrag.getColor() == type.get(GImageType.OBSTACLE) && (e.getY() <= TOP_SETTINGS_TAB_HEIGHT) || e.getX() > PROGRAM_WIDTH);
 	}
 	private void moveObstacles(int direction) {
 		for(GObject s: mapObstacles) {
@@ -320,16 +414,16 @@ public class CreateMap extends GraphicsProgram {
 	
 	//PLAYER
 	public boolean isPlayer(MouseEvent e) {
-		return (toDrag != null && toDrag instanceof GRect 
-				&& toDrag.getColor() == playerColor);
+		return (toDrag != null && toDrag instanceof GImage 
+				&& toDrag.getColor() == type.get(GImageType.PLAYER));
 	}
 	private boolean isPlayerInMap(MouseEvent e) {
-		return (toDrag != null && toDrag instanceof GRect 
-				&& toDrag.getColor() == playerColor && e.getY() > TOP_SETTINGS_TAB_HEIGHT);
+		return (toDrag != null && toDrag instanceof GImage 
+				&& toDrag.getColor() == type.get(GImageType.PLAYER) && e.getY() > TOP_SETTINGS_TAB_HEIGHT);
 	}
 	public boolean isPlayerInSettings(MouseEvent e) {
-		return (toDrag != null && toDrag instanceof GRect 
-				&& toDrag.getColor() == playerColor && e.getY() <= TOP_SETTINGS_TAB_HEIGHT);
+		return (toDrag != null && toDrag instanceof GImage 
+				&& toDrag.getColor() == type.get(GImageType.PLAYER) && e.getY() <= TOP_SETTINGS_TAB_HEIGHT);
 	}
 	private void movePlayer(int direction) {
 		for(GObject mP: mapPlayer) {
@@ -347,16 +441,16 @@ public class CreateMap extends GraphicsProgram {
 	
 	//ENEMY
 	public boolean isEnemy(MouseEvent e) {
-		return (toDrag != null && toDrag instanceof GRect 
-				&& toDrag.getColor() == enemyColor);
+		return (toDrag != null && toDrag instanceof GImage 
+				&& toDrag.getColor() == type.get(GImageType.ENEMY));
 	}
 	private boolean isEnemyInMap(MouseEvent e) {
-		return (toDrag != null && toDrag instanceof GRect 
-				&& toDrag.getColor() == enemyColor && e.getY() > TOP_SETTINGS_TAB_HEIGHT);
+		return (toDrag != null && toDrag instanceof GImage 
+				&& toDrag.getColor() == type.get(GImageType.ENEMY) && e.getY() > TOP_SETTINGS_TAB_HEIGHT);
 	}
 	public boolean isEnemyInSettings(MouseEvent e) {
-		return (toDrag != null && toDrag instanceof GRect 
-				&& toDrag.getColor() == enemyColor && e.getY() <= TOP_SETTINGS_TAB_HEIGHT);
+		return (toDrag != null && toDrag instanceof GImage 
+				&& toDrag.getColor() == type.get(GImageType.ENEMY) && e.getY() <= TOP_SETTINGS_TAB_HEIGHT);
 	}
 	private void moveEnemies(int direction) {
 		for(GObject mE: mapEnemies) {
@@ -373,19 +467,22 @@ public class CreateMap extends GraphicsProgram {
 	}
 	
 	private boolean isSaveButton(MouseEvent e) {
-		return (toClick != null && toClick instanceof GOval 
-				&&  toClick.getColor() == saveButtonColor && e.getY() <= TOP_SETTINGS_TAB_HEIGHT);
+		return (toClick != null && toClick instanceof GImage 
+				&&  toClick.getColor() == type.get(GImageType.SAVE_BUTTON) && e.getY() <= TOP_SETTINGS_TAB_HEIGHT);
 	}
 	private boolean isMoveLeftButton(MouseEvent e) {
-		return (toClick != null && toClick instanceof GOval 
-				&&  toClick.getColor() == moveLeftButtonColor && e.getY() <= TOP_SETTINGS_TAB_HEIGHT);
+		return (toClick != null && toClick instanceof GImage 
+				&&  toClick.getColor() == type.get(GImageType.LEFT_BUTTON_SCREEN) && e.getY() <= TOP_SETTINGS_TAB_HEIGHT);
 	}
 	private boolean isMoveRightButton(MouseEvent e) {
-		return (toClick != null && toClick instanceof GOval 
-				&&  toClick.getColor() == moveRightButtonColor && e.getY() <= TOP_SETTINGS_TAB_HEIGHT);
+		return (toClick != null && toClick instanceof GImage 
+				&&  toClick.getColor() == type.get(GImageType.RIGHT_BUTTON_SCREEN) && e.getY() <= TOP_SETTINGS_TAB_HEIGHT);
 	}
 	private double rightPointOf(GObject o) {
 		return (o.getX() + o.getWidth());
+	}
+	private double bottomPointOf(GObject o) {
+		return (o.getY() + o.getHeight());
 	}
 
 }
