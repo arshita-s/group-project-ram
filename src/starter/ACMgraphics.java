@@ -482,8 +482,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	//Going to game from main menu
 	public void resetAll() {
-		currentLevelNumber = 1;
-		previousLevelNumber = 1;
 		level.readFromFile(currentLevelNumber);
 		resetArrayLists();
 		resetPositions();
@@ -527,6 +525,11 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		updateLives();
 
 		setupLevel(program);
+	}
+	
+	public void resetLevelNumbers() {
+		currentLevelNumber = 1;
+		previousLevelNumber = 1;
 	}
 
 	//adds images to game

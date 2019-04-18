@@ -37,6 +37,7 @@ public class MainApplication extends GraphicsApplication {
 			game.returnToGame();
 		} else {
 			if(temp.equals(mainMenu)) {
+				game.resetLevelNumbers();
 				game.resetAll();
 			} else {
 				game.nextLevel();
