@@ -88,7 +88,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			program.switchToScore((int)score);
 		}
 		processEnemyCollision();
-		//processMaskCollision();
+		processMaskCollision();
 		player.move();
 		player.playerAnimation();
 		playBackgroundMusic();
@@ -175,16 +175,14 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			i++;
 		}
 		
-		/* COMMENTED OUT BECAUSE NO IMAGE FILE YET
 		GImage mask;
 		i = 0;
 		for(Mask m: level.getMaskList()) {
-			mask = createMask(mask);
+			mask = createMask(m);
 			mapMasks[i] = mask;
 			program.add(mask);
 			i++;
 		}
-		*/
 		
 		player = level.getPlayer();
 		program.add(player.getGImage());
@@ -316,23 +314,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		SoundClip fx;
 		if(enemyCollisionDeath(player.getSpeedX(), player.getSpeedY())) {
 			player.loseHealth(10); 
-			if(player.getLives() == 0) {
-				tm.stop();
-				program.switchToMainMenu();
-			} 
-			else if(!player.isLifeLost()) {
-				fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[3]);
-				fx.setVolume(1);
-				fx.play();
-				player.setSpeedX(-2*player.getSpeedX());
-			}
-			else if(player.isLifeLost()){
-				fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[2]);
-				fx.setVolume(1);
-				fx.play();
-				reset();
-				tm.start();
-			}
 			checkForDeath();
 		}
 		if(enemyBounce(player.getSpeedY())) {
@@ -352,6 +333,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	private void checkForDeath() {
 		SoundClip fx;
+		System.out.println(player.isLifeLost());
 		if(player.getLives() == 0) {
 			tm.stop();
 			program.switchToMainMenu();
@@ -363,7 +345,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			player.setSpeedX(-2*player.getSpeedX());
 		}
 		else {
-			player.playerDieAnimation();
 			fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[2]); //death
 			fx.setVolume(1);
 			fx.play();
@@ -374,7 +355,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	private void processMaskCollision() {
 		if(maskCollision(player.getSpeedX(), player.getSpeedY())) {
-			//TODO SWITCH ANIMATION IMAGES OF THE PLAYER
+			player.ninjaTransformationPlayer();
 			program.remove(collidingO);
 		}
 	}
