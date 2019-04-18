@@ -26,7 +26,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	private MainApplication program;
 	private ArrayList<GObject> mapObstacles;
-	private ArrayList<GObject> mapMasks;
+	private GImage[] mapMasks;
 	private GImage[] mapEnemies;
 	private Player player;
 	private Map level;
@@ -58,7 +58,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		level = new Map();
 		mapObstacles = new ArrayList<GObject>();
 		mapEnemies = new GImage[level.getEnemyList().size()];
-		mapMasks = new ArrayList<GObject>();
+		mapMasks = new GImage[level.getMaskList().size()];
 		player = new Player(0, 0);
 	}
 
@@ -88,6 +88,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			program.switchToScore((int)score);
 		}
 		processEnemyCollision();
+		//processMaskCollision();
 		player.move();
 		player.playerAnimation();
 		playBackgroundMusic();
@@ -176,10 +177,12 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		
 		/* COMMENTED OUT BECAUSE NO IMAGE FILE YET
 		GImage mask;
+		i = 0;
 		for(Mask m: level.getMaskList()) {
 			mask = createMask(mask);
-			mapMasks.add(mask);
+			mapMasks[i] = mask;
 			program.add(mask);
+			i++;
 		}
 		*/
 		
@@ -369,6 +372,61 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 	}
 
+	private void processMaskCollision() {
+		if(maskCollision(player.getSpeedX(), player.getSpeedY())) {
+			//TODO SWITCH ANIMATION IMAGES OF THE PLAYER
+			program.remove(collidingO);
+		}
+	}
+	
+	private boolean maskCollision(double speedX, double speedY) {
+		for(GObject mask: mapMasks) {
+			if(mask != null) {
+				if(mask == program.getElementAt(pointNE.getX() + speedX, pointNE.getY() +1)) {
+					collidingO = program.getElementAt(pointNE.getX() + speedX, pointNE.getY()+1);
+					return true;
+				} else if(mask == program.getElementAt(pointNW.getX() + speedX, pointNW.getY()+1)) {
+					collidingO = program.getElementAt(pointNW.getX() + speedX, pointNW.getY()+1);
+					return true;
+				} else if(mask == program.getElementAt(pointSE.getX() + speedX, pointSE.getY()-1)) {
+					collidingO = program.getElementAt(pointSE.getX() + speedX, pointSE.getY()-1);
+					return true;
+				} else if(mask == program.getElementAt(pointSW.getX() + speedX, pointSW.getY()-1)) {
+					collidingO = program.getElementAt(pointSW.getX() + speedX, pointSW.getY()-1);
+					return true;
+				} else if(mask == program.getElementAt(pointNE.getX(), pointNE.getY() + speedY)) {
+					collidingO = program.getElementAt(pointNE.getX(), pointNE.getY() + speedY);
+					return true;
+				} else if(mask == program.getElementAt(pointNW.getX(), pointNW.getY() + speedY)) {
+					collidingO = program.getElementAt(pointNW.getX(), pointNW.getY() + speedY);
+					return true;
+				}  else if(mask == program.getElementAt(pointE.getX() + speedX, pointE.getY()-1)) {
+					collidingO = program.getElementAt(pointE.getX() + speedX, pointE.getY()-1);
+					return true;
+				} else if(mask == program.getElementAt(pointW.getX() + speedX, pointW.getY()-1)) {
+					collidingO = program.getElementAt(pointW.getX() + speedX, pointW.getY()-1);
+					return true;
+				} else if(mask == program.getElementAt(pointN.getX(), pointN.getY() + speedY)) {
+					collidingO = program.getElementAt(pointN.getX(), pointN.getY() + speedY);
+					return true;
+				} else if(mask == program.getElementAt(pointSE.getX(), pointSE.getY() + speedY)) {
+					collidingO = program.getElementAt(pointSE.getX(), pointSE.getY() + speedY);
+					player.getGImage().setLocation(pointNW.getX(), collidingO.getY() - player.getGImage().getHeight());
+					return true;
+				} else if(mask == program.getElementAt(pointSW.getX(), pointSW.getY() + speedY)) {
+					collidingO = program.getElementAt(pointSW.getX(), pointSW.getY() + speedY);
+					player.getGImage().setLocation(pointNW.getX(), collidingO.getY() - player.getGImage().getHeight());
+					return true;
+				} else if(mask == program.getElementAt(pointS.getX(), pointS.getY() + speedY)) {
+					collidingO = program.getElementAt(pointS.getX(), pointS.getY() + speedY);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	
 	//Returns true if player collided with enemy from every direction except top 
 	private boolean enemyCollisionDeath(double speedX, double speedY) {
 		for(GObject enem: mapEnemies) {
