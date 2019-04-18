@@ -1,5 +1,4 @@
 package starter;
-import java.awt.Color;
 
 import acm.graphics.GImage;
 
