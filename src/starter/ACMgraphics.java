@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.Timer;
@@ -341,7 +340,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	private void checkForDeath() {
 		SoundClip fx;
-		System.out.println(player.isLifeLost());
 		if(player.getLives() == 0) {
 			tm.stop();
 			program.switchToMainMenu();
