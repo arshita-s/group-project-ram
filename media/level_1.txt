@@ -11,7 +11,8 @@ Enemy 10 10 32 40 1000 510 40
 
 Obstacle 5 600 false 0 0 0 0 false dirt_6x1.png true
 Obstacle 50 700 false 2370 0 0 0 false dirt_1x1.png true
-Obstacle 90 600 false 750 200 0 0 false dirt_1x1.png true
+Obstacle 90 150 false 750 170 0 0 false dirt_1x3.png true
+.Obstacle 90 300 false 750 450 0 0 false dirt_1x3.png true
 
 
 Obstacle 400 50 false 0 551 0 0 false purple_grass_dirt_6x1.png true
@@ -60,4 +61,4 @@ Obstacle 50 50 false 2303 501 0 0 false door.png true
 Obstacle 50 600 false 2300 0 0 0 false dirt_6x1.png false
 
 *Mask xPosition yPosition width height
-Mask 220 512 40 40
+Mask 150 510 30 30

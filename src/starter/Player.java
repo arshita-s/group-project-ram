@@ -205,6 +205,7 @@ public class Player {
 		calculateLives();
 		setPowerUps(0);
 		djojTransformationPlayer();
+		System.out.println("DJddd");
 	}
 
 	//Resets all characteristics except health
@@ -220,6 +221,7 @@ public class Player {
 		calculateLives();
 		setPowerUps(0);
 		djojTransformationPlayer();
+		System.out.println("DJ");
 	}
 
 	private void calculateLives() {

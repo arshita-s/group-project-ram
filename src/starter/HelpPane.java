@@ -11,9 +11,9 @@ public class HelpPane extends GraphicsPane{
 
 	private static final int numHelpElements = 6;
 	private int XLabel = 110;
-	private int YLabel = 250;
+	private int YLabel = 275;
 	private int XImage = 100;
-	private int YImage = 160;
+	private int YImage = 185;
 	private MainApplication program;
 	private GLabel title;
 	private GButton backToMenu;
@@ -44,7 +44,7 @@ public class HelpPane extends GraphicsPane{
 			images.add(i, image);
 			elements.add(i, label);
 			if(i == 3) {
-				XLabel+=30;
+				XLabel+=40;
 			}
 			XLabel+=170;
 			XImage+=170;

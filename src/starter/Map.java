@@ -62,7 +62,7 @@ public class Map {
 					Enemy temp = new Enemy(health, damage, new Size(width, height), new Position(xPos, yPos), movesWithin);
 					Enemies.add(temp);
 				}
-				if(str.contentEquals("Mask")) {
+				if(str.equals("Mask")) {
 					int xPos = read.nextInt();
 					int yPos = read.nextInt();
 					int width = read.nextInt();

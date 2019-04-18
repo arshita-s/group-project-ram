@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.Timer;
@@ -122,6 +121,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			player.getGImage().setLocation(BOUND + player.getGImage().getWidth(), player.getGImage().getY());
 			moveMapObstacles(-program.getWidth());
 			moveMapEnemies(-program.getWidth());
+			moveMapMasks(-program.getWidth());
 		}
 		if(player.getGImage().getX() < BOUND) {
 			player.getGImage().setLocation(player.getGImage().getX() + 5, player.getGImage().getY());
@@ -233,6 +233,14 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 	}
 
+	private void moveMapMasks(double distance) {
+		for(int i = 0; i < mapMasks.length; i++) {
+			GObject m = mapMasks[i];
+			m.move(distance, 0);
+			level.getMaskList().get(i).setCurrentPosition(new Position((int) m.getX(), (int) m.getY()));
+		}
+	}
+	
 	//Logic for colliding with obstacles
 	private void processObstacleCollision() {
 		checkBounds(player.getGImage());
@@ -350,7 +358,12 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[3]); //one hit
 			fx.setVolume(1);
 			fx.play();
-			player.setSpeedX(-2*player.getSpeedX());
+			if(player.getSpeedX() == 0) {
+				player.setSpeedX(-2);
+			}
+			else {
+				player.setSpeedX(-2*player.getSpeedX());
+			}
 		}
 		else {
 			tm.stop();
@@ -492,6 +505,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private void resetArrayLists() {
 		mapObstacles.clear();
 		mapEnemies = new GImage[level.getEnemyList().size()];
+		mapMasks = new GImage[level.getMaskList().size()];
 
 	}
 
@@ -503,6 +517,9 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		for(Enemy enem: level.getEnemyList()) {
 			enem.resetPosition();
 			//enem.setCurrentPosition(enem.getSpawnPoint());
+		}
+		for(Mask m: level.getMaskList()) {
+			m.resetPosition();
 		}
 
 	}
