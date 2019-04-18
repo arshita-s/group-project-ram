@@ -146,6 +146,12 @@ public class Player {
 		animationDieFrame++;
 
 	}
+	
+	public void ninjaTransformationPlayer() {
+		SPEED_DX = .4;
+		SPEED_DY = .7;
+	}
+	
 	public void setLives(int l) {
 		lives = l;
 	}

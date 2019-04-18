@@ -372,7 +372,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	private void processMaskCollision() {
 		if(maskCollision(player.getSpeedX(), player.getSpeedY())) {
-			//TODO SWITCH ANIMATION IMAGES OF THE PLAYER
+			player.ninjaTransformationPlayer();
 			program.remove(collidingO);
 		}
 	}
