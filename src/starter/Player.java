@@ -30,7 +30,7 @@ public class Player {
 	private int health;
 	private int powerUps;
 	private boolean lostLife;
-	
+
 	private static final String DIRECTORY = System.getProperty("user.dir") + "/PlayerAnimations/";
 	private static final String skin = DIRECTORY+"player_standing_right.png";
 	private String[] animationWalkRight;
@@ -38,10 +38,9 @@ public class Player {
 	private String[] animationWalkLeft;
 	private double animationWalkLeftFrame = 0;
 	private String[] animationDie;
-	private int animationDieFrame = 0;
 	private double animationSpeed = SPEED_DX;
 	private PlayerMovement lastXDirection = PlayerMovement.RIGHT;
-	
+
 
 	/*
 	 * Constructor
@@ -65,21 +64,21 @@ public class Player {
 		int totalImages = 9;
 		animationWalkRight = new String[totalImages];	
 		animationWalkLeft = new String[totalImages];
-		animationDie = new String[totalImages];
+		animationDie = new String[6];
 		for (int i = 0; i < totalImages; i++) {
 			animationWalkRight[i] = DIRECTORY + "player_walk_right_" + Integer.toString(i+1) + ".png";
 		}
 		for (int i = 0; i < totalImages; i++) {
 			animationWalkLeft[i] = DIRECTORY + "player_walk_left_" + Integer.toString(i+1) + ".png";
 		}
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < animationDie.length; i++) {
 			animationDie[i] = DIRECTORY + "player_die_" + Integer.toString(i+1) + ".png";
 		}
 	}
 	public int getLives() {
 		return lives;
 	}
-//player.setImage(animationWalkRight[frame]);
+	//player.setImage(animationWalkRight[frame]);
 	public int getHealth() {
 		return health;
 	}
@@ -135,16 +134,16 @@ public class Player {
 		}
 	}
 	public void playerDieAnimation() {
-		System.out.println(animationDie[animationDieFrame%7]);
-		player.setImage(animationDie[animationDieFrame]);
-		player.setSize(player.getWidth(), PLAYER_SIZE_Y);
-		for(double j=0; j<10; j+=0.001) {
-			for(double k=0; k<2; k+=0.001) {
-				System.out.print("");
+		//System.out.println(animationDie[animationDieFrame%7]);
+		for(int i = 0; i < animationDie.length; i++) {
+			player.setImage(animationDie[i]);
+			player.setSize(player.getWidth(), PLAYER_SIZE_Y);
+			for(double j=0; j<10; j+=0.01) {
+				for(double k=0; k<2; k+=0.1) {
+					System.out.print("");
+				}
 			}
 		}
-		animationDieFrame++;
-
 	}
 	public void setLives(int l) {
 		lives = l;
@@ -181,7 +180,7 @@ public class Player {
 	public void setCurrentPosition(Position p) {
 		currentPosition = p;
 	}
-	
+
 	//Resets all characteristics of player
 	public void resetAll() {
 		player = new GImage(skin, currentPosition.getX(), currentPosition.getY());
@@ -195,7 +194,7 @@ public class Player {
 		calculateLives();
 		setPowerUps(0);
 	}
-	
+
 	//Resets all characteristics except health
 	//Used after player loses a life
 	public void reset() {
@@ -218,7 +217,7 @@ public class Player {
 	public boolean lostALife(int after) {
 		return after < lives && after < STARTING_HEALTH / LIFE_VARIABLE;
 	}
-	
+
 	public void addForce() {
 		if (currentJump == PlayerJump.JUMP && onGround) {
 			speedY -= JUMP;
@@ -236,15 +235,15 @@ public class Player {
 			speedX = Math.max(speedX - SPEED_DX, -MAX_SPEED);
 		}
 	}
-	
+
 	public boolean isLifeLost() {
 		return lostLife;
 	}
-	
+
 	public void setLifeLost(boolean b) {
 		lostLife = b;
 	}
-	
+
 	public void loseHealth(int health) {
 		setHealth(getHealth() - health);
 		calculateLives();
@@ -261,7 +260,7 @@ public class Player {
 			speedY = Math.min(speedY + SPEED_DY / 3, MAX_GRAVITY);
 		}
 	}
-	
+
 
 	/*
 	 * Setters and Getters below.
@@ -281,7 +280,7 @@ public class Player {
 	public Position getPosition() {
 		return currentPosition;
 	}
-	
+
 	public Position getOriginalPosition() {
 		return originalPosition;
 	}
@@ -313,15 +312,15 @@ public class Player {
 	public double getSpeedY() {
 		return speedY;
 	}
-	
+
 	public boolean getOnGround() {
 		return onGround;
 	}
-	
+
 	public void setOnGround(boolean og) {
 		onGround = og;
 	}
-	
+
 	public double getJumpSpeed() {
 		return JUMP;
 	}

@@ -20,10 +20,11 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private static final String BACKGROUND = "background.png";
 	private GImage backGround = new GImage(BACKGROUND, 0, 0);
 	private static final int BOUND = 5;
-	private static final int STARTING_SCORE = 1000;
+	private static final int STARTING_SCORE = 2000;
+	private static final int LAST_LEVEL = 1;
 	
+	private int levelNumber;
 	private long score;
-
 	private MainApplication program;
 	private ArrayList<GObject> mapObstacles;
 	private GImage[] mapMasks;
@@ -55,6 +56,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	public ACMgraphics(MainApplication app) {
 		super();
 		this.program = app;
+		levelNumber = 1;
 		level = new Map();
 		mapObstacles = new ArrayList<GObject>();
 		mapEnemies = new GImage[level.getEnemyList().size()];
@@ -156,6 +158,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	public void setupLevel(MainApplication program) {
+		level.readFromFile(levelNumber);
 		backGround.setSize(program.GAME_WINDOW_WIDTH , program.getHeight());
 		program.add(backGround);
 		GImage obstacle;
@@ -315,24 +318,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		checkBounds(player.getGImage());
 		SoundClip fx;
 		if(enemyCollisionDeath(player.getSpeedX(), player.getSpeedY())) {
-			player.loseHealth(10); 
-			if(player.getLives() == 0) {
-				tm.stop();
-				program.switchToMainMenu();
-			} 
-			else if(!player.isLifeLost()) {
-				fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[3]);
-				fx.setVolume(1);
-				fx.play();
-				player.setSpeedX(-2*player.getSpeedX());
-			}
-			else if(player.isLifeLost()){
-				fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[2]);
-				fx.setVolume(1);
-				fx.play();
-				reset();
-				tm.start();
-			}
+			player.loseHealth(30); 
 			checkForDeath();
 		}
 		if(enemyBounce(player.getSpeedY())) {
@@ -363,6 +349,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			player.setSpeedX(-2*player.getSpeedX());
 		}
 		else {
+			tm.stop();
 			player.playerDieAnimation();
 			fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[2]); //death
 			fx.setVolume(1);
@@ -425,7 +412,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 		return false;
 	}
-	
 	
 	//Returns true if player collided with enemy from every direction except top 
 	private boolean enemyCollisionDeath(double speedX, double speedY) {
@@ -515,6 +501,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 
 	}
+	
+	public void nextLevel() {
+		
+	}
 
 	//redraw from level text file with less life
 	//Used after losing a life. Currently has the player restart the level with one less life
@@ -545,6 +535,9 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		tm.start();
 	}
 
+	public boolean isLastLevel() {
+		return levelNumber == LAST_LEVEL;
+	}
 
 	private void playBackgroundMusic() {
 		AudioPlayer audio = AudioPlayer.getInstance();
@@ -571,9 +564,4 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 		stopBackgroundMusic();
 	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-
-	}	
 }

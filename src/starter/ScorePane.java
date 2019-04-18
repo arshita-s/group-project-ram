@@ -46,7 +46,7 @@ public class ScorePane extends GraphicsPane{
 		if(obj == backToMenu) {
 			program.switchToMainMenu();
 		} else if(obj == next) {
-			//program.switchToGame();
+			program.switchToGame();
 		}
 	}
 	
@@ -54,4 +54,11 @@ public class ScorePane extends GraphicsPane{
 		num.setLabel("" + score);
 	}
 	
+	public void removeNextButton() {
+		try {
+			program.remove(next);
+		} catch(NullPointerException e) {
+			
+		}
+	}
 }

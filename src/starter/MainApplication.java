@@ -1,4 +1,6 @@
 package starter;
+
+
 public class MainApplication extends GraphicsApplication {
 	public static final int WINDOW_WIDTH = 600;
 	public static final int WINDOW_HEIGHT = 600;
@@ -36,6 +38,8 @@ public class MainApplication extends GraphicsApplication {
 		} else {
 			if(temp.equals(mainMenu)) {
 				game.resetAll();
+			} else {
+				game.nextLevel();
 			}
 			switchToScreen(game);
 		}
@@ -57,6 +61,9 @@ public class MainApplication extends GraphicsApplication {
 	public void switchToScore(int score_num) {
 		score.setScore(score_num);
 		switchToScreen(score);
+		if(game.isLastLevel()) {
+			score.removeNextButton();
+		}
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	}
 }

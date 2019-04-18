@@ -5,7 +5,8 @@ import java.io.*;
 
 public class Map {
 
-	private static final String FILENAME = "level.txt";
+	private static final String FILENAME = "level_";
+	private static final String EXTENSION = ".txt";
 	
 	private ArrayList<Obstacle> Obstacles;
 	private ArrayList<Enemy> Enemies;
@@ -16,13 +17,14 @@ public class Map {
 		Obstacles = new ArrayList<Obstacle>();
 		Enemies = new ArrayList<Enemy>();
 		Masks = new ArrayList<Mask>();
-		this.readFromFile();
+		this.readFromFile(1);
 	}
 	
-	public void readFromFile() {
+	public void readFromFile(int level) {
+		this.resetAllLists();
 		File file = new File("");
 		try {
-			file = new File(System.getProperty("user.dir") + "//" + FILENAME);
+			file = new File(System.getProperty("user.dir") + "//" + FILENAME + level + EXTENSION);
 			Scanner read = new Scanner(new FileReader(file));
 			
 			while(read.hasNextLine()) {
@@ -73,6 +75,12 @@ public class Map {
 		} catch (Exception e) {
 			
 		}
+	}
+	
+	public void resetAllLists() {
+		Obstacles = new ArrayList<Obstacle>();
+		Enemies = new ArrayList<Enemy>();
+		Masks = new ArrayList<Mask>();
 	}
 	
 	public ArrayList<Obstacle> getObstacleList() {
