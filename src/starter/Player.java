@@ -148,7 +148,12 @@ public class Player {
 	
 	public void ninjaTransformationPlayer() {
 		SPEED_DX = .4;
-		SPEED_DY = .7;
+		JUMP = 8;
+	}
+	
+	public void djojTransformationPlayer() {
+		SPEED_DX = .2;
+		JUMP = 7;
 	}
 	
 	public void setLives(int l) {
@@ -199,6 +204,7 @@ public class Player {
 		setHealth(STARTING_HEALTH);
 		calculateLives();
 		setPowerUps(0);
+		djojTransformationPlayer();
 	}
 
 	//Resets all characteristics except health
@@ -213,6 +219,7 @@ public class Player {
 		setCurrentJump(PlayerJump.STAND);
 		calculateLives();
 		setPowerUps(0);
+		djojTransformationPlayer();
 	}
 
 	private void calculateLives() {

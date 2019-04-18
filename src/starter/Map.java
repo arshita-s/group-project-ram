@@ -78,9 +78,9 @@ public class Map {
 	}
 	
 	public void resetAllLists() {
-		Obstacles = new ArrayList<Obstacle>();
-		Enemies = new ArrayList<Enemy>();
-		Masks = new ArrayList<Mask>();
+		Obstacles.clear();
+		Enemies.clear();
+		Masks.clear();
 	}
 	
 	public ArrayList<Obstacle> getObstacleList() {
