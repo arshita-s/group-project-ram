@@ -29,7 +29,7 @@ public class CreateMap extends GraphicsProgram {
 	private static final int PROGRAM_HEIGHT = 600;
 	private static final double STANDARD_BLOCK_SIZE = PROGRAM_HEIGHT * 0.08333333333333333333333333333;
 	private static final double SPACE_BETWEEN_SETTINGS = PROGRAM_WIDTH * 0.005;
-	private static final int TOP_SETTINGS_TAB_HEIGHT = (int) (STANDARD_BLOCK_SIZE + ( 2 * SPACE_BETWEEN_SETTINGS) ) * 2;
+	private static final int TOP_SETTINGS_TAB_HEIGHT = (int) (STANDARD_BLOCK_SIZE + ( 2 * SPACE_BETWEEN_SETTINGS) ) * 1;
 	private static final String FILENAME = "levelCreated.txt";
 	
 	private ArrayList<GObject> mapObstacles = new ArrayList<GObject>();
@@ -138,6 +138,7 @@ public class CreateMap extends GraphicsProgram {
 		//player settings
 		int bodyHeight = (int) (STANDARD_BLOCK_SIZE);
 		int bodyWidth = (int) (0.6666666667 * bodyHeight);
+		
 		GImage player = new GImage(System.getProperty("user.dir") + "/PlayerAnimations/player_walk_right_1.png", rightPointOf(o3) + SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS);
 		player.setSize(bodyWidth, bodyHeight);
 		setGImageType(player, GImageType.PLAYER);
@@ -150,7 +151,8 @@ public class CreateMap extends GraphicsProgram {
 		setGImageType(enemy, GImageType.ENEMY);
 		add(enemy);
 		settings.add(enemy);
-		
+	
+		buttonSize *= .9;
 		//move left button screen
 		GImage moveLB = new GImage("left_button_screen.png", rightPointOf(enemy) + SPACE_BETWEEN_SETTINGS, SPACE_BETWEEN_SETTINGS);
 		moveLB.setSize(buttonSize, STANDARD_BLOCK_SIZE);
@@ -172,26 +174,6 @@ public class CreateMap extends GraphicsProgram {
 		add(saveButton);
 		settings.add(saveButton);
 		
-		//download button
-		GImage downloadButton = new GImage("download_button.png", rightPointOf(moveRB) + SPACE_BETWEEN_SETTINGS, row(2));
-		downloadButton.setSize(buttonSize, STANDARD_BLOCK_SIZE);
-		setGImageType(downloadButton, GImageType.DOWNLOAD_BUTTON);
-		add(downloadButton);
-		settings.add(downloadButton);
-		
-		//move left button settings
-		GImage moveLBSs = new GImage("left_button_settings.png", rightPointOf(enemy) + SPACE_BETWEEN_SETTINGS, row(2));
-		moveLBSs.setSize(buttonSize, STANDARD_BLOCK_SIZE);
-		setGImageType(moveLBSs, GImageType.LEFT_BUTTON_SETTINGS);
-		add(moveLBSs);
-		settings.add(moveLBSs);
-		
-		//move right button settings
-		GImage moveRBSs = new GImage("right_button_settings.png", rightPointOf(moveLBSs) + SPACE_BETWEEN_SETTINGS, row(2));
-		moveRBSs.setSize(buttonSize, STANDARD_BLOCK_SIZE);
-		setGImageType(moveRBSs, GImageType.RIGHT_BUTTON_SETTINGS);
-		add(moveRBSs);
-		settings.add(moveRBSs);
 		
 		
 	}
@@ -238,7 +220,6 @@ public class CreateMap extends GraphicsProgram {
 		mouseDraggedObstacle(e);
 		mouseDraggedPlayer(e);
 		mouseDraggedEnemy(e);
-		prioritizeSettings();
 	}
 	public void mouseDraggedObstacle(MouseEvent e) {
 		if (isObstacle(e)) {
@@ -270,8 +251,8 @@ public class CreateMap extends GraphicsProgram {
 		mouseReleasedObstacle(e);
 		mouseReleasedPlayer(e);
 		mouseReleasedEnemy(e);
-		prioritizeSettings();
-		toDrag = null;
+		//prioritizeSettings();
+
 	}
 	public void mouseReleasedObstacle(MouseEvent e) {
 		if (isObstacleInSettings(e)) {
@@ -453,17 +434,17 @@ public class CreateMap extends GraphicsProgram {
 				&& toDrag.getColor() == type.get(GImageType.ENEMY) && e.getY() <= TOP_SETTINGS_TAB_HEIGHT);
 	}
 	private void moveEnemies(int direction) {
-		for(GObject mE: mapEnemies) {
-			mE.move(PROGRAM_WIDTH * direction, 0);
+		for(GObject mP: mapEnemies) {
+			mP.move(PROGRAM_WIDTH * direction, 0);
 		}
 	}
-	private void removeEnemy(GObject e) {
-		mapEnemies.remove(e);
-		remove(e);
+	private void removeEnemy(GObject p) {
+		mapEnemies.remove(p);
+		remove(p);
 	}
-	private void addEnemy(GObject e) {
-		mapEnemies.add(e);
-		add(e);
+	private void addEnemy(GObject p) {
+		mapEnemies.add(p);
+		add(p);
 	}
 	
 	private boolean isSaveButton(MouseEvent e) {
