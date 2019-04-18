@@ -341,6 +341,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	private void checkForDeath() {
 		SoundClip fx;
+		System.out.println(player.isLifeLost());
 		if(player.getLives() == 0) {
 			tm.stop();
 			program.switchToMainMenu();
@@ -353,7 +354,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 		else {
 			tm.stop();
-			player.playerDieAnimation();
 			fx = new SoundClip(MUSIC_FOLDER +"/" + SOUND_FILES[2]); //death
 			fx.setVolume(1);
 			fx.play();
@@ -364,7 +364,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	private void processMaskCollision() {
 		if(maskCollision(player.getSpeedX(), player.getSpeedY())) {
-			//TODO SWITCH ANIMATION IMAGES OF THE PLAYER
+			player.ninjaTransformationPlayer();
 			program.remove(collidingO);
 		}
 	}
