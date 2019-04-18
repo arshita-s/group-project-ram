@@ -84,7 +84,7 @@ public class Map {
 	public Player getPlayer() {
 		return mainPlayer;
 	}
-	public ArrayList<Mask> getPowerUpList() {
+	public ArrayList<Mask> getMaskList() {
 		return Masks;
 	}
 }

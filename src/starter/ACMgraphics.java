@@ -175,11 +175,11 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		}
 		
 		/* COMMENTED OUT BECAUSE NO IMAGE FILE YET
-		GImage powerup;
-		for(PowerUp power: level.getPowerUpList()) {
-			powerup = createPowerUp(power);
-			mapPowerUps.add(powerup);
-			program.add(powerup);
+		GImage mask;
+		for(Mask m: level.getMaskList()) {
+			mask = createMask(mask);
+			mapMasks.add(mask);
+			program.add(mask);
 		}
 		*/
 		
@@ -194,7 +194,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	
-	public GImage createPowerUp(Mask p) {
+	public GImage createMask(Mask p) {
 		return p.getSkin();
 	}
 	public GImage createEnemy(Enemy e) {

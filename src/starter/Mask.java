@@ -3,7 +3,6 @@ package starter;
 import acm.graphics.GImage;
 
 public class Mask {
-	private static final int amtPower = 10;
 	private boolean taken;
 	public Position spawnPosition;
 	private GImage mask;
@@ -24,9 +23,6 @@ public class Mask {
 		return taken;
 	}
 	
-	public int getPower() {
-		return amtPower;
-	}
 	
 	public GImage getSkin() {
 		return mask;
