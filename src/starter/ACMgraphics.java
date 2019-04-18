@@ -503,7 +503,8 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 	
 	public void nextLevel() {
-		
+		levelNumber++;
+		setupLevel(program);
 	}
 
 	//redraw from level text file with less life
