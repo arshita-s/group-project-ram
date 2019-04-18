@@ -218,11 +218,11 @@ public class Player {
 
 	private void calculateLives() {
 		lostLife = lostALife(getHealth()/LIFE_VARIABLE);
-		setLives((int)(getHealth()/LIFE_VARIABLE));
+		setLives((getHealth()/LIFE_VARIABLE));
 	}
 
 	public boolean lostALife(int after) {
-		return after < lives && after < STARTING_HEALTH / LIFE_VARIABLE;
+		return after < lives;
 	}
 	
 	public void addForce() {
