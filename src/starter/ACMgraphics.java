@@ -23,7 +23,8 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private static final int STARTING_SCORE = 2000;
 	private static final int LAST_LEVEL = 1;
 	
-	private int levelNumber;
+	private int currentLevelNumber;
+	private int previousLevelNumber;
 	private long score;
 	private MainApplication program;
 	private ArrayList<GObject> mapObstacles;
@@ -56,7 +57,8 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	public ACMgraphics(MainApplication app) {
 		super();
 		this.program = app;
-		levelNumber = 1;
+		previousLevelNumber = 1;
+		currentLevelNumber = 1;
 		level = new Map();
 		mapObstacles = new ArrayList<GObject>();
 		mapEnemies = new GImage[level.getEnemyList().size()];
@@ -90,7 +92,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			program.switchToScore((int)score);
 		}
 		processEnemyCollision();
-		//processMaskCollision();
+		processMaskCollision();
 		player.move();
 		player.playerAnimation();
 		playBackgroundMusic();
@@ -122,9 +124,10 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			moveMapEnemies(-program.getWidth());
 		}
 		if(player.getGImage().getX() < BOUND) {
-			player.getGImage().setLocation(program.getWidth() - BOUND - player.getGImage().getWidth(), player.getGImage().getY());
+			player.getGImage().setLocation(player.getGImage().getX() + 5, player.getGImage().getY());
+			/*player.getGImage().setLocation(program.getWidth() - BOUND - player.getGImage().getWidth(), player.getGImage().getY());
 			moveMapObstacles(program.getWidth());
-			moveMapEnemies(program.getWidth());
+			moveMapEnemies(program.getWidth());*/
 		}
 	}
 
@@ -158,7 +161,9 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	public void setupLevel(MainApplication program) {
-		level.readFromFile(levelNumber);
+		if(previousLevelNumber != currentLevelNumber) {
+			level.readFromFile(currentLevelNumber);
+		}
 		backGround.setSize(program.GAME_WINDOW_WIDTH , program.getHeight());
 		program.add(backGround);
 		GImage obstacle;
@@ -178,16 +183,14 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 			i++;
 		}
 		
-		/* COMMENTED OUT BECAUSE NO IMAGE FILE YET
 		GImage mask;
 		i = 0;
 		for(Mask m: level.getMaskList()) {
-			mask = createMask(mask);
+			mask = createMask(m);
 			mapMasks[i] = mask;
 			program.add(mask);
 			i++;
 		}
-		*/
 		
 		player = level.getPlayer();
 		program.add(player.getGImage());
@@ -318,7 +321,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		checkBounds(player.getGImage());
 		SoundClip fx;
 		if(enemyCollisionDeath(player.getSpeedX(), player.getSpeedY())) {
-			player.loseHealth(30); 
+			player.loseHealth(10);
 			checkForDeath();
 		}
 		if(enemyBounce(player.getSpeedY())) {
@@ -503,7 +506,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 	
 	public void nextLevel() {
-		levelNumber++;
+		currentLevelNumber++;
 		setupLevel(program);
 	}
 
@@ -537,7 +540,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	}
 
 	public boolean isLastLevel() {
-		return levelNumber == LAST_LEVEL;
+		return currentLevelNumber == LAST_LEVEL;
 	}
 
 	private void playBackgroundMusic() {
