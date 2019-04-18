@@ -6,7 +6,7 @@ public class Mask {
 	private boolean taken;
 	public Position spawnPosition;
 	private GImage mask;
-	private static final String skin = " ";
+	private static final String skin = "maniaxe_mask.png";
 	
 	public Mask(Position p, Size s) {
 		taken = false;
