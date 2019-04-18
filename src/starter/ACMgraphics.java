@@ -21,7 +21,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	private GImage backGround = new GImage(BACKGROUND, 0, 0);
 	private static final int BOUND = 5;
 	private static final int STARTING_SCORE = 2000;
-	private static final int LAST_LEVEL = 1;
+	private static final int LAST_LEVEL = 2;
 	
 	private int currentLevelNumber;
 	private int previousLevelNumber;
@@ -164,6 +164,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		if(previousLevelNumber != currentLevelNumber) {
 			level.readFromFile(currentLevelNumber);
 		}
+		resetArrayLists();
 		backGround.setSize(program.GAME_WINDOW_WIDTH , program.getHeight());
 		program.add(backGround);
 		GImage obstacle;
@@ -341,7 +342,6 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	private void checkForDeath() {
 		SoundClip fx;
-		System.out.println(player.isLifeLost());
 		if(player.getLives() == 0) {
 			tm.stop();
 			program.switchToMainMenu();
@@ -480,7 +480,11 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 		program.remove(lives);
 	}
 
+	//Going to game from main menu
 	public void resetAll() {
+		currentLevelNumber = 1;
+		previousLevelNumber = 1;
+		level.readFromFile(currentLevelNumber);
 		resetArrayLists();
 		resetPositions();
 		player.resetAll();
@@ -507,12 +511,15 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 	
 	public void nextLevel() {
 		currentLevelNumber++;
-		setupLevel(program);
+		resetArrayLists();
+		resetPositions();
+		player.resetAll();
 	}
 
 	//redraw from level text file with less life
 	//Used after losing a life. Currently has the player restart the level with one less life
 	private void reset() {
+		previousLevelNumber = currentLevelNumber;
 		program.removeAll();
 		resetArrayLists();
 		resetPositions();
@@ -561,6 +568,7 @@ public class ACMgraphics extends GraphicsPane implements ActionListener, KeyList
 
 	@Override
 	public void hideContents() {
+		previousLevelNumber = currentLevelNumber;
 		tm.stop();
 		clearScreen();
 		if(lastPressed != KeyEvent.VK_ESCAPE) {

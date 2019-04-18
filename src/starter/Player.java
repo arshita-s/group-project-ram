@@ -148,7 +148,7 @@ public class Player {
 	
 	public void ninjaTransformationPlayer() {
 		SPEED_DX = .4;
-		SPEED_DY = .7;
+		JUMP = 8;
 	}
 	
 	public void setLives(int l) {
