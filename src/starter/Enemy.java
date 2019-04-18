@@ -79,8 +79,8 @@ public class Enemy {
 	 */ 
 	public void move() {
 		Position newPos = new Position(spawnPosition.getX(), spawnPosition.getY());
-		if(spawnPosition.getX() > 800 && currentPosition.getX() < 800) {
-			newPos.setX(spawnPosition.getX() - 800);
+		while(newPos.getX() > 800 && currentPosition.getX() < 800) {
+			newPos.setX(newPos.getX() - 800);
 		}
 		if (currentPosition.getX() + dX > (newPos.getX() + movesWithin) || currentPosition.getX() + dX < (newPos.getX() - movesWithin)) {
 			setdX(getdX() * -1);
