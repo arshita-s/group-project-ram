@@ -1,5 +1,5 @@
 *Player xPosition yPosition
-Player 32 500
+Player 20 500
 
 *Enemy health damage width length xPosition yPosition movesWithin
 
@@ -11,7 +11,10 @@ Enemy 10 10 32 40 1000 510 40
 
 Obstacle 5 600 false 0 0 0 0 false dirt_6x1.png true
 Obstacle 50 700 false 2370 0 0 0 false dirt_1x1.png true
-Obstacle 90 150 false 750 170 0 0 false dirt_1x3.png true
+Obstacle 50 150 false 755 170 0 0 false dirt_1x3.png true
+Obstacle 50 150 false 755 320 0 0 false dirt_1x3.png true
+Obstacle 50 150 false 755 470 0 0 false dirt_1x3.png true
+
 .Obstacle 90 300 false 750 450 0 0 false dirt_1x3.png true
 
 
@@ -27,13 +30,16 @@ Obstacle 400 50 false 194 345 0 0 false purple_grass_dirt_6x1.png true
 Obstacle 50 50 false 602 503 0 0 false purple_grass_dirt_1x1.png true
 Obstacle 50 50 false 602 548 0 0 false dirt_1x1.png true
 
-Obstacle 50 50 false 653 450 0 0 false purple_grass_dirt_1x1.png true
-Obstacle 50 50 false 695 399 0 0 false purple_grass_dirt_1x1.png true
+Obstacle 50 50 false 653 399 0 0 false purple_grass_dirt_1x1.png true
 Obstacle 50 50 false 450 273 0 0 false purple_grass_dirt_1x1.png true
 Obstacle 50 50 false 360 199 0 0 false purple_grass_dirt_1x1.png true
-Obstacle 200 50 false 481 165 0 0 false purple_grass_dirt_6x1.png true
-Obstacle 200 50 false 677 165 0 0 false purple_grass_dirt_6x1.png true
-Obstacle 400 50 false 798 550 0 0 false dirt_6x1.png true
+Obstacle 200 50 false 481 165 0 0 false purple_grass_dirt_4x1.png true
+Obstacle 200 50 false 581 215 0 0 false dirt_4x1.png true
+
+Obstacle 200 50 false 677 165 0 0 false purple_grass_dirt_4x1.png true
+Obstacle 300 50 false 798 550 0 0 false dirt_6x1.png true
+Obstacle 100 50 false 1098 550 0 0 false dirt_2x1.png true
+
 
 
 Obstacle 50 50 false 974 4 0 0 false dirt_1x1.png true
@@ -48,6 +54,7 @@ Obstacle 50 50 false 974 393 0 0 false dirt_1x1.png true
 Obstacle 400 50 false 1274 550 0 0 false dirt_6x1.png true
 Obstacle 50 50 false 1208 379 0 0 false purple_grass_dirt_1x1.png true
 Obstacle 50 50 false 1309 503 0 0 false purple_grass_dirt_1x1.png true
+Enemy 10 10 32 40 1398 510 30
 Obstacle 50 50 false 1388 358 0 0 false purple_grass_dirt_1x1.png true
 Obstacle 50 50 false 1482 503 0 0 false purple_grass_dirt_1x1.png true
 Obstacle 400 50 false 1672 550 0 0 false dirt_6x1.png true
