@@ -13,7 +13,7 @@ public class Player {
 	private static double SPEED_DY = .605;
 	private static int MAX_GRAVITY = 10;
 	private static double JUMP = 7;
-	private static final int PLAYER_SIZE_X = 50;
+	private static final int PLAYER_SIZE_X = 28;
 	private static final int PLAYER_SIZE_Y = 50;
 	private static final int STARTING_HEALTH = 110;
 	private static final int LIFE_VARIABLE = 30;
@@ -94,7 +94,7 @@ public class Player {
 			lastXDirection = PlayerMovement.RIGHT;
 			animationWalkRightFrame+=animationSpeed;
 			player.setImage(animationWalkRight[(int)(animationWalkRightFrame%8)]);
-			player.setSize(player.getWidth(), PLAYER_SIZE_Y);
+			player.setSize(PLAYER_SIZE_X, PLAYER_SIZE_Y);
 		}
 	}
 	public void playerWalkLeftNextFrame() {
@@ -102,35 +102,35 @@ public class Player {
 			lastXDirection = PlayerMovement.LEFT;
 			animationWalkLeftFrame+=animationSpeed;
 			player.setImage(animationWalkLeft[(int)(animationWalkLeftFrame%8)]);
-			player.setSize(player.getWidth(), PLAYER_SIZE_Y);
+			player.setSize(PLAYER_SIZE_X, PLAYER_SIZE_Y);
 		}
 	}
 	public void playerStandingAnimation() {
 		if(speedX == 0) {
 			if(lastXDirection == PlayerMovement.RIGHT) player.setImage(DIRECTORY+skinType + "_standing_right.png");
 			else player.setImage(DIRECTORY+ skinType + "_standing_left.png");
-			player.setSize(player.getWidth(), PLAYER_SIZE_Y);
+			player.setSize(PLAYER_SIZE_X, PLAYER_SIZE_Y);
 		}
 	}
 	public void playerJumpAnimation() {
 		if(lastXDirection == PlayerMovement.RIGHT) {
 			if(speedY < 0) {
 				player.setImage(DIRECTORY+ skinType + "_jump_right_1.png");
-				player.setSize(player.getWidth(), PLAYER_SIZE_Y);
+				player.setSize(PLAYER_SIZE_X, PLAYER_SIZE_Y);
 			}
 			if(speedY > 0) {
 				player.setImage(DIRECTORY+ skinType + "_jump_right_2.png");
-				player.setSize(player.getWidth(), PLAYER_SIZE_Y);
+				player.setSize(PLAYER_SIZE_X, PLAYER_SIZE_Y);
 			}			
 		}
 		if(lastXDirection == PlayerMovement.LEFT) {
 			if(speedY < 0) {
 				player.setImage(DIRECTORY+skinType + "_jump_left_1.png");
-				player.setSize(player.getWidth(), PLAYER_SIZE_Y);
+				player.setSize(PLAYER_SIZE_X, PLAYER_SIZE_Y);
 			}
 			if(speedY > 0) {
 				player.setImage(DIRECTORY+skinType + "_jump_left_2.png");
-				player.setSize(player.getWidth(), PLAYER_SIZE_Y);
+				player.setSize(PLAYER_SIZE_X, PLAYER_SIZE_Y);
 			}	
 		}
 	}
@@ -210,7 +210,6 @@ public class Player {
 		calculateLives();
 		setPowerUps(0);
 		djojTransformationPlayer();
-		System.out.println("DJddd");
 	}
 
 	//Resets all characteristics except health
@@ -226,7 +225,6 @@ public class Player {
 		calculateLives();
 		setPowerUps(0);
 		djojTransformationPlayer();
-		System.out.println("DJ");
 	}
 
 	private void calculateLives() {

@@ -68,7 +68,7 @@ Obstacle 200 50 false 1755 121 0 0 false purple_grass_dirt_4x1.png true
 Obstacle 50 50 false 2076 557 0 0 false purple_grass_dirt_1x1.png true
 Obstacle 50 150 false 2075 326 0 0 false purple_grass_dirt_1x3.png true
 Obstacle 50 300 false 2075 151 0 0 false purple_grass_dirt_1x6.png true
-Obstacle 50 300 false 2351 333 0 0 false purple_grass_dirt_1x6.png true
+Obstacle 50 300 false 2350 333 0 0 false purple_grass_dirt_1x6.png true
 Obstacle 50 300 false 2350 244 0 0 false purple_grass_dirt_1x6.png true
 Obstacle 50 300 false 2350 1 0 0 false purple_grass_dirt_1x6.png true
 Obstacle 50 300 false 2301 319 0 0 false purple_grass_dirt_1x6.png true
@@ -78,4 +78,8 @@ Obstacle 50 300 false 2251 105 0 0 false purple_grass_dirt_1x6.png true
 Obstacle 50 150 false 2026 276 0 0 false purple_grass_dirt_1x3.png true
 Obstacle 50 150 false 2026 198 0 0 false purple_grass_dirt_1x3.png true
 
+Obstacle 50 50 false 1800 509 0 0 false door.png true
 Obstacle 50 200 false 1800 450 0 0 false purple_grass_dirt_1x3.png false
+
+*Mask xPosition yPosition width height
+Mask 1270 325 30 30
