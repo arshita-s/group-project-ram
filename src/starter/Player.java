@@ -32,7 +32,7 @@ public class Player {
 	private boolean lostLife;
 
 	private static final String DIRECTORY = System.getProperty("user.dir") + "/PlayerAnimations/";
-	private static final String skin = DIRECTORY+"player_standing_right.png";
+	private String skinType;
 	private String[] animationWalkRight;
 	private double animationWalkRightFrame = 0;
 	private String[] animationWalkLeft;
@@ -46,9 +46,10 @@ public class Player {
 	 * Constructor
 	 */
 	public Player(double x, double y) {
+		skinType="player";
 		currentPosition = new Position(x, y);
 		originalPosition = new Position(x, y);
-		player = new GImage(skin, currentPosition.getX(), currentPosition.getY());
+		player = new GImage(DIRECTORY+skinType + "_standing_right.png", currentPosition.getX(), currentPosition.getY());
 		player.setSize(PLAYER_SIZE_X, PLAYER_SIZE_Y);
 		speedX = 0;
 		speedY = 0;
@@ -66,13 +67,13 @@ public class Player {
 		animationWalkLeft = new String[totalImages];
 		animationDie = new String[6];
 		for (int i = 0; i < totalImages; i++) {
-			animationWalkRight[i] = DIRECTORY + "player_walk_right_" + Integer.toString(i+1) + ".png";
+			animationWalkRight[i] = DIRECTORY + skinType + "_walk_right_" + Integer.toString(i+1) + ".png";
 		}
 		for (int i = 0; i < totalImages; i++) {
-			animationWalkLeft[i] = DIRECTORY + "player_walk_left_" + Integer.toString(i+1) + ".png";
+			animationWalkLeft[i] = DIRECTORY + skinType + "_walk_left_" + Integer.toString(i+1) + ".png";
 		}
 		for (int i = 0; i < animationDie.length; i++) {
-			animationDie[i] = DIRECTORY + "player_die_" + Integer.toString(i+1) + ".png";
+			animationDie[i] = DIRECTORY + skinType + "_die_" + Integer.toString(i+1) + ".png";
 		}
 	}
 	public int getLives() {
@@ -106,29 +107,29 @@ public class Player {
 	}
 	public void playerStandingAnimation() {
 		if(speedX == 0) {
-			if(lastXDirection == PlayerMovement.RIGHT) player.setImage(DIRECTORY+"player_standing_right.png");
-			else player.setImage(DIRECTORY+"player_standing_left.png");
+			if(lastXDirection == PlayerMovement.RIGHT) player.setImage(DIRECTORY+skinType + "_standing_right.png");
+			else player.setImage(DIRECTORY+ skinType + "_standing_left.png");
 			player.setSize(player.getWidth(), PLAYER_SIZE_Y);
 		}
 	}
 	public void playerJumpAnimation() {
 		if(lastXDirection == PlayerMovement.RIGHT) {
 			if(speedY < 0) {
-				player.setImage(DIRECTORY+"player_jump_right_1.png");
+				player.setImage(DIRECTORY+ skinType + "_jump_right_1.png");
 				player.setSize(player.getWidth(), PLAYER_SIZE_Y);
 			}
 			if(speedY > 0) {
-				player.setImage(DIRECTORY+"player_jump_right_2.png");
+				player.setImage(DIRECTORY+ skinType + "_jump_right_2.png");
 				player.setSize(player.getWidth(), PLAYER_SIZE_Y);
 			}			
 		}
 		if(lastXDirection == PlayerMovement.LEFT) {
 			if(speedY < 0) {
-				player.setImage(DIRECTORY+"player_jump_left_1.png");
+				player.setImage(DIRECTORY+skinType + "_jump_left_1.png");
 				player.setSize(player.getWidth(), PLAYER_SIZE_Y);
 			}
 			if(speedY > 0) {
-				player.setImage(DIRECTORY+"player_jump_left_2.png");
+				player.setImage(DIRECTORY+skinType + "_jump_left_2.png");
 				player.setSize(player.getWidth(), PLAYER_SIZE_Y);
 			}	
 		}
@@ -147,11 +148,15 @@ public class Player {
 	}
 	
 	public void ninjaTransformationPlayer() {
+		skinType="ninja";
+		setAnimations();
 		SPEED_DX = .4;
 		JUMP = 8;
 	}
 	
 	public void djojTransformationPlayer() {
+		skinType="player";
+		setAnimations();
 		SPEED_DX = .2;
 		JUMP = 7;
 	}
@@ -194,7 +199,7 @@ public class Player {
 
 	//Resets all characteristics of player
 	public void resetAll() {
-		player = new GImage(skin, currentPosition.getX(), currentPosition.getY());
+		player = new GImage(DIRECTORY+skinType + "_standing_right.png", currentPosition.getX(), currentPosition.getY());
 		player.setSize(PLAYER_SIZE_X, PLAYER_SIZE_Y);
 		setCurrentPosition(originalPosition);
 		setSpeedX(0);
@@ -211,7 +216,7 @@ public class Player {
 	//Resets all characteristics except health
 	//Used after player loses a life
 	public void reset() {
-		player = new GImage(skin, currentPosition.getX(), currentPosition.getY());
+		player = new GImage(DIRECTORY+skinType + "_standing_right.png", currentPosition.getX(), currentPosition.getY());
 		player.setSize(PLAYER_SIZE_X, PLAYER_SIZE_Y);
 		setCurrentPosition(originalPosition);
 		setSpeedX(0);
