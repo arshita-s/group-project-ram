@@ -1,6 +1,6 @@
 
 *Player xPosition yPosition
-Player 0 0
+Player 20 500
 
 *Enemy health damage width length xPosition yPosition movesWithin
 Enemy 1 1 33 50 322 476 50
@@ -80,6 +80,3 @@ Obstacle 50 150 false 2026 198 0 0 false purple_grass_dirt_1x3.png true
 
 Obstacle 50 50 false 1800 509 0 0 false door.png true
 Obstacle 50 200 false 1800 450 0 0 false purple_grass_dirt_1x3.png false
-
-*Mask xPosition yPosition width height
-Mask 1270 325 30 30
